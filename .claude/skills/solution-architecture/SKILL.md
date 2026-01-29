@@ -1,3 +1,8 @@
+---
+description: TOGAF ADM, POSA 패턴, 품질 속성, ADR 작성 가이드
+user-invocable: false
+---
+
 # Solution Architecture Skill
 
 전체 시스템 아키텍처, TOGAF, POSA 패턴을 담당합니다.

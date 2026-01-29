@@ -1,3 +1,8 @@
+---
+description: Richardson Maturity Model, API Versioning, Contract-First
+user-invocable: false
+---
+
 # API Design Skill
 
 REST API, GraphQL, API Versioning, Contract-First 설계를 담당합니다.

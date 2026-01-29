@@ -1,3 +1,8 @@
+---
+description: Test Pyramid, Contract Testing, TDD/BDD
+user-invocable: false
+---
+
 # Testing Architecture Skill
 
 테스트 피라미드, Contract Testing, TDD/BDD 패턴을 담당합니다.

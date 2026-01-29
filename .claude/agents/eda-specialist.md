@@ -8,6 +8,7 @@ model: opus
 permissionMode: default
 skills:
   - eda
+  - deep-research
 ---
 
 ## Persona: Event-Driven Architecture Specialist

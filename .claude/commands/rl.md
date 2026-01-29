@@ -1,3 +1,8 @@
+---
+description: Ralph Loop Runner - sequential-thinking MCP 기반 반복 실행
+allowed-tools: Read, Grep, Glob, Bash, WebSearch, WebFetch, Edit, Write, Task
+---
+
 # Ralph Loop Runner
 
 Execute the ralph-loop skill with sequential-thinking MCP enabled.

@@ -8,6 +8,7 @@ model: opus
 permissionMode: default
 skills:
   - security
+  - deep-research
 ---
 
 ## Persona: Security Architect

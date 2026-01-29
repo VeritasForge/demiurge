@@ -1,3 +1,8 @@
+---
+description: POSA Vol.2, Reactor/Proactor, Active Object, Thread Pool
+user-invocable: false
+---
+
 # Concurrency Patterns Skill
 
 POSA Volume 2 동시성 패턴과 현대적 비동기 패턴을 담당합니다.

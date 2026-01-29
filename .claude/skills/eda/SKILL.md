@@ -1,3 +1,8 @@
+---
+description: Event-Driven Architecture, SAGA, Event Sourcing, 멱등성
+user-invocable: false
+---
+
 # Event-Driven Architecture Skill
 
 이벤트 기반 아키텍처, 메시징 패턴, SAGA, CQRS를 담당합니다.

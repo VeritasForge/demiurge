@@ -1,3 +1,8 @@
+---
+description: HL7 FHIR, HIPAA, Medical Terminology
+user-invocable: false
+---
+
 # Healthcare Informatics Skill
 
 의료 도메인 지식, 표준, 규제 준수를 담당합니다.

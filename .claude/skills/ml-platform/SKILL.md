@@ -1,3 +1,8 @@
+---
+description: MLOps, Model Serving, Feature Store
+user-invocable: false
+---
+
 # ML Platform Skill
 
 ML 모델 서빙, MLOps 파이프라인, 모델 모니터링을 설계합니다.

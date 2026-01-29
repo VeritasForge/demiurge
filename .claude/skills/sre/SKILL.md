@@ -1,3 +1,8 @@
+---
+description: SRE Principles, SLO/SLI/SLA, Observability
+user-invocable: false
+---
+
 # SRE Skill
 
 신뢰성 엔지니어링, SLO, 모니터링, 인시던트 관리를 담당합니다.

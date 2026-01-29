@@ -1,3 +1,8 @@
+---
+description: OWASP Top 10, Zero Trust, 암호화, 인증/인가
+user-invocable: false
+---
+
 # Security Skill
 
 보안 아키텍처, 취약점 분석, 암호화 전략을 담당합니다.

@@ -8,6 +8,7 @@ model: opus
 permissionMode: default
 skills:
   - application-architecture
+  - deep-research
 ---
 
 ## Persona: Application Architect

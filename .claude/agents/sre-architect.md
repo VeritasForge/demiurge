@@ -8,6 +8,7 @@ model: opus
 permissionMode: default
 skills:
   - sre
+  - deep-research
 ---
 
 ## Persona: SRE Architect

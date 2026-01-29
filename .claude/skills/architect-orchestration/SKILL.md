@@ -1,9 +1,10 @@
-# Architect Orchestration Skill
-
 ---
 name: architect-orchestration
 description: 12개 아키텍트 에이전트를 오케스트레이션하여 합의된 아키텍처 설계를 도출. /architect-orchestration 으로 실행.
+allowed-tools: Read, Grep, Glob, Task, WebSearch, WebFetch
 ---
+
+# Architect Orchestration Skill
 
 ## Overview
 
@@ -62,6 +63,54 @@ description: 12개 아키텍트 에이전트를 오케스트레이션하여 합�
 | 동시성, 병렬, 락, 스레드 | concurrency-architect |
 
 분석이 끝나면 사용자에게 **선택된 아키텍트 목록과 실행 계획**을 요약하여 보여주고 진행합니다.
+
+---
+
+### Step 1.5: Deep Research (Optional)
+
+요구사항 분석 결과 다음 조건 중 하나라도 해당하면, **아키텍트 리뷰 전에 심층 조사**를 수행합니다:
+
+| 트리거 조건 | 예시 |
+|-------------|------|
+| 명시적 조사 요청 | "최신 기술 동향을 반영해서 검토해줘" |
+| 최신 기술 검토 필요 | 새로운 프레임워크, 최근 릴리스된 도구 |
+| 불확실한 trade-off | 근거 자료 없이 비교가 어려운 기술 선택 |
+| 표준/규정 최신 확인 | HIPAA, FHIR, OWASP 등 최신 변경사항 |
+
+#### 실행 방법
+
+1. **오케스트레이터가 Phase 1 (광역 탐색)을 수행**:
+   - `deep-research` 스킬의 Phase 1 프로토콜에 따라 WebSearch 3-5회 병렬 실행
+   - 쿼리 분해 → 병렬 검색 → 출처 다양성 확인 → 핵심 발견 정리
+
+2. **`research_context` 생성**:
+   ```yaml
+   research_context:
+     topic: "[조사 주제]"
+     phase1_summary: "[Phase 1 핵심 발견 요약]"
+     key_findings:
+       - finding: "[발견]"
+         confidence: "[Confirmed/Likely/Uncertain/Unverified]"
+         source: "[출처]"
+     relevant_to:
+       security: "[보안 관련 발견]"
+       data: "[데이터 관련 발견]"
+       integration: "[통합 관련 발견]"
+   ```
+
+3. **각 Agent 프롬프트에 `research_context` 주입**:
+   - Step 2 이후의 모든 Agent 호출 시, 프롬프트에 `## Research Context` 섹션 추가
+   - 각 Agent는 자기 도메인에 관련된 발견을 기반으로 Phase 2 (심화 탐색) 수행 가능
+
+4. **최종 문서 생성 시 Phase 3 (지식 합성) 수행**:
+   - Step 7에서 Research 결과를 통합하여 출처 인용 및 확신도 태깅 포함
+
+#### 건너뛰기 조건
+
+다음의 경우 Step 1.5를 **건너뛰고** Step 2로 직행합니다:
+- 코드 리뷰, 리팩토링 등 기존 코드베이스에 대한 검토
+- 잘 정립된 패턴에 대한 적용 검토 (별도 조사 불필요)
+- 사용자가 빠른 리뷰를 요청한 경우
 
 ---
 

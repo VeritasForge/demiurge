@@ -1,3 +1,8 @@
+---
+description: DAMA-DMBOK, CQRS, Event Sourcing, Data Mesh
+user-invocable: false
+---
+
 # Data Architecture Skill
 
 데이터 모델링, ETL 파이프라인, CQRS/Event Sourcing, Data Mesh를 담당합니다.

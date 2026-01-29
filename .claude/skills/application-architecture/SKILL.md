@@ -1,3 +1,8 @@
+---
+description: Clean Architecture, Hexagonal, MSA/SAGA 패턴
+user-invocable: false
+---
+
 # Application Architecture Skill
 
 Clean Architecture, Hexagonal Architecture, MSA 패턴을 담당합니다.

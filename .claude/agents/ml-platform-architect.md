@@ -8,6 +8,7 @@ model: opus
 permissionMode: default
 skills:
   - ml-platform
+  - deep-research
 ---
 
 ## Persona: ML Platform Architect

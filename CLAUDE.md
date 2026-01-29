@@ -35,7 +35,7 @@ AI가 답변 시 준수할 원칙:
 
 - `.claude/agents/` — 12 architect agent definitions
 - `.claude/rules/` — 8 governance rules auto-applied based on file glob patterns
-- `.claude/skills/` — 15 quick-reference skill cards for architecture patterns
+- `.claude/skills/` — 16 quick-reference skill cards for architecture patterns
 - `.claude/commands/` — Slash commands (`commit`, `rl`, `wrap`)
 
 ## Orchestration Flow
@@ -85,13 +85,14 @@ AI가 답변 시 준수할 원칙:
 | `ml-platform-architect` | ML 플랫폼 | MLOps, Feature Store |
 | `healthcare-informatics-architect` | 의료 정보 | HL7 FHIR, HIPAA |
 
-## Skills (15개)
+## Skills (16개)
 
 ### Orchestration
 
 | Skill | 내용 |
 |-------|------|
 | `architect-orchestration` | 다중 아키텍트 오케스트레이션, 라우팅 전략, 합의 프로토콜 |
+| `deep-research` | 3단계 심층 조사 프로토콜 (광역 탐색, 심화 탐색, 지식 합성) |
 
 ### Architecture Patterns
 
@@ -123,7 +124,7 @@ Rules in `.claude/rules/` are automatically loaded based on file path globs:
 
 | Rule | Trigger Paths | Content |
 |------|---------------|---------|
-| `architecture-principles` | `**/*.py`, `**/*.kt`, `**/*.java`, `**/*.ts` | SoC, DDD, MSA, EDA, security principles |
+| `architecture-principles` | `**/*.py`, `**/*.kt`, `**/*.java`, `**/*.ts`, `**/*.tsx`, `**/*.go` | SoC, DDD, MSA, EDA, security principles |
 | `security-requirements` | `**/*.py`, `**/*.kt`, `**/*.java`, `**/*.ts` | JWT, encryption, input validation, API security |
 | `ddd-patterns` | `**/domain/**`, `**/entities/**`, `**/aggregate/**` | Entity, VO, Aggregate, Repository, ACL |
 | `api-design` | `**/controller/**`, `**/router/**`, `**/api/**` | Richardson Model, versioning, rate limiting |
@@ -171,6 +172,7 @@ Rules in `.claude/rules/` are automatically loaded based on file path globs:
 | | Half-Sync/Half-Async | ✅ | ✅ | - |
 | **Data** | DAMA-DMBOK | ✅ | ✅ | - |
 | | Data Mesh | ✅ | ✅ | - |
+| **Research** | Deep Research Protocol | ✅ (12 agents) | ✅ | - |
 
 ## Usage
 
@@ -203,10 +205,29 @@ Use **`/wrap`** to validate and sync documentation:
 
 - Created: 2026-01-27
 - Last Updated: 2026-01-29
-- Version: 3.2
+- Version: 3.5
 
 ### Changelog
 
+- v3.5: Deep Research 스킬에 SNS 조회 기능 추가 + `/wrap` 동기화
+  - `deep-research` 스킬에 SNS 검색 전략 추가 (WebSearch `site:` 연산자 기반)
+  - SNS 플랫폼별 적합도 테이블 추가 (Reddit > X > Instagram > Facebook)
+  - SNS 심화 조사 서브섹션 및 신뢰도 판정 규칙 추가
+  - Research Metadata에 SNS 출처 필드 추가
+  - 품질 기준 체크리스트에 SNS 항목 2건 추가
+  - SNS 조사 가이드 독립 섹션 추가 (MCP 향후 대응 포함)
+  - `architecture-principles` rule의 Trigger Paths에 `**/*.tsx`, `**/*.go` 누락 수정
+- v3.4: Skills/Commands YAML front matter 표준화
+  - 14개 참조 스킬에 `description`, `user-invocable: false` front matter 추가
+  - `deep-research` 스킬에 `allowed-tools` 추가
+  - `architect-orchestration` 스킬에 `allowed-tools` 추가
+  - 3개 슬래시 커맨드(`commit`, `wrap`, `rl`)에 `description`, `allowed-tools` front matter 추가
+- v3.3: Deep Research 스킬 추가
+  - `deep-research` 스킬 신규 생성 (3단계 심층 조사 프로토콜)
+  - 12개 아키텍트 에이전트에 `deep-research` 스킬 연결
+  - `cloud-native-architect`, `concurrency-architect` 에이전트에 YAML front matter 추가
+  - `architect-orchestration` 스킬에 Step 1.5 (Deep Research) 삽입
+  - Skills 수: 15 → 16
 - v3.2: `/wrap` 동기화 - `commit` 커맨드 누락 반영
   - Repository Structure의 commands 목록에 `commit` 추가
 - v3.1: AI 사고 프로세스 및 응답 가이드라인 추가

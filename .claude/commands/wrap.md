@@ -1,3 +1,8 @@
+---
+description: CLAUDE.md 문서 동기화 검증 및 업데이트
+allowed-tools: Read, Grep, Glob, Edit
+---
+
 # /wrap — CLAUDE.md 문서 동기화 검증 및 업데이트
 
 이 커맨드는 CLAUDE.md가 실제 프로젝트 구조(agents, skills, rules, commands)와 일치하는지 검증하고, 불일치 발견 시 CLAUDE.md를 업데이트합니다.

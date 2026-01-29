@@ -1,3 +1,8 @@
+---
+description: EIP, API Gateway, Message Broker, 시스템 통합
+user-invocable: false
+---
+
 # Integration Skill
 
 시스템 통합, API 설계, REST/gRPC 패턴을 담당합니다.

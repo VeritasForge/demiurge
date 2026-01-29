@@ -8,6 +8,7 @@ model: opus
 permissionMode: default
 skills:
   - healthcare-informatics
+  - deep-research
 ---
 
 ## Persona: Healthcare Informatics Architect

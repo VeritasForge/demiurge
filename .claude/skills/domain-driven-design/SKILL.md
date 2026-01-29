@@ -1,3 +1,8 @@
+---
+description: DDD Strategic/Tactical Design, Bounded Context, Aggregate 패턴
+user-invocable: false
+---
+
 # Domain-Driven Design Skill
 
 도메인 중심 설계, Bounded Context, Aggregate, 전략적/전술적 패턴을 담당합니다.

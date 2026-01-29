@@ -1,3 +1,8 @@
+---
+description: 12-Factor App, K8s Patterns, Deployment Strategies
+user-invocable: false
+---
+
 # Cloud-Native Skill
 
 12-Factor App, Kubernetes 패턴, 배포 전략을 담당합니다.

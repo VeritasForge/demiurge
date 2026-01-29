@@ -8,6 +8,7 @@ model: opus
 permissionMode: default
 skills:
   - integration
+  - deep-research
 ---
 
 ## Persona: Integration Architect

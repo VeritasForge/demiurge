@@ -8,6 +8,7 @@ model: opus
 permissionMode: default
 skills:
   - domain-driven-design
+  - deep-research
 ---
 
 ## Persona: Domain Architect
