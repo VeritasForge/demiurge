@@ -41,10 +41,10 @@ AI가 답변 시 준수할 원칙:
 ## Orchestration Flow
 
 ```
-[Requirement] → [Analysis] → [Deep Research?] → [Draft Phase] → [Specialist Feedback] → [Cross-Review] → [Consensus] → [Result]
-                  Step 1        Step 1.5            Step 2            Step 3                 Step 4          Step 5        Step 6
-                                (Optional)       (Tier 1 Sequential   (Tier 2/3/4           (Mediator        (Multi-round
-                                                  + 교차 리뷰)        Parallel)              Pattern)         Loop)
+[Requirement] → [Analysis] → [Deep Research?] → [Draft Phase] → [Specialist Feedback] → [Cross-Review] → [Consensus] → [Result] → [Verification]
+                  Step 1        Step 1.5            Step 2            Step 3                 Step 4          Step 5        Step 6       Step 7
+                                (Optional)       (Tier 1 Sequential   (Tier 2/3/4           (Mediator        (Multi-round              (Post-Orch
+                                                  + 교차 리뷰)        Parallel)              Pattern)         Loop)                     Verify)
 ```
 
 ### Detailed Step Flow
@@ -72,6 +72,12 @@ Step 4-2: Consolidated Findings 기반 재리뷰 + 재투표
 Step 5: 투표 집계 → 합의 미달 시 Step 4 재진입 (max 5 라운드)
 
 Step 6: 최종 문서 생성
+
+═══ Verification Phase ═══
+Step 7: 실행 검증 (Post-Orchestration Verification)
+  Step 7-1: 실행 체크리스트 (7개 항목 자동 검증)
+  Step 7-2: Execution Log 기록 (review/{review-id}/execution-log.md)
+  Step 7-3: 실패 시 보완 실행 or ACKNOWLEDGED_SKIP
 ```
 
 ### Agent Tiers
@@ -115,7 +121,8 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 - Maximum 5 consensus rounds (Step 4-5 loop)
 - Maximum 3 Tier 1 cross-review rounds (Step 2-3)
 - Minority opinions are recorded
-- DISAGREE/CONDITIONAL 아키텍트만 재호출 (효율성)
+- DISAGREE 또는 CONDITIONAL 아키텍트만 재호출 (1명 이상 존재 시 반드시 실행)
+- Step 5-0: CONDITIONAL 조건 충족 검증 (MET/PARTIALLY_MET/UNMET) — Pre-Consensus Gate
 
 ## Agents (12개)
 
@@ -261,10 +268,18 @@ Use **`/wrap`** to validate and sync documentation:
 
 - Created: 2026-01-27
 - Last Updated: 2026-01-30
-- Version: 4.0
+- Version: 4.1
 
 ### Changelog
 
+- v4.1: Step 4-2 버그 수정 + Step 5-0 Pre-Consensus Gate + Step 7 자기검증 메커니즘
+  - Step 4-2 재호출 조건 명확화: "DISAGREE/CONDITIONAL" → "DISAGREE 또는 CONDITIONAL" (1명 이상 존재 시 반드시 실행)
+  - Step 5-0 (Pre-Consensus Gate) 추가: CONDITIONAL 조건 충족 검증 (MET/PARTIALLY_MET/UNMET)
+  - consensus-protocol.md 판정 알고리즘에 CONDITIONAL 처리 추가 (effective_agrees 계산)
+  - Step 7 (Post-Orchestration Verification) 추가: 7개 항목 실행 체크리스트 + execution-log.md + 실패 시 보완
+  - 설정 옵션에 `auto_verify`, `execution_log` 추가
+  - Orchestration Flow 다이어그램에 Step 7 반영
+  - `/wrap` 동기화
 - v4.0: Architect-Orchestration 재설계 — Draft → Cross-Review → Consensus 멀티라운드 구조
   - SKILL.md 전면 재작성: Draft Phase (Step 2), Specialist Feedback (Step 3), Cross-Review (Step 4), Consensus Loop (Step 5)
   - Draft Phase: Tier 1이 "리뷰"가 아닌 "설계" 역할 — Solution Architect 초안 + Domain Architect 보강

@@ -646,10 +646,14 @@ consolidated_findings:
 
 #### Step 4-2: Consolidated Findings 기반 재리뷰 요청
 
-Consolidated Findings를 **모든 참여 아키텍트**에게 배포하고 재리뷰 + 재투표를 요청합니다.
+Consolidated Findings 기반으로 **DISAGREE 또는 CONDITIONAL** 투표한 아키텍트를 재호출합니다.
+AGREE 아키텍트는 입장 변경 사유가 없으므로 기존 투표를 유지합니다.
+
+**재호출 조건**: DISAGREE 또는 CONDITIONAL 아키텍트가 1명 이상 존재하면 반드시 실행
+**건너뛰기 조건**: 모든 아키텍트가 AGREE인 경우에만 건너뜀 (= UNANIMOUS)
 
 ```
-# DISAGREE/CONDITIONAL 아키텍트만 재호출 (효율성)
+# DISAGREE 또는 CONDITIONAL 아키텍트만 재호출 (효율성)
 # AGREE 아키텍트는 입장 변경 사유가 없으므로 유지
 
 Task(
@@ -716,10 +720,30 @@ consensus_status:
 - `solution-architect` 또는 `domain-architect`가 `DISAGREE`이면 → **BLOCKED_BY_TIER1**
 - Tier 1 블록 시, 해당 아키텍트의 우려사항과 대안을 정리하여 재논의 진행
 
+#### Step 5-0: CONDITIONAL 조건 충족 검증 (Pre-Consensus Gate)
+
+Step 5 진입 전, CONDITIONAL 투표의 조건 충족 여부를 검증합니다.
+
+```yaml
+conditional_verification:
+  for_each_conditional_vote:
+    - architect: "{AID}"
+      conditions: [이 아키텍트가 제시한 조건 목록]
+      consolidated_response: "Consolidated Findings에서 해당 조건이 어떻게 반영되었는지"
+      status: MET | PARTIALLY_MET | UNMET
+      rationale: "판단 근거"
+```
+
+- **MET**: 조건이 합의에 명시적으로 반영되고 Action Item으로 추적 가능
+- **PARTIALLY_MET**: 조건의 일부만 반영되었거나 우선순위가 기대보다 낮음
+- **UNMET**: 조건이 반영되지 않았거나 거부됨
+
 #### Step 5-3: 다수결 확인
 
 ```
-합의 비율 = (AGREE + CONDITIONAL 중 조건 충족) / 전체 참여 아키텍트 수
+합의 비율 = (AGREE + CONDITIONAL 중 status=MET) / 전체 참여 아키텍트 수
+- PARTIALLY_MET → 0.5로 계산
+- UNMET → 0으로 계산
 
 - 비율 >= 1.0  → UNANIMOUS (만장일치, 즉시 완료)
 - 비율 >= 0.67 → MAJORITY_WITH_MINORITY (소수의견 기록 후 완료)
@@ -818,6 +842,77 @@ Consensus Loop:
 
 ---
 
+### Step 7: 실행 검증 (Post-Orchestration Verification)
+
+오케스트레이션 완료 후, 모든 단계가 설계대로 실행되었는지 자동 검증합니다.
+
+#### Step 7-1: 실행 체크리스트
+
+**mcp__sequential-thinking__sequentialthinking**으로 다음 항목을 검증:
+
+| # | 검증 항목 | 확인 방법 | PASS 기준 |
+|---|----------|-----------|-----------|
+| 1 | Draft Architecture 생성 | `draft-architecture.md` 존재 | 파일 존재 + SA/DA 섹션 포함 |
+| 2 | Tier 1 교차 리뷰 실행 | Draft 내 교차 리뷰 결과 기록 | 합의 상태 명시 |
+| 3 | Specialist 피드백 수집 | `artifacts/` 내 Full Report 파일 수 | 선정 아키텍트 수와 일치 |
+| 4 | Consolidated Findings 생성 | `consolidated-findings-r{N}.md` 존재 | Vote Summary + Concern Clusters 포함 |
+| 5 | Step 4-2 재호출 실행 여부 | CONDITIONAL/DISAGREE 존재 시 R2 산출물 확인 | 재호출 대상이 있었으면 R2 투표 결과 존재 |
+| 6 | Consensus Protocol 실행 | final-review.md 내 Consensus Status | 합의 비율 + 판정 결과 명시 |
+| 7 | 최종 문서 완성 | final-review.md 필수 섹션 | Agreed Points, Action Items, Risks 포함 |
+
+#### Step 7-2: Execution Log
+
+검증 결과를 `review/{review-id}/execution-log.md`에 기록:
+
+```yaml
+execution_log:
+  review_id: "{review-id}"
+  timestamp: "ISO8601"
+  steps_executed:
+    - step: "2-1"
+      status: EXECUTED
+      output: "draft-architecture.md"
+    - step: "2-2"
+      status: EXECUTED
+      output: "draft-architecture.md (DA 보강)"
+    - step: "2-3"
+      status: EXECUTED
+      rounds: 1
+      result: "SA/DA AGREE"
+    - step: "3"
+      status: EXECUTED
+      architects: ["APP", "DATA", "INT", "SRE", "CN", "EDA"]
+      output: "artifacts/*.md (6 files)"
+    - step: "4-1"
+      status: EXECUTED
+      output: "consolidated-findings-r1.md"
+    - step: "4-2"
+      status: EXECUTED | SKIPPED
+      reason: "CONDITIONAL 6명 재호출" | "모든 아키텍트 AGREE (UNANIMOUS)"
+      output: "consolidated-findings-r2.md" | null
+    - step: "5"
+      status: EXECUTED
+      rounds: 1
+      result: "UNANIMOUS | MAJORITY_WITH_MINORITY"
+    - step: "6"
+      status: EXECUTED
+      output: "final-review.md"
+  verification:
+    total_checks: 7
+    passed: 7
+    failed: 0
+    result: PASS | FAIL
+    failures: []
+```
+
+#### Step 7-3: 실패 시 처리
+
+- FAIL 항목 발견 시 → 누락된 단계를 명시하고 보완 실행 여부를 사용자에게 확인
+- 사용자 승인 시 → 누락 단계만 보완 실행
+- 사용자 거부 시 → execution-log.md에 "ACKNOWLEDGED_SKIP" 기록
+
+---
+
 ## 설정 옵션
 
 사용자가 요구사항과 함께 설정을 지정할 수 있습니다:
@@ -830,6 +925,8 @@ orchestration:
   consensus_threshold: 0.67     # 합의 기준 (2/3)
   tier1_required: true          # Tier 1 필수 동의 (veto권)
   auto_escalate: true           # 미합의 시 사용자 에스컬레이션
+  auto_verify: true             # 자동 검증 실행 (Step 7)
+  execution_log: true           # 실행 로그 기록
 
 # 빠른 리뷰 프로필
 fast_review:

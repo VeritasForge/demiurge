@@ -144,15 +144,18 @@ consensus_criteria:
 def check_consensus(votes, config):
     total = len(votes)
     agree_count = count_agrees(votes)
+    conditional_met = count_conditionals_met(votes)       # status=MET
+    conditional_partial = count_conditionals_partial(votes) # status=PARTIALLY_MET
 
     # Tier 1 필수 체크
     if config.tier1_required:
         tier1_votes = get_tier1_votes(votes)
-        if not all_agree(tier1_votes):
+        if any_disagree(tier1_votes):
             return ConsensusResult.BLOCKED_BY_TIER1
 
-    # 비율 체크
-    ratio = agree_count / total
+    # 비율 체크 (CONDITIONAL 포함)
+    effective_agrees = agree_count + conditional_met + (conditional_partial * 0.5)
+    ratio = effective_agrees / total
 
     if ratio >= 1.0:
         return ConsensusResult.UNANIMOUS
@@ -160,6 +163,37 @@ def check_consensus(votes, config):
         return ConsensusResult.MAJORITY_WITH_MINORITY
     else:
         return ConsensusResult.NO_CONSENSUS
+
+
+def verify_conditional(vote):
+    """CONDITIONAL 투표의 조건 충족 여부를 검증"""
+    verification = {
+        'architect': vote.aid,
+        'conditions': vote.conditions,
+        'status': 'UNMET',  # MET | PARTIALLY_MET | UNMET
+        'rationale': ''
+    }
+    for condition in vote.conditions:
+        # Consolidated Findings에서 해당 조건이 반영되었는지 확인
+        if condition_in_action_items(condition) and action_item_priority_match(condition):
+            condition.status = 'MET'
+        elif condition_partially_reflected(condition):
+            condition.status = 'PARTIALLY_MET'
+        else:
+            condition.status = 'UNMET'
+
+    met_count = count_status(vote.conditions, 'MET')
+    partial_count = count_status(vote.conditions, 'PARTIALLY_MET')
+    total_conditions = len(vote.conditions)
+
+    if met_count == total_conditions:
+        verification['status'] = 'MET'
+    elif met_count + partial_count == total_conditions:
+        verification['status'] = 'PARTIALLY_MET'
+    else:
+        verification['status'] = 'UNMET'
+
+    return verification
 ```
 
 ### 판정 결과
