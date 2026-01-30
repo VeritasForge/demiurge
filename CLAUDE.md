@@ -41,25 +41,81 @@ AI가 답변 시 준수할 원칙:
 ## Orchestration Flow
 
 ```
-[Requirement] → [Analysis & Routing] → [Tier 1: Strategic] → [Tier 2: Design] → [Tier 3: Quality] → [Consensus] → [Result]
-                                         (Sequential)          (Parallel)         (Parallel)          (Round-based voting)
+[Requirement] → [Analysis] → [Deep Research?] → [Draft Phase] → [Specialist Feedback] → [Cross-Review] → [Consensus] → [Result]
+                  Step 1        Step 1.5            Step 2            Step 3                 Step 4          Step 5        Step 6
+                                (Optional)       (Tier 1 Sequential   (Tier 2/3/4           (Mediator        (Multi-round
+                                                  + 교차 리뷰)        Parallel)              Pattern)         Loop)
+```
+
+### Detailed Step Flow
+
+```
+Step 0: 참조 문서 로드
+Step 1: 요구사항 분석 (키워드 추출, review-id 생성)
+Step 1.5: Deep Research (선택적)
+
+═══ Draft Phase ═══
+Step 2-1: Solution Architect → 시스템 아키텍처 초안 생성
+Step 2-2: Domain Architect → Draft에 도메인 모델 보강
+Step 2-3: Tier 1 교차 리뷰 (SA ↔ DA, max 3 라운드)
+Step 2-4: 합의된 Draft Architecture 문서 생성
+Step 2-5: Draft 기반 Tier 2/3/4 아키텍트 라우팅 재결정
+
+═══ Specialist Feedback Phase ═══
+Step 3: 선정된 아키텍트들에게 Draft 전달 → 병렬 피드백 (Tiered Report)
+
+═══ Cross-Review Phase (Mediator) ═══
+Step 4-1: Tier 1 중재자가 모든 리포트 수집·정리 → Consolidated Findings
+Step 4-2: Consolidated Findings 기반 재리뷰 + 재투표
+
+═══ Consensus Phase ═══
+Step 5: 투표 집계 → 합의 미달 시 Step 4 재진입 (max 5 라운드)
+
+Step 6: 최종 문서 생성
 ```
 
 ### Agent Tiers
 
-| Tier | Agents | Execution |
-|------|--------|-----------|
-| **1 Strategic** (required) | Solution Architect, Domain Architect | Sequential |
-| **2 Design** (conditional) | Application, Data, Integration, Healthcare Informatics | Parallel |
-| **3 Quality** (conditional) | Security, SRE, Cloud-Native | Parallel |
-| **4 Enabling** (on-demand) | EDA Specialist, ML Platform, Concurrency | On-demand |
+| Tier | Agents | Role | Execution |
+|------|--------|------|-----------|
+| **1 Strategic** (required) | Solution Architect, Domain Architect | Draft 생성 + 교차 리뷰 + 중재자 | Sequential |
+| **2 Design** (conditional) | Application, Data, Integration, Healthcare Informatics | Specialist Feedback | Parallel |
+| **3 Quality** (conditional) | Security, SRE, Cloud-Native | Specialist Feedback | Parallel |
+| **4 Enabling** (on-demand) | EDA Specialist, ML Platform, Concurrency | Specialist Feedback | On-demand |
+
+### AID (Architect ID) 체계
+
+모든 아키텍트 리포트에 출처와 라운드를 추적하는 AID가 포함됩니다.
+
+```
+형식: "{Tier}-{Role}-R{Round}"
+예시: T1-SA-R1, T1-DA-R2, T2-APP-R1, T3-SEC-R1, T4-EDA-R1
+```
+
+### Tiered Report Template
+
+Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
+
+| Layer | 용도 | 크기 제한 | 전달 범위 |
+|-------|------|-----------|-----------|
+| **Layer 1** Executive Summary | 투표 + 핵심 발견 + 변경이력 | 500토큰 | 항상 전달 |
+| **Layer 2** Key Findings | 권고·우려·투표상세 | 2K토큰 | 교차 리뷰 시 |
+| **Layer 3** Full Report | 상세 분석·다이어그램·코드 | 제한 없음 | artifact 파일 저장 |
+
+### Cross-Review: Mediator 패턴
+
+- P2P 방식(O(n²)) 대신 Mediator 방식(O(n)) 채택 — 70% Context 절감
+- Tier 1 아키텍트가 중재자로서 모든 리포트를 수집·정리
+- Consolidated Findings 생성 (Concern 집계, Recommendation 클러스터링, 충돌 명시, 소수 의견 기록)
 
 ### Consensus Protocol
 
 - Threshold: 2/3 agreement (67%)
 - Tier 1 architects hold veto power
-- Maximum 5 voting rounds
+- Maximum 5 consensus rounds (Step 4-5 loop)
+- Maximum 3 Tier 1 cross-review rounds (Step 2-3)
 - Minority opinions are recorded
+- DISAGREE/CONDITIONAL 아키텍트만 재호출 (효율성)
 
 ## Agents (12개)
 
@@ -204,11 +260,23 @@ Use **`/wrap`** to validate and sync documentation:
 ## Version & Changelog
 
 - Created: 2026-01-27
-- Last Updated: 2026-01-29
-- Version: 3.5
+- Last Updated: 2026-01-30
+- Version: 4.0
 
 ### Changelog
 
+- v4.0: Architect-Orchestration 재설계 — Draft → Cross-Review → Consensus 멀티라운드 구조
+  - SKILL.md 전면 재작성: Draft Phase (Step 2), Specialist Feedback (Step 3), Cross-Review (Step 4), Consensus Loop (Step 5)
+  - Draft Phase: Tier 1이 "리뷰"가 아닌 "설계" 역할 — Solution Architect 초안 + Domain Architect 보강
+  - Tier 1 교차 리뷰: SA ↔ DA 합의 라운드 (max 3회)
+  - Draft 기반 라우팅: 키워드 기반이 아닌 Draft 내용 분석으로 Tier 2/3/4 선정
+  - Cross-Review Mediator 패턴: Tier 1이 중재자로 Consolidated Findings 생성 (70% Context 절감)
+  - AID (Architect ID) 체계: `{Tier}-{Role}-R{Round}` 형식으로 출처·라운드 추적
+  - Tiered Report Template: Layer 1 (500토큰) / Layer 2 (2K토큰) / Layer 3 (무제한, artifact 저장)
+  - Changes 섹션: structured changelog (before/after/rationale) — 변경 이력 추적
+  - External Artifact 패턴: `review/{review-id}/` 경로에 Draft, Findings, Full Reports 저장
+  - 12개 에이전트 파일에 Tiered Report Template + AID 할당 규칙 추가
+  - CLAUDE.md Orchestration Flow 다이어그램 업데이트
 - v3.5: Deep Research 스킬에 SNS 조회 기능 추가 + `/wrap` 동기화
   - `deep-research` 스킬에 SNS 검색 전략 추가 (WebSearch `site:` 연산자 기반)
   - SNS 플랫폼별 적합도 테이블 추가 (Reddit > X > Instagram > Facebook)

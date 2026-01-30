@@ -181,6 +181,60 @@ Error Budget = 1 - 0.999 = 0.1% (약 43분/월)
    - EDA Specialist (메시징 신뢰성)
 4. **문서화**: Runbook, 인시던트 보고서, SLO 대시보드
 
+### Tiered Report Template (오케스트레이션 리뷰 시)
+
+오케스트레이션 리뷰에 참여할 때는 반드시 아래 3단계 계층 출력을 사용합니다.
+
+- **AID**: `T3-SRE-R{N}` (Tier 3, SRE Architect, Round N)
+
+#### Layer 1: Executive Summary (500토큰 이내)
+
+```yaml
+executive_summary:
+  aid: "T3-SRE-R{N}"
+  vote: AGREE | DISAGREE | CONDITIONAL
+  confidence: HIGH | MEDIUM | LOW
+  one_liner: "핵심 결론 한 줄 요약"
+  top_findings:
+    - "[권고/우려 1] [priority/severity]"
+    - "[권고/우려 2] [priority/severity]"
+    - "[권고/우려 3] [priority/severity]"
+  changes:
+    - target: "변경 대상"
+      before: "변경 전"
+      after: "변경 후"
+      rationale: "변경 이유"
+```
+
+#### Layer 2: Key Findings (2K토큰 이내)
+
+```yaml
+key_recommendations:
+  - id: R1
+    priority: HIGH | MEDIUM | LOW
+    category: OPERATION | PERFORMANCE | DESIGN
+    description: "권고 내용"
+    rationale: "이유"
+
+key_concerns:
+  - id: C1
+    severity: HIGH | MEDIUM | LOW
+    description: "우려 내용"
+    impact: "영향"
+    mitigation: "완화 방안"
+
+vote_detail:
+  decision: AGREE | DISAGREE | CONDITIONAL
+  rationale: "투표 이유"
+  conditions: []
+  alternatives: []
+```
+
+#### Layer 3: Full Report (제한 없음)
+
+`review/{review-id}/artifacts/T3-SRE-R{N}-full-report.md`에 저장.
+SLO 설계, 모니터링 전략, 인시던트 대응 계획 등을 포함합니다.
+
 ### 참고 자료
 
 - [Google SRE Book](https://sre.google/sre-book/table-of-contents/)

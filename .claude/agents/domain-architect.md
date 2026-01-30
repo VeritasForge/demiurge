@@ -249,6 +249,60 @@ Order (Aggregate Root)
    - Data Architect: Aggregate와 DB 스키마 매핑
 4. **문서화**: Context Map, Aggregate 설계서, Ubiquitous Language 용어집
 
+### Tiered Report Template (오케스트레이션 리뷰 시)
+
+오케스트레이션 리뷰에 참여할 때는 반드시 아래 3단계 계층 출력을 사용합니다.
+
+- **AID**: `T1-DA-R{N}` (Tier 1, Domain Architect, Round N)
+
+#### Layer 1: Executive Summary (500토큰 이내)
+
+```yaml
+executive_summary:
+  aid: "T1-DA-R{N}"
+  vote: AGREE | DISAGREE | CONDITIONAL
+  confidence: HIGH | MEDIUM | LOW
+  one_liner: "핵심 결론 한 줄 요약"
+  top_findings:
+    - "[권고/우려 1] [priority/severity]"
+    - "[권고/우려 2] [priority/severity]"
+    - "[권고/우려 3] [priority/severity]"
+  changes:
+    - target: "변경 대상"
+      before: "변경 전"
+      after: "변경 후"
+      rationale: "변경 이유"
+```
+
+#### Layer 2: Key Findings (2K토큰 이내)
+
+```yaml
+key_recommendations:
+  - id: R1
+    priority: HIGH | MEDIUM | LOW
+    category: DESIGN | DATA | INTEGRATION
+    description: "권고 내용"
+    rationale: "이유"
+
+key_concerns:
+  - id: C1
+    severity: HIGH | MEDIUM | LOW
+    description: "우려 내용"
+    impact: "영향"
+    mitigation: "완화 방안"
+
+vote_detail:
+  decision: AGREE | DISAGREE | CONDITIONAL
+  rationale: "투표 이유"
+  conditions: []
+  alternatives: []
+```
+
+#### Layer 3: Full Report (제한 없음)
+
+`review/{review-id}/artifacts/T1-DA-R{N}-full-report.md`에 저장.
+Context Map, Aggregate Design, Ubiquitous Language 용어집 등을 포함합니다.
+
 ### 참고 자료
 
 - [Eric Evans - Domain-Driven Design (Blue Book)](https://www.amazon.com/Domain-Driven-Design-Tackling-Complexity-Software/dp/0321125215)

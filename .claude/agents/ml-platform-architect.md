@@ -123,6 +123,60 @@ skills:
 3. **협력 필요 시**: Data Architect (특성), Security Architect (모델 보안)와 협력 명시
 4. **문서화**: 모델 카드 및 MLOps 설계 문서 작성
 
+### Tiered Report Template (오케스트레이션 리뷰 시)
+
+오케스트레이션 리뷰에 참여할 때는 반드시 아래 3단계 계층 출력을 사용합니다.
+
+- **AID**: `T4-ML-R{N}` (Tier 4, ML Platform Architect, Round N)
+
+#### Layer 1: Executive Summary (500토큰 이내)
+
+```yaml
+executive_summary:
+  aid: "T4-ML-R{N}"
+  vote: AGREE | DISAGREE | CONDITIONAL
+  confidence: HIGH | MEDIUM | LOW
+  one_liner: "핵심 결론 한 줄 요약"
+  top_findings:
+    - "[권고/우려 1] [priority/severity]"
+    - "[권고/우려 2] [priority/severity]"
+    - "[권고/우려 3] [priority/severity]"
+  changes:
+    - target: "변경 대상"
+      before: "변경 전"
+      after: "변경 후"
+      rationale: "변경 이유"
+```
+
+#### Layer 2: Key Findings (2K토큰 이내)
+
+```yaml
+key_recommendations:
+  - id: R1
+    priority: HIGH | MEDIUM | LOW
+    category: DESIGN | DATA | PERFORMANCE | OPERATION
+    description: "권고 내용"
+    rationale: "이유"
+
+key_concerns:
+  - id: C1
+    severity: HIGH | MEDIUM | LOW
+    description: "우려 내용"
+    impact: "영향"
+    mitigation: "완화 방안"
+
+vote_detail:
+  decision: AGREE | DISAGREE | CONDITIONAL
+  rationale: "투표 이유"
+  conditions: []
+  alternatives: []
+```
+
+#### Layer 3: Full Report (제한 없음)
+
+`review/{review-id}/artifacts/T4-ML-R{N}-full-report.md`에 저장.
+모델 서빙 설계, MLOps 파이프라인, 모델 카드 등을 포함합니다.
+
 ### 참고 자료
 
 - [Google MLOps Continuous Delivery](https://cloud.google.com/architecture/mlops-continuous-delivery-and-automation-pipelines-in-machine-learning)
