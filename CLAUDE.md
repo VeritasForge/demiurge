@@ -35,7 +35,7 @@ AI가 답변 시 준수할 원칙:
 
 - `.claude/agents/` — 12 architect agent definitions
 - `.claude/rules/` — 8 governance rules auto-applied based on file glob patterns
-- `.claude/skills/` — 16 quick-reference skill cards for architecture patterns
+- `.claude/skills/` — 17 quick-reference skill cards for architecture patterns
 - `.claude/commands/` — Slash commands (`commit`, `rl`, `wrap`)
 
 ## Orchestration Flow
@@ -148,7 +148,7 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 | `ml-platform-architect` | ML 플랫폼 | MLOps, Feature Store |
 | `healthcare-informatics-architect` | 의료 정보 | HL7 FHIR, HIPAA |
 
-## Skills (16개)
+## Skills (17개)
 
 ### Orchestration
 
@@ -180,6 +180,12 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 | `sre` | SRE Principles, SLO/SLI, Observability |
 | `ml-platform` | MLOps, Model Serving, Feature Store |
 | `healthcare-informatics` | HL7 FHIR, HIPAA, Medical Terminology |
+
+### Career Analysis
+
+| Skill | 내용 |
+|-------|------|
+| `job-analysis` | 이직 분석 4단계 프로토콜 (기업 심층 조사, 직무 분석, 이력서 매칭, 최종 평가 + 면접 예측) |
 
 ## Rules Auto-Application (8개)
 
@@ -236,6 +242,7 @@ Rules in `.claude/rules/` are automatically loaded based on file path globs:
 | **Data** | DAMA-DMBOK | ✅ | ✅ | - |
 | | Data Mesh | ✅ | ✅ | - |
 | **Research** | Deep Research Protocol | ✅ (12 agents) | ✅ | - |
+| **Career** | Job Analysis Protocol | - | ✅ | - |
 
 ## Usage
 
@@ -268,10 +275,21 @@ Use **`/wrap`** to validate and sync documentation:
 
 - Created: 2026-01-27
 - Last Updated: 2026-01-31
-- Version: 4.2
+- Version: 4.3
 
 ### Changelog
 
+- v4.3: `job-analysis` 스킬 추가 — 이직 준비 4단계 분석 프로토콜
+  - `.claude/skills/job-analysis/SKILL.md` 신규 생성
+  - Phase 1: 기업 심층 조사 (deep-research 프로토콜 적용, 재무 안전성, 레드플래그)
+  - Phase 2: 직무 역할 분석 (JD 파싱, 기술 스택, 채용 프로세스 조사)
+  - Phase 3: 이력서 매칭 분석 (6차원 매칭률, 강점/약점/성장 기회)
+  - Phase 4: 최종 평가 (종합 판정, Radar Chart, 예상 과제/면접 질문, 전략적 권고)
+  - 모든 Phase에서 sequential-thinking MCP 필수 사용
+  - 이모지 활용 리포팅 (가독성 강화)
+  - 이력서 자동 감지 (resume.md / RESUME.md / career/resume.md)
+  - 결과 저장: `career/{company-slug}-{role-slug}-analysis.md`
+  - Skills 수: 16 → 17
 - v4.2: Context Management Protocol 추가 — 오케스트레이션 세션 안정성 개선
   - `architect-orchestration` 스킬에 Context Management Protocol 섹션 추가
   - Context 위생 3원칙: 즉시 파일 저장 / Layer 1만 유지 / 마일스톤 compact
