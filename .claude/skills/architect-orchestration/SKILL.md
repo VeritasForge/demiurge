@@ -114,6 +114,90 @@ review/
 
 ---
 
+## Context Management Protocol
+
+대규모 오케스트레이션 실행 시 컨텍스트 윈도우 초과를 방지하기 위한 **필수** 프로토콜입니다.
+
+> **배경**: Deep Research + 다수 아키텍트 호출 시, 각 결과가 메인 컨텍스트에 누적되어 세션이 멈추는 문제가 발생합니다. Tiered Report와 Mediator 패턴으로 70% 절감했지만, 추가적인 context 위생 관리가 필요합니다.
+
+### 원칙
+
+```
+┌─ Context 위생 3원칙 ─────────────────────────────────────────────┐
+│                                                                    │
+│  1. 📁 즉시 파일 저장: 결과 수신 즉시 artifact 파일에 Write       │
+│  2. 📝 Layer 1만 유지: 메인 컨텍스트에는 Executive Summary만 보유  │
+│  3. 🔄 마일스톤 compact: /compact 실행으로 누적 context 압축      │
+│                                                                    │
+└────────────────────────────────────────────────────────────────────┘
+```
+
+### Compact 트리거 포인트
+
+다음 시점에서 **반드시 `/compact`를 실행**하여 컨텍스트를 압축합니다:
+
+| 시점 | 조건 | 이유 |
+|------|------|------|
+| **Step 1.5 완료 후** | Deep Research가 실행된 경우 | WebSearch/WebFetch 결과가 대량 누적 |
+| **Step 3 완료 후** | Specialist 3명 이상 호출된 경우 | 다수 Task 결과가 메인 컨텍스트에 반환됨 |
+| **Step 5 재라운드 시** | 재투표 2회 이상 발생 시 | 반복 호출로 context 누적 |
+
+> **중요**: `/compact` 실행 **전에** 모든 중요 결과를 반드시 파일로 저장하세요. compact 후에는 파일에서 Read로 복원합니다.
+
+### Deep Research 결과 파일 저장 규칙
+
+Step 1.5 (Deep Research) 결과는 반드시 파일로 저장하고, 메인 컨텍스트에는 **요약본(research_context)만** 유지합니다:
+
+```
+review/{review-id}/
+├── research/
+│   ├── phase1-broad-findings.md    # Phase 1 전체 결과 (WebSearch 결과 포함)
+│   ├── phase2-deep-dive.md         # Phase 2 심화 결과 (WebFetch 결과 포함)
+│   └── research-summary.md         # 요약본 (이것만 context에 유지)
+```
+
+**research-summary.md** (context에 유지할 요약본, 1K 토큰 이내):
+```yaml
+research_context:
+  topic: "[조사 주제]"
+  key_findings:
+    - finding: "[핵심 발견 1]"
+      confidence: "[Confirmed/Likely/Uncertain]"
+    - finding: "[핵심 발견 2]"
+      confidence: "[Confirmed/Likely/Uncertain]"
+  relevant_to:
+    security: "[보안 관련 1줄 요약]"
+    data: "[데이터 관련 1줄 요약]"
+  full_report: "review/{review-id}/research/"
+```
+
+### 단계 간 Context 위생 체크리스트
+
+각 주요 단계 완료 시 다음을 확인합니다:
+
+```yaml
+context_hygiene_check:
+  after_step_1_5:  # Deep Research 후
+    - action: "전체 검색 결과를 research/ 디렉토리에 Write"
+    - action: "research_context 요약본만 메인 컨텍스트에 유지"
+    - action: "/compact 실행"
+
+  after_step_2:    # Draft Architecture 후
+    - action: "draft-architecture.md에 Write 완료 확인"
+    - action: "이후 Step에서는 draft-architecture.md를 Read로 참조"
+
+  after_step_3:    # Specialist Review 후
+    - action: "각 Full Report를 artifacts/{AID}-full-report.md에 Write"
+    - action: "Layer 1 (Executive Summary)만 메인 컨텍스트에 유지"
+    - action: "/compact 실행 (3명 이상 호출 시)"
+
+  after_step_4:    # Cross-Review 후
+    - action: "consolidated-findings-r{N}.md에 Write 완료 확인"
+    - action: "이전 라운드 결과는 파일 참조로 전환"
+```
+
+---
+
 ## Execution Instructions
 
 아래 단계를 **순서대로** 실행하세요.
@@ -198,6 +282,18 @@ review/
 
 4. **최종 문서 생성 시 Phase 3 (지식 합성) 수행**:
    - Step 6에서 Research 결과를 통합하여 출처 인용 및 확신도 태깅 포함
+
+#### Context 관리 (필수)
+
+Deep Research 실행 후 반드시 다음을 수행합니다:
+
+1. **Phase 1 전체 결과** → `review/{review-id}/research/phase1-broad-findings.md`에 Write
+2. **Phase 2 심화 결과** (실행 시) → `review/{review-id}/research/phase2-deep-dive.md`에 Write
+3. **요약본 생성** → `review/{review-id}/research/research-summary.md`에 Write
+4. 메인 컨텍스트에는 **research_context 요약본(1K 토큰 이내)만** 유지
+5. **`/compact` 실행** — WebSearch/WebFetch 결과로 비대해진 컨텍스트를 압축
+
+> 이후 Step에서 Research 상세 내용이 필요하면 `research/` 디렉토리에서 Read로 참조합니다.
 
 #### 건너뛰기 조건
 
@@ -565,6 +661,16 @@ Task(
 2. 각 아키텍트의 **Layer 2 (Key Findings)** 를 `specialist_findings` 변수로 수집
 3. 각 아키텍트의 **Layer 3 (Full Report)** 를 `review/{review-id}/artifacts/{AID}-full-report.md`에 **Write tool**로 저장
 
+#### Context 관리 (필수)
+
+Specialist Review 완료 후 반드시 다음을 수행합니다:
+
+1. **모든 Full Report가 파일에 Write되었는지 확인**
+2. 메인 컨텍스트에는 **Layer 1 (Executive Summary)만 유지** — Layer 2/3은 파일 참조
+3. **3명 이상 호출된 경우 `/compact` 실행** — 다수 Task 결과로 비대해진 컨텍스트 압축
+
+> `/compact` 실행 후에도 `specialist_summaries` (Layer 1)는 compact 요약에 포함되므로 Step 4에서 활용 가능합니다. Layer 2가 필요한 경우 `artifacts/{AID}-full-report.md`에서 Read로 참조합니다.
+
 ---
 
 ### Step 4: Cross-Review — Mediator 방식
@@ -859,6 +965,7 @@ Consensus Loop:
 | 5 | Step 4-2 재호출 실행 여부 | CONDITIONAL/DISAGREE 존재 시 R2 산출물 확인 | 재호출 대상이 있었으면 R2 투표 결과 존재 |
 | 6 | Consensus Protocol 실행 | final-review.md 내 Consensus Status | 합의 비율 + 판정 결과 명시 |
 | 7 | 최종 문서 완성 | final-review.md 필수 섹션 | Agreed Points, Action Items, Risks 포함 |
+| 8 | Context 관리 실행 | /compact 실행 횟수 확인 | Deep Research 후 + Step 3 후 (해당 시) |
 
 #### Step 7-2: Execution Log
 
@@ -897,8 +1004,16 @@ execution_log:
     - step: "6"
       status: EXECUTED
       output: "final-review.md"
+  context_management:
+    compact_executed:
+      - after: "step-1.5"
+        reason: "Deep Research 완료"
+      - after: "step-3"
+        reason: "Specialist 6명 호출 완료"
+    files_saved: 12
+    layer1_only_in_context: true
   verification:
-    total_checks: 7
+    total_checks: 8
     passed: 7
     failed: 0
     result: PASS | FAIL
@@ -971,13 +1086,17 @@ critical_decision:
   오케스트레이터 Context ≈ 8 × 5K = 40K 토큰
   → Context 폭발 → 세션 초기화
 
-개선 후 (Mediator + Tiered Output):
+개선 후 (Mediator + Tiered Output + Context Management Protocol):
+  Step 1.5 Deep Research: 결과 파일 저장 + /compact → context 초기화
+  Step 2 Draft: draft-architecture.md 파일 참조 ≈ 0 (Read 시에만)
   Step 3 리포트 수집: 8 × 500 (Layer 1만) = 4K 토큰
+  Step 3 완료 후: Full Report 파일 저장 + /compact → context 압축
   Step 4 중재 정리: Consolidated Findings ≈ 3K 토큰
-  Step 4 재배포: 각 에이전트에 3K + 원본 Draft 2K = 5K 토큰
+  Step 4 재배포: 각 에이전트에 3K + Draft 참조 = 5K 토큰
   Step 5 합의: 재투표 결과 ≈ 1K 토큰
   ────────────
-  오케스트레이터 총 Context ≈ 12K 토큰 (70% 감소)
+  오케스트레이터 피크 Context ≈ 8K 토큰 (compact 후 기준)
+  Deep Research 포함 시에도 안정적 실행 가능
 
   필요 시 Layer 2/3는 파일에서 Read로 참조
 ```

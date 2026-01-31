@@ -267,11 +267,21 @@ Use **`/wrap`** to validate and sync documentation:
 ## Version & Changelog
 
 - Created: 2026-01-27
-- Last Updated: 2026-01-30
-- Version: 4.1
+- Last Updated: 2026-01-31
+- Version: 4.2
 
 ### Changelog
 
+- v4.2: Context Management Protocol 추가 — 오케스트레이션 세션 안정성 개선
+  - `architect-orchestration` 스킬에 Context Management Protocol 섹션 추가
+  - Context 위생 3원칙: 즉시 파일 저장 / Layer 1만 유지 / 마일스톤 compact
+  - Compact 트리거 포인트 3곳 정의: Step 1.5 후, Step 3 후, Step 5 재라운드 시
+  - Deep Research 결과 파일 저장 규칙 추가 (`research/` 디렉토리)
+  - 단계 간 Context 위생 체크리스트 추가
+  - Step 3 결과 수집에 Context 관리 지침 삽입
+  - Step 7 실행 검증에 Context 관리 검증 항목 추가 (#8)
+  - execution-log에 `context_management` 섹션 추가
+  - Context 절감 효과 수치 업데이트 (compact 포함)
 - v4.1: Step 4-2 버그 수정 + Step 5-0 Pre-Consensus Gate + Step 7 자기검증 메커니즘
   - Step 4-2 재호출 조건 명확화: "DISAGREE/CONDITIONAL" → "DISAGREE 또는 CONDITIONAL" (1명 이상 존재 시 반드시 실행)
   - Step 5-0 (Pre-Consensus Gate) 추가: CONDITIONAL 조건 충족 검증 (MET/PARTIALLY_MET/UNMET)
