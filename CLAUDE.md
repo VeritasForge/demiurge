@@ -274,11 +274,17 @@ Use **`/wrap`** to validate and sync documentation:
 ## Version & Changelog
 
 - Created: 2026-01-27
-- Last Updated: 2026-01-31
-- Version: 4.3
+- Last Updated: 2026-02-01
+- Version: 4.4
 
 ### Changelog
 
+- v4.4: `job-analysis` 스킬 개선 — Executive Summary 섹션 추가
+  - Step 4-5 `📌 Executive Summary` 단계 신설 (기존 저장은 Step 4-6으로 이동)
+  - 분석 파일 마지막에 Executive Summary 포함 (콘솔 출력과 동일)
+  - 필수 포함: Verdict Box, 차원별 Bar Chart, 핵심 요약 테이블, 종합 코멘트
+  - Output Template에 Executive Summary 섹션 추가
+  - Quality Checklist에 Executive Summary 검증 항목 추가
 - v4.3: `job-analysis` 스킬 추가 — 이직 준비 4단계 분석 프로토콜
   - `.claude/skills/job-analysis/SKILL.md` 신규 생성
   - Phase 1: 기업 심층 조사 (deep-research 프로토콜 적용, 재무 안전성, 레드플래그)
