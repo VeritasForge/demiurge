@@ -36,7 +36,7 @@ AI가 답변 시 준수할 원칙:
 - `.claude/agents/` — 12 architect agent definitions
 - `.claude/rules/` — 8 governance rules auto-applied based on file glob patterns
 - `.claude/skills/` — 17 quick-reference skill cards for architecture patterns
-- `.claude/commands/` — Slash commands (`commit`, `rl`, `wrap`)
+- `.claude/commands/` — Slash commands (`commit`, `rl`, `wrap`, `save_obsi`)
 
 ## Orchestration Flow
 
@@ -275,10 +275,12 @@ Use **`/wrap`** to validate and sync documentation:
 
 - Created: 2026-01-27
 - Last Updated: 2026-02-01
-- Version: 4.4
+- Version: 4.5
 
 ### Changelog
 
+- v4.5: `/wrap` 동기화 — `save_obsi` 커맨드 누락 반영
+  - Repository Structure의 commands 목록에 `save_obsi` 추가
 - v4.4: `job-analysis` 스킬 개선 — Executive Summary 섹션 추가
   - Step 4-5 `📌 Executive Summary` 단계 신설 (기존 저장은 Step 4-6으로 이동)
   - 분석 파일 마지막에 Executive Summary 포함 (콘솔 출력과 동일)
