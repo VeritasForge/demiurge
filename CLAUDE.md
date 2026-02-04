@@ -33,9 +33,9 @@ AI가 답변 시 준수할 원칙:
 
 ## Repository Structure
 
-- `.claude/agents/` — 12 architect agent definitions
+- `.claude/agents/` — 12 architect agents + 4 investigation agents (16 total)
 - `.claude/rules/` — 8 governance rules auto-applied based on file glob patterns
-- `.claude/skills/` — 17 quick-reference skill cards for architecture patterns
+- `.claude/skills/` — 18 skill cards (architecture patterns + investigation orchestration)
 - `.claude/commands/` — Slash commands (`commit`, `rl`, `wrap`, `save_obsi`)
 
 ## Orchestration Flow
@@ -124,7 +124,7 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 - DISAGREE 또는 CONDITIONAL 아키텍트만 재호출 (1명 이상 존재 시 반드시 실행)
 - Step 5-0: CONDITIONAL 조건 충족 검증 (MET/PARTIALLY_MET/UNMET) — Pre-Consensus Gate
 
-## Agents (12개)
+## Agents (16개)
 
 ### Core Architecture Agents
 
@@ -148,7 +148,16 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 | `ml-platform-architect` | ML 플랫폼 | MLOps, Feature Store |
 | `healthcare-informatics-architect` | 의료 정보 | HL7 FHIR, HIPAA |
 
-## Skills (17개)
+### Investigation Agents
+
+| Agent | 역할 | 핵심 지식 |
+|-------|------|-----------|
+| `code-investigator` | 코드베이스 분석 | 호출 체인, 에러 핸들링, 데이터 흐름, 동시성 |
+| `log-investigator` | 로그/에러 분석 | 스택트레이스, 패턴, 타임라인, 메트릭 |
+| `history-investigator` | Git 이력 분석 | blame, 최근 변경, PR 컨텍스트, 회귀 |
+| `counter-reviewer` | 발견사항 반박 | Boris Cherny "poking holes", false positive 제거 |
+
+## Skills (18개)
 
 ### Orchestration
 
@@ -180,6 +189,12 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 | `sre` | SRE Principles, SLO/SLI, Observability |
 | `ml-platform` | MLOps, Model Serving, Feature Store |
 | `healthcare-informatics` | HL7 FHIR, HIPAA, Medical Terminology |
+
+### Investigation
+
+| Skill | 내용 |
+|-------|------|
+| `investigation-orchestration` | 다중 조사관 오케스트레이션 (동적 배정, 병렬 조사, 교차 검증, 반박, 증거 기반 판정) |
 
 ### Career Analysis
 
@@ -242,6 +257,7 @@ Rules in `.claude/rules/` are automatically loaded based on file path globs:
 | **Data** | DAMA-DMBOK | ✅ | ✅ | - |
 | | Data Mesh | ✅ | ✅ | - |
 | **Research** | Deep Research Protocol | ✅ (12 agents) | ✅ | - |
+| **Investigation** | Multi-Agent Investigation | ✅ (4 agents) | ✅ | - |
 | **Career** | Job Analysis Protocol | - | ✅ | - |
 
 ## Usage
@@ -256,6 +272,11 @@ Use **individual agents** for focused reviews:
 domain-architect: 도메인 모델 및 Bounded Context 검토
 security-architect: 보안 위협 분석 및 암호화 검증
 solution-architect: 전체 시스템 아키텍처 설계
+```
+
+Use the **investigation skill** for codebase investigation and debugging:
+```
+/investigation-orchestration 코드베이스 조사 (버그, 성능, 구조 분석 등)
 ```
 
 Reference **skills** for quick pattern lookups:
@@ -274,11 +295,25 @@ Use **`/wrap`** to validate and sync documentation:
 ## Version & Changelog
 
 - Created: 2026-01-27
-- Last Updated: 2026-02-01
-- Version: 4.5
+- Last Updated: 2026-02-04
+- Version: 4.6
 
 ### Changelog
 
+- v4.6: Investigation Orchestration System 추가 — 코드베이스 다중 조사관 오케스트레이션
+  - `.claude/skills/investigation-orchestration/SKILL.md` 신규 생성 (5-Step 프로토콜)
+  - `.claude/skills/investigation-orchestration/investigator-registry.md` 신규 생성 (조사관 타입/관점 카탈로그)
+  - `.claude/skills/investigation-orchestration/classification-protocol.md` 신규 생성 (분류 규칙 + 판정 알고리즘)
+  - `.claude/agents/code-investigator.md` 신규 생성 (코드 분석 전문 조사관)
+  - `.claude/agents/log-investigator.md` 신규 생성 (로그/에러 분석 전문 조사관)
+  - `.claude/agents/history-investigator.md` 신규 생성 (Git 이력 분석 전문 조사관)
+  - `.claude/agents/counter-reviewer.md` 신규 생성 (Boris Cherny 반박 패턴)
+  - 동적 조사관 배정: 타입 x 관점(perspective) 조합을 쿼리에 따라 동적 결정
+  - IID (Investigator ID) 체계: `{TYPE}-{PERSPECTIVE}-R{Round}` 형식
+  - 증거 기반 판정: majority vote 대신 Judge 패턴 (Tool-MAD 18.1% 개선)
+  - Anti-Sycophancy: Counter-Reviewer 필수 반박 + 독립 조사 선행
+  - Quick Mode: 단순 문의는 1 조사관으로 간소화
+  - Agents 수: 12 → 16, Skills 수: 17 → 18
 - v4.5: `/wrap` 동기화 — `save_obsi` 커맨드 누락 반영
   - Repository Structure의 commands 목록에 `save_obsi` 추가
 - v4.4: `job-analysis` 스킬 개선 — Executive Summary 섹션 추가

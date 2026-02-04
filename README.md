@@ -29,10 +29,10 @@ Demiurge doesn't build software. It makes Claude Code capable of building *anyth
 
 A **multi-agent architecture governance template** for Claude Code:
 
-- **12 specialist architect agents** — from Solution Architect to Healthcare Informatics
-- **15 skill cards** — quick-reference patterns for DDD, EDA, cloud-native, security, and more
+- **16 agents** — 12 specialist architects + 4 investigation agents
+- **18 skill cards** — architecture patterns, investigation orchestration, deep research, job analysis, and more
 - **8 governance rules** — auto-applied based on file paths
-- **Orchestration system** — tiered review, parallel evaluation, consensus protocol
+- **2 orchestration systems** — architect review (consensus protocol) + investigation (evidence-based judgment)
 
 No application code. No runtime dependencies. Pure `.claude/` configuration.
 
@@ -53,6 +53,7 @@ No application code. No runtime dependencies. Pure `.claude/` configuration.
 | **2 Design** (conditional) | Application, Data, Integration, Healthcare Informatics | Parallel |
 | **3 Quality** (conditional) | Security, SRE, Cloud-Native | Parallel |
 | **4 Enabling** (on-demand) | EDA Specialist, ML Platform, Concurrency | On-demand |
+| **Investigation** (on-demand) | Code, Log, History Investigators + Counter-Reviewer | Parallel |
 
 ### Consensus Protocol
 
@@ -85,6 +86,12 @@ solution-architect: 전체 시스템 아키텍처 설계
 .claude/skills/cloud-native/SKILL.md
 ```
 
+### Codebase investigation (bug, performance, structure analysis)
+
+```
+/investigation-orchestration 코드베이스 조사 (버그, 성능, 구조 분석 등)
+```
+
 ### Documentation sync
 
 ```
@@ -99,8 +106,8 @@ demiurge/
 ├── CLAUDE.md                          # Project instructions (single source of truth)
 ├── README.md                          # This file
 ├── .claude/
-│   ├── agents/                        # 12 architect agent definitions
-│   │   ├── solution-architect.md
+│   ├── agents/                        # 16 agent definitions
+│   │   ├── solution-architect.md      #   12 architect agents
 │   │   ├── domain-architect.md
 │   │   ├── application-architect.md
 │   │   ├── data-architect.md
@@ -111,7 +118,11 @@ demiurge/
 │   │   ├── eda-specialist.md
 │   │   ├── concurrency-architect.md
 │   │   ├── ml-platform-architect.md
-│   │   └── healthcare-informatics-architect.md
+│   │   ├── healthcare-informatics-architect.md
+│   │   ├── code-investigator.md       #   4 investigation agents
+│   │   ├── log-investigator.md
+│   │   ├── history-investigator.md
+│   │   └── counter-reviewer.md
 │   ├── rules/                         # 8 governance rules (auto-applied by glob)
 │   │   ├── architecture-principles.md
 │   │   ├── security-requirements.md
@@ -121,8 +132,11 @@ demiurge/
 │   │   ├── messaging-patterns.md
 │   │   ├── healthcare-compliance.md
 │   │   └── architect-review.md
-│   ├── skills/                        # 15 skill cards
+│   ├── skills/                        # 18 skill cards
 │   │   ├── architect-orchestration/
+│   │   ├── investigation-orchestration/
+│   │   ├── deep-research/
+│   │   ├── job-analysis/
 │   │   ├── solution-architecture/
 │   │   ├── domain-driven-design/
 │   │   ├── application-architecture/
@@ -138,9 +152,13 @@ demiurge/
 │   │   ├── ml-platform/
 │   │   └── healthcare-informatics/
 │   └── commands/                      # Slash commands
-│       ├── rl.md
 │       ├── commit.md
-│       └── wrap.md
+│       ├── rl.md
+│       ├── wrap.md
+│       └── save_obsi.md
+├── docs/                              # Design documentation
+│   ├── investigation-orchestration-system.md       # Deep research (기반 연구)
+│   └── investigation-orchestration-implementation.md # 설계/구현 문서
 └── adr_1.md
 ```
 
