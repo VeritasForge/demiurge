@@ -1,7 +1,7 @@
 # Investigation Orchestration System — 설계 과정 및 구현 문서
 
 > **생성일**: 2026-02-04
-> **버전**: v4.6 (CLAUDE.md 기준)
+> **버전**: v4.7 (CLAUDE.md 기준)
 > **기반 연구**: [`docs/investigation-orchestration-system.md`](./investigation-orchestration-system.md)
 
 ---
@@ -172,6 +172,7 @@ TYPE:                    PERSPECTIVE 예시:
   LOG  = log-investigator     STACKTRACE, PATTERN, TIMELINE, METRICS
   HIST = history-investigator RECENT, BLAME, PRCONTEXT, REGRESSION
   CR   = counter-reviewer     AGREED (challenge)
+  REL  = release-investigator ARTCOMP, DEPLOY, RISK, INFRA, OPS
 ```
 
 ### Tiered Report Template
@@ -202,23 +203,28 @@ Investigation Orchestration (Tiered + Compact):
 
 ## 5. 생성된 파일 목록
 
-### 신규 생성 (7개)
+### 신규 생성 (9개)
 
-| # | 파일 경로 | 역할 |
-|---|-----------|------|
-| 1 | `.claude/skills/investigation-orchestration/SKILL.md` | 5-Step 오케스트레이션 프로토콜 |
-| 2 | `.claude/skills/investigation-orchestration/investigator-registry.md` | 조사관 타입/관점 카탈로그, 배정 알고리즘 |
-| 3 | `.claude/skills/investigation-orchestration/classification-protocol.md` | 분류 규칙, 판정 알고리즘, 보고서 구조 |
-| 4 | `.claude/agents/code-investigator.md` | 코드 분석 전문 조사관 에이전트 |
-| 5 | `.claude/agents/log-investigator.md` | 로그/에러 분석 전문 조사관 에이전트 |
-| 6 | `.claude/agents/history-investigator.md` | Git 이력 분석 전문 조사관 에이전트 |
-| 7 | `.claude/agents/counter-reviewer.md` | 발견사항 반박 (Boris Cherny 패턴) |
+| # | 파일 경로 | 역할 | 버전 |
+|---|-----------|------|------|
+| 1 | `.claude/skills/investigation-orchestration/SKILL.md` | 5-Step 오케스트레이션 프로토콜 | v4.6 |
+| 2 | `.claude/skills/investigation-orchestration/investigator-registry.md` | 조사관 타입/관점 카탈로그, 배정 알고리즘 | v4.6 |
+| 3 | `.claude/skills/investigation-orchestration/classification-protocol.md` | 분류 규칙, 판정 알고리즘, 보고서 구조 | v4.6 |
+| 4 | `.claude/agents/code-investigator.md` | 코드 분석 전문 조사관 에이전트 | v4.6 |
+| 5 | `.claude/agents/log-investigator.md` | 로그/에러 분석 전문 조사관 에이전트 | v4.6 |
+| 6 | `.claude/agents/history-investigator.md` | Git 이력 분석 전문 조사관 에이전트 | v4.6 |
+| 7 | `.claude/agents/counter-reviewer.md` | 발견사항 반박 (Boris Cherny 패턴) | v4.6 |
+| 8 | `.claude/agents/release-investigator.md` | 릴리즈 분석 전문 조사관 에이전트 | v4.7 |
+| 9 | `.claude/skills/release-handoff/SKILL.md` | 릴리즈 핸드오프 참조 지식 스킬 카드 | v4.7 |
 
-### 수정 (1개)
+### 수정 (5개)
 
-| 파일 | 변경 내용 |
-|------|-----------|
-| `CLAUDE.md` | v4.6 업데이트 — Investigation agents/skill 추가, Agents 12→16, Skills 17→18, Orchestration Flow에 Investigation 반영 |
+| 파일 | 변경 내용 | 버전 |
+|------|-----------|------|
+| `CLAUDE.md` | v4.6: Investigation agents/skill 추가 (12→16 agents, 17→18 skills); v4.7: Release Investigator 추가 (16→17 agents, 18→19 skills) | v4.6, v4.7 |
+| `investigator-registry.md` | v4.7: REL type + 5 perspectives + IID + 권장 조합 3건 추가 | v4.7 |
+| `investigation-orchestration/SKILL.md` | v4.7: description에 릴리즈 조사 범위 추가, IID에 REL 추가 | v4.7 |
+| `docs/investigation-orchestration-implementation.md` | v4.7: 신규 파일 2개 + 수정 4개 반영, 매트릭스/시나리오 추가 | v4.7 |
 
 ---
 
@@ -261,7 +267,22 @@ Investigation Orchestration (Tiered + Compact):
 | CODE-CONCURRENCY-R1 | code-investigator | 동시성/커넥션 풀 |
 | HIST-BLAME-R1 | history-investigator | 쿼리 변경 이력 |
 
-#### 시나리오 3: 단순 문의 (Quick Mode)
+#### 시나리오 3: 릴리즈 핸드오프 문서 검증
+
+```
+/investigation-orchestration vc-backend v2.3.0 릴리즈 핸드오프 문서를 검증해주세요.
+신규 모듈(vc-screening-service)이 포함되어 있고, DB 마이그레이션이 있습니다.
+```
+
+예상 배정:
+| IID | 조사관 | 조사 범위 |
+|-----|--------|----------|
+| REL-ARTCOMP-R1 | release-investigator | 문서 Section 1-7 완전성 검증 |
+| REL-RISK-R1 | release-investigator | 변경 리스크 + 롤백 계획 적절성 |
+| REL-DEPLOY-R1 | release-investigator | 배포 절차 + 마이그레이션 검증 |
+| CODE-DEPENDENCY-R1 | code-investigator | 의존성 변경 교차 검증 |
+
+#### 시나리오 4: 단순 문의 (Quick Mode)
 
 ```
 /investigation-orchestration OrderService.createOrder() 메서드에서
@@ -275,7 +296,7 @@ Quick Mode 판정 → 조사관 1명(CODE-CALLCHAIN-R1)만 배정 → 교차 검
 | 구분 | Architect Orchestration | Investigation Orchestration |
 |------|------------------------|----------------------------|
 | **목적** | 아키텍처 설계 리뷰/합의 | 코드베이스 문제 조사/분석 |
-| **에이전트** | 12 Architect agents | 4 Investigator agents |
+| **에이전트** | 12 Architect agents | 5 Investigator agents |
 | **합의** | 2/3 투표 + Veto | Judge Pattern (증거 기반) |
 | **결과물** | ADR, Architecture Decision | Investigation Report, Findings |
 | **적합한 질문** | "이 설계가 적절한가?" | "왜 이 버그가 발생하는가?" |
@@ -295,8 +316,10 @@ Quick Mode 판정 → 조사관 1명(CODE-CALLCHAIN-R1)만 배정 → 교차 검
 | 5 | log-investigator.md 에이전트 정의 | PASS |
 | 6 | history-investigator.md 에이전트 정의 | PASS |
 | 7 | counter-reviewer.md 에이전트 정의 | PASS |
-| 8 | CLAUDE.md v4.6 반영 (16 agents, 18 skills) | PASS |
-| 9 | IID 체계 정의 및 일관성 | PASS |
+| 8 | release-investigator.md 에이전트 정의 | PASS |
+| 9 | release-handoff/SKILL.md 참조 스킬 정의 | PASS |
+| 10 | CLAUDE.md v4.7 반영 (17 agents, 19 skills) | PASS |
+| 11 | IID 체계 정의 및 일관성 (REL 포함) | PASS |
 | 10 | Tiered Report Template 정의 | PASS |
 | 11 | Quick Mode 분기 로직 | PASS |
 | 12 | Context Management Protocol 포함 | PASS |
@@ -318,16 +341,17 @@ Quick Mode 판정 → 조사관 1명(CODE-CALLCHAIN-R1)만 배정 → 교차 검
 ## 부록: 조사관-관점 매트릭스
 
 ```
-           ┌─────────────┬───────────────┬──────────────┬─────────────┐
-           │ Code Inv.   │ Log Inv.      │ History Inv. │ Counter-Rev │
-           │ (CODE)      │ (LOG)         │ (HIST)       │ (CR)        │
-  ─────────┼─────────────┼───────────────┼──────────────┼─────────────┤
-  Persp. 1 │ CALLCHAIN   │ STACKTRACE    │ RECENT       │ AGREED      │
-  Persp. 2 │ DATAFLOW    │ PATTERN       │ BLAME        │             │
-  Persp. 3 │ ERRORHANDL. │ TIMELINE      │ PRCONTEXT    │             │
-  Persp. 4 │ CONCURRENCY │ METRICS       │ REGRESSION   │             │
-           └─────────────┴───────────────┴──────────────┴─────────────┘
+           ┌─────────────┬───────────────┬──────────────┬─────────────┬──────────────┐
+           │ Code Inv.   │ Log Inv.      │ History Inv. │ Counter-Rev │ Release Inv. │
+           │ (CODE)      │ (LOG)         │ (HIST)       │ (CR)        │ (REL)        │
+  ─────────┼─────────────┼───────────────┼──────────────┼─────────────┼──────────────┤
+  Persp. 1 │ CALLCHAIN   │ STACKTRACE    │ RECENT       │ AGREED      │ ARTCOMP      │
+  Persp. 2 │ DATAFLOW    │ PATTERN       │ BLAME        │             │ DEPLOY       │
+  Persp. 3 │ ERRORHANDL. │ TIMELINE      │ PRCONTEXT    │             │ RISK         │
+  Persp. 4 │ CONCURRENCY │ METRICS       │ REGRESSION   │             │ INFRA        │
+  Persp. 5 │             │               │              │             │ OPS          │
+           └─────────────┴───────────────┴──────────────┴─────────────┴──────────────┘
 
-  조합 예: CODE-CALLCHAIN-R1, LOG-STACKTRACE-R1, HIST-BLAME-R1
+  조합 예: CODE-CALLCHAIN-R1, LOG-STACKTRACE-R1, HIST-BLAME-R1, REL-ARTCOMP-R1
   → 쿼리에 따라 동적으로 최적 조합 결정
 ```

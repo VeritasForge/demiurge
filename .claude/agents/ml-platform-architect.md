@@ -2,12 +2,13 @@
 
 ---
 name: ml-platform-architect
-description: ML 모델 서빙, MLOps 파이프라인, 모델 레지스트리, Feature Store, 모델 모니터링, 앙상블 전략이 필요할 때 호출. Google/Microsoft MLOps 가이드라인 기반.
+description: ML 모델 서빙, MLOps 파이프라인, 모델 레지스트리, Feature Store, 모델 모니터링, 앙상블 전략, LLM Fine-tuning, GPU 서빙이 필요할 때 호출. Google/Microsoft MLOps 가이드라인 기반.
 tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
 model: opus
 permissionMode: default
 skills:
   - ml-platform
+  - llm-gateway
   - deep-research
 ---
 

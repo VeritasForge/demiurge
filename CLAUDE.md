@@ -33,9 +33,9 @@ AI가 답변 시 준수할 원칙:
 
 ## Repository Structure
 
-- `.claude/agents/` — 12 architect agents + 4 investigation agents (16 total)
+- `.claude/agents/` — 15 architect agents + 5 investigation agents (20 total)
 - `.claude/rules/` — 8 governance rules auto-applied based on file glob patterns
-- `.claude/skills/` — 18 skill cards (architecture patterns + investigation orchestration)
+- `.claude/skills/` — 25 skill cards (architecture patterns + AI backend + business + investigation + release)
 - `.claude/commands/` — Slash commands (`commit`, `rl`, `wrap`, `save_obsi`)
 
 ## Orchestration Flow
@@ -85,8 +85,8 @@ Step 7: 실행 검증 (Post-Orchestration Verification)
 | Tier | Agents | Role | Execution |
 |------|--------|------|-----------|
 | **1 Strategic** (required) | Solution Architect, Domain Architect | Draft 생성 + 교차 리뷰 + 중재자 | Sequential |
-| **2 Design** (conditional) | Application, Data, Integration, Healthcare Informatics | Specialist Feedback | Parallel |
-| **3 Quality** (conditional) | Security, SRE, Cloud-Native | Specialist Feedback | Parallel |
+| **2 Design** (conditional) | Application, Data, Integration, Healthcare Informatics, LLM, RAG | Specialist Feedback | Parallel |
+| **3 Quality** (conditional) | Security, SRE, Cloud-Native, AI Safety | Specialist Feedback | Parallel |
 | **4 Enabling** (on-demand) | EDA Specialist, ML Platform, Concurrency | Specialist Feedback | On-demand |
 
 ### AID (Architect ID) 체계
@@ -95,7 +95,7 @@ Step 7: 실행 검증 (Post-Orchestration Verification)
 
 ```
 형식: "{Tier}-{Role}-R{Round}"
-예시: T1-SA-R1, T1-DA-R2, T2-APP-R1, T3-SEC-R1, T4-EDA-R1
+예시: T1-SA-R1, T1-DA-R2, T2-APP-R1, T2-LLM-R1, T2-RAG-R1, T3-SEC-R1, T3-AIS-R1, T4-EDA-R1
 ```
 
 ### Tiered Report Template
@@ -124,7 +124,7 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 - DISAGREE 또는 CONDITIONAL 아키텍트만 재호출 (1명 이상 존재 시 반드시 실행)
 - Step 5-0: CONDITIONAL 조건 충족 검증 (MET/PARTIALLY_MET/UNMET) — Pre-Consensus Gate
 
-## Agents (16개)
+## Agents (20개)
 
 ### Core Architecture Agents
 
@@ -143,10 +143,18 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 |-------|------|-----------|
 | `data-architect` | 데이터 아키텍처 | DAMA-DMBOK, CQRS, Data Mesh |
 | `integration-architect` | 시스템 통합 | EIP, API Gateway, Message Broker |
-| `security-architect` | 보안 아키텍처 | OWASP, Zero Trust, NIST |
-| `sre-architect` | 운영 아키텍처 | SRE, Observability, SLO |
-| `ml-platform-architect` | ML 플랫폼 | MLOps, Feature Store |
+| `security-architect` | 보안 아키텍처 | OWASP, Zero Trust, NIST, AI Safety |
+| `sre-architect` | 운영 아키텍처 | SRE, Observability, SLO, LLM Observability |
+| `ml-platform-architect` | ML 플랫폼 | MLOps, Feature Store, LLM Fine-tuning, GPU Serving |
 | `healthcare-informatics-architect` | 의료 정보 | HL7 FHIR, HIPAA |
+
+### AI Backend Agents
+
+| Agent | 역할 | 핵심 지식 |
+|-------|------|-----------|
+| `llm-architect` | LLM 시스템 아키텍처 | LLM Gateway, 모델 라우팅, Prompt Management, Caching |
+| `rag-architect` | RAG & Agent 아키텍처 | RAG Pipeline, Vector DB, Multi-Agent, MCP |
+| `ai-safety-architect` | AI 안전성 아키텍처 | OWASP LLM Top 10, Prompt Injection 방어, EU AI Act |
 
 ### Investigation Agents
 
@@ -156,8 +164,9 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 | `log-investigator` | 로그/에러 분석 | 스택트레이스, 패턴, 타임라인, 메트릭 |
 | `history-investigator` | Git 이력 분석 | blame, 최근 변경, PR 컨텍스트, 회귀 |
 | `counter-reviewer` | 발견사항 반박 | Boris Cherny "poking holes", false positive 제거 |
+| `release-investigator` | 릴리즈 핸드오프 검증 | 문서 완전성, 배포 준비, 리스크, 인프라 영향, 운영 준비 |
 
-## Skills (18개)
+## Skills (25개)
 
 ### Orchestration
 
@@ -177,7 +186,7 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 | `concurrency-patterns` | Reactor, Proactor, Active Object, Thread Pool |
 | `cloud-native` | 12-Factor, K8s Patterns, Deployment Strategies |
 | `api-design` | Richardson Model, Versioning, Contract-First |
-| `testing-architecture` | Test Pyramid, Contract Testing, TDD/BDD |
+| `testing-architecture` | Test Pyramid, Contract Testing, TDD/BDD, LLM Evaluation, LLM-as-Judge |
 
 ### Domain-Specific Skills
 
@@ -186,21 +195,38 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 | `data-architecture` | DAMA-DMBOK, CQRS, Event Sourcing, Data Mesh |
 | `integration` | EIP, API Gateway, Event-Driven |
 | `security` | OWASP, Zero Trust, Encryption |
-| `sre` | SRE Principles, SLO/SLI, Observability |
-| `ml-platform` | MLOps, Model Serving, Feature Store |
+| `sre` | SRE Principles, SLO/SLI, Observability, LLM Observability, 토큰/비용 추적 |
+| `ml-platform` | MLOps, Model Serving, Feature Store, LLM Fine-tuning, GPU Serving |
 | `healthcare-informatics` | HL7 FHIR, HIPAA, Medical Terminology |
+
+### AI Backend Skills
+
+| Skill | 내용 |
+|-------|------|
+| `llm-gateway` | LLM Gateway 아키텍처, 모델 라우팅, Multi-provider 추상화, Streaming, Caching |
+| `rag-architecture` | RAG Pipeline, Chunking, Embedding, Vector DB, Hybrid Search, Re-ranking, Agentic RAG |
+| `ai-agent` | AI Agent 패턴 (ReAct, Multi-Agent, Plan-and-Execute), Workflow, MCP, State Management |
+| `prompt-engineering` | Prompt Lifecycle, 버저닝, A/B Testing, DSPy, Dynamic Assembly, CI/CD |
+| `ai-safety` | OWASP LLM Top 10, Prompt Injection 방어, 할루시네이션 감지, PII 보호, EU AI Act |
 
 ### Investigation
 
 | Skill | 내용 |
 |-------|------|
 | `investigation-orchestration` | 다중 조사관 오케스트레이션 (동적 배정, 병렬 조사, 교차 검증, 반박, 증거 기반 판정) |
+| `release-handoff` | 릴리즈 핸드오프 문서 구조, 변경 등급 기준, 섹션별 필수/선택 매트릭스 (참조 스킬) |
 
 ### Career Analysis
 
 | Skill | 내용 |
 |-------|------|
 | `job-analysis` | 이직 분석 4단계 프로토콜 (기업 심층 조사, 직무 분석, 이력서 매칭, 최종 평가 + 면접 예측) |
+
+### Business & Marketing
+
+| Skill | 내용 |
+|-------|------|
+| `seth-godin-marketing` | Seth Godin 마케팅 철학 (보랏빛 소, 퍼미션 마케팅, 트라이브, 최소 유효 시장, 변화 중심). 전략·카피·이메일·콘텐츠·론칭 생성. |
 
 ## Rules Auto-Application (8개)
 
@@ -256,9 +282,27 @@ Rules in `.claude/rules/` are automatically loaded based on file path globs:
 | | Half-Sync/Half-Async | ✅ | ✅ | - |
 | **Data** | DAMA-DMBOK | ✅ | ✅ | - |
 | | Data Mesh | ✅ | ✅ | - |
-| **Research** | Deep Research Protocol | ✅ (12 agents) | ✅ | - |
+| **AI Backend** | LLM Gateway (Routing, Fallback) | ✅ | ✅ | - |
+| | RAG Pipeline (Chunking, VectorDB, Rerank) | ✅ | ✅ | - |
+| | AI Agent (ReAct, Multi-Agent, MCP) | ✅ | ✅ | - |
+| | Prompt Management (Versioning, A/B, DSPy) | ✅ | ✅ | - |
+| | AI Safety (OWASP LLM, Injection, PII) | ✅ | ✅ | - |
+| | LLM Evaluation (RAGAS, LLM-as-Judge) | - | ✅ | - |
+| | LLM Observability (OTel, Token Tracking) | - | ✅ | - |
+| | LLM Fine-tuning (SFT, DPO, LoRA) | - | ✅ | - |
+| | GPU Serving (vLLM, TGI, Continuous Batching) | - | ✅ | - |
+| **Research** | Deep Research Protocol | ✅ (15 agents) | ✅ | - |
 | **Investigation** | Multi-Agent Investigation | ✅ (4 agents) | ✅ | - |
+| **Release Investigation** | Release Handoff Verification | ✅ (1 agent) | ✅ | - |
 | **Career** | Job Analysis Protocol | - | ✅ | - |
+| **Business & Marketing** | Purple Cow (Remarkability) | - | ✅ | - |
+| | Permission Marketing | - | ✅ | - |
+| | Tribes (Community Building) | - | ✅ | - |
+| | Smallest Viable Market | - | ✅ | - |
+| | Story Framework | - | ✅ | - |
+| | Content Strategy (Lighthouse/Gift/Connection) | - | ✅ | - |
+| | Launch Framework (Seeding → Ignition → Spread) | - | ✅ | - |
+| | Trust Ladder | - | ✅ | - |
 
 ## Usage
 
@@ -279,6 +323,13 @@ Use the **investigation skill** for codebase investigation and debugging:
 /investigation-orchestration 코드베이스 조사 (버그, 성능, 구조 분석 등)
 ```
 
+Use the **marketing skill** for Seth Godin-style marketing:
+```
+/seth-godin-marketing strategy "번아웃 직전 스타트업 대표" "AI 업무 자동화 SaaS"
+/seth-godin-marketing copywriting "취업준비생" "이력서 작성 도구"
+/seth-godin-marketing email "신규 가입자" "웰컴 시퀀스"
+```
+
 Reference **skills** for quick pattern lookups:
 ```
 .claude/skills/domain-driven-design/SKILL.md
@@ -295,11 +346,39 @@ Use **`/wrap`** to validate and sync documentation:
 ## Version & Changelog
 
 - Created: 2026-01-27
-- Last Updated: 2026-02-04
-- Version: 4.6
+- Last Updated: 2026-02-13
+- Version: 4.9
 
 ### Changelog
 
+- v4.9: Seth Godin Marketing Skill 추가 — 비즈니스/마케팅 도메인 확장
+  - `.claude/skills/business/seth-godin-marketing/` 신규 생성 (1 SKILL.md + 5 reference docs)
+  - NEW PATTERN: business/ 카테고리 폴더 도입 (향후 마케팅/세일즈 스킬 확장 기반)
+  - User-invocable skill: `/seth-godin-marketing <request_type> <target_audience> [context]`
+  - 5 Core Principles: Purple Cow, Permission Marketing, Tribes, The Dip, This Is Marketing
+  - 5 Supporting Docs: strategy.md (5단계), copywriting.md (4단계), email.md (Trust Ladder), content.md (3타입), launch.md (3단계)
+  - 5-Step Process: Empathy Map → SVM → Story Framework → Output → Purple Cow Check
+  - Coverage Matrix에 Business & Marketing 영역 추가 (8개 패턴)
+  - First business/marketing skill (project expansion from pure technical to business domain)
+  - Skills 수: 24 → 25
+- v4.8: AI Backend 아키텍처 확장 — LLM/RAG/Agent/Safety 스킬 및 에이전트 추가
+  - 10개 카테고리 심층 조사 수행 (`research/ai-backend/` 디렉토리, ~845KB 산출물)
+  - 5개 신규 스킬 생성: `llm-gateway`, `rag-architecture`, `ai-agent`, `prompt-engineering`, `ai-safety`
+  - 3개 기존 스킬 확장: `ml-platform` (+LLM Fine-tuning, GPU Serving), `sre` (+LLM Observability), `testing-architecture` (+LLM Evaluation)
+  - 3개 신규 에이전트 생성: `llm-architect` (Tier 2), `rag-architect` (Tier 2), `ai-safety-architect` (Tier 3)
+  - 3개 기존 에이전트 업데이트: `security-architect` (+ai-safety 스킬), `sre-architect` (+llm-gateway 스킬), `ml-platform-architect` (+llm-gateway 스킬, 설명 업데이트)
+  - Agent Tiers 업데이트: Tier 2에 LLM/RAG 추가, Tier 3에 AI Safety 추가
+  - Coverage Matrix에 AI Backend 영역 9개 패턴 추가
+  - AID 체계 확장: T2-LLM, T2-RAG, T3-AIS 추가
+  - Agents 수: 17 → 20, Skills 수: 19 → 24
+- v4.7: Release Investigator 확장 — 릴리즈 핸드오프 검증 시스템
+  - `.claude/agents/release-investigator.md` 신규 생성 (릴리즈 분석 전문 조사관)
+  - `.claude/skills/release-handoff/SKILL.md` 신규 생성 (릴리즈 핸드오프 참조 지식)
+  - `investigator-registry.md`에 REL type + 5개 perspectives + 권장 조합 3건 추가
+  - `investigation-orchestration/SKILL.md`에 릴리즈 조사 범위 + REL IID 추가
+  - 5개 Perspectives: artifact-completeness, deployment-readiness, risk-assessment, infra-impact, ops-readiness
+  - 증거 소스 확장: 릴리즈 문서, CHANGELOG, 배포 스크립트, 설정 파일, 마이그레이션, IaC, diff
+  - Agents 수: 16 → 17, Skills 수: 18 → 19
 - v4.6: Investigation Orchestration System 추가 — 코드베이스 다중 조사관 오케스트레이션
   - `.claude/skills/investigation-orchestration/SKILL.md` 신규 생성 (5-Step 프로토콜)
   - `.claude/skills/investigation-orchestration/investigator-registry.md` 신규 생성 (조사관 타입/관점 카탈로그)

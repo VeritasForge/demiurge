@@ -8,6 +8,7 @@ model: opus
 permissionMode: default
 skills:
   - sre
+  - llm-gateway
   - deep-research
 ---
 

@@ -1,6 +1,6 @@
 ---
 name: investigation-orchestration
-description: 코드베이스 조사를 위한 다중 조사관 오케스트레이션. 동적 조사관 배정 → 병렬 독립 조사 → 교차 검증 → 반박 → 증거 기반 판정. /investigation-orchestration 으로 실행.
+description: 코드베이스 조사 및 릴리즈 핸드오프 검증을 위한 다중 조사관 오케스트레이션. 동적 조사관 배정 → 병렬 독립 조사 → 교차 검증 → 반박 → 증거 기반 판정. /investigation-orchestration 으로 실행.
 allowed-tools: Read, Grep, Glob, Task, Bash, mcp__sequential-thinking__sequentialthinking
 ---
 
@@ -8,7 +8,7 @@ allowed-tools: Read, Grep, Glob, Task, Bash, mcp__sequential-thinking__sequentia
 
 ## Overview
 
-이 스킬은 사용자의 코드베이스 관련 질문/문제를 분석하고, 전문 조사관 에이전트를 **Task tool**로 spawn하여 **독립 조사 → 교차 검증 → 반박 → 증거 기반 판정**의 멀티라운드 구조로 근거 있는 결론을 도출합니다.
+이 스킬은 사용자의 코드베이스 관련 질문/문제 또는 릴리즈 핸드오프 문서 검증을 분석하고, 전문 조사관 에이전트를 **Task tool**로 spawn하여 **독립 조사 → 교차 검증 → 반박 → 증거 기반 판정**의 멀티라운드 구조로 근거 있는 결론을 도출합니다.
 
 **핵심 원리**: 이 스킬은 main conversation context에서 실행되므로 Task tool을 사용하여 subagent를 spawn할 수 있습니다.
 
@@ -28,6 +28,7 @@ TYPE:
   LOG  = log-investigator
   HIST = history-investigator
   CR   = counter-reviewer
+  REL  = release-investigator
 
 예시:
   CODE-CALLCHAIN-R1       → 코드 조사관, 호출 체인, Round 1
@@ -35,6 +36,8 @@ TYPE:
   HIST-RECENT-R1          → 이력 조사관, 최근 변경, Round 1
   CR-AGREED-R3            → 반박자, AGREED 검증, Round 3
   CODE-DATAFLOW-R3-DEEP   → 코드 조사관, 데이터 흐름, Round 3 심화
+  REL-ARTCOMP-R1          → 릴리즈 조사관, 문서 완전성, Round 1
+  REL-DEPLOY-R1           → 릴리즈 조사관, 배포 준비, Round 1
 ```
 
 ---

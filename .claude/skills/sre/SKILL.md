@@ -1,11 +1,11 @@
 ---
-description: SRE Principles, SLO/SLI/SLA, Observability
+description: SRE Principles, SLO/SLI/SLA, Observability, LLM Observability, 토큰/비용 추적
 user-invocable: false
 ---
 
 # SRE Skill
 
-신뢰성 엔지니어링, SLO, 모니터링, 인시던트 관리를 담당합니다.
+신뢰성 엔지니어링, SLO, 모니터링, 인시던트 관리, LLM Observability를 담당합니다.
 
 ## 핵심 역량
 
@@ -82,9 +82,62 @@ Error Budget = 0.1% = 43.2분/월
 - Where we got lucky:
 ```
 
+## LLM Observability
+
+### LLM 5 Pillars of Observability
+
+| Pillar | 메트릭 | 도구 |
+|--------|--------|------|
+| **Reliability** | Error Rate, TTFT, E2E Latency | OTel, Datadog |
+| **Quality** | Hallucination Rate, User Satisfaction | Langfuse, Braintrust |
+| **Safety** | Injection 차단율, PII 노출 | Guardrails 메트릭 |
+| **Cost** | Token Usage, Cost per Request | Helicone, Langfuse |
+| **Governance** | Audit Log, Compliance | 커스텀 |
+
+### LLM 핵심 메트릭
+
+| 메트릭 | 설명 | 권장 목표 |
+|--------|------|----------|
+| **TTFT** | Time to First Token | < 500ms |
+| **TPOT** | Time per Output Token | < 50ms |
+| **E2E Latency** | 전체 응답 시간 | < 3s (간단 쿼리) |
+| **Token Cost** | 요청당 토큰 비용 | 모니터링 |
+| **Hallucination Rate** | 환각 발생률 | < 5% |
+
+### LLM Tracing (OpenTelemetry)
+
+```
+Trace: user_request_123
+├── Span: input_guard (2ms)
+├── Span: prompt_assembly (5ms)
+├── Span: cache_lookup (1ms) → MISS
+├── Span: llm_call (1200ms)
+│   ├── model: claude-3.5-sonnet
+│   ├── input_tokens: 1500
+│   ├── output_tokens: 300
+│   └── cost: $0.012
+├── Span: output_guard (3ms)
+└── Span: total (1215ms)
+```
+
+### Observability 플랫폼 비교
+
+| Platform | 유형 | 강점 | 가격 |
+|----------|------|------|------|
+| **Langfuse** | OSS | 종합 (Trace+Eval+Cost) | 무료/저렴 |
+| **Helicone** | SaaS | 비용 추적 특화, 1줄 통합 | 무료 tier |
+| **LangSmith** | SaaS | LangChain 네이티브 | 유료 |
+| **Arize Phoenix** | OSS | ML 관찰성 확장 | 무료 |
+
 ## 사용 시점
 - SLO 설정/검토
 - 인시던트 대응
 - 용량 계획
 - 모니터링 설계
 - 신뢰성 개선
+- LLM 비용/품질 모니터링 설계
+- LLM 트레이싱 아키텍처 설계
+- AI 시스템 SLO 정의
+
+## 참고 조사
+- LLM Observability 상세: [research/ai-backend/observability.md](../../../research/ai-backend/observability.md)

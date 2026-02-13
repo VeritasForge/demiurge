@@ -1,11 +1,11 @@
 ---
-description: Test Pyramid, Contract Testing, TDD/BDD
+description: Test Pyramid, Contract Testing, TDD/BDD, LLM Evaluation, LLM-as-Judge
 user-invocable: false
 ---
 
 # Testing Architecture Skill
 
-테스트 피라미드, Contract Testing, TDD/BDD 패턴을 담당합니다.
+테스트 피라미드, Contract Testing, TDD/BDD 패턴, LLM Evaluation을 담당합니다.
 
 ## 핵심 역량
 
@@ -158,9 +158,95 @@ Feature: 환자 조회
 - [ ] CI에서 자동 실행?
 - [ ] 테스트 데이터 관리 전략?
 
+## LLM Evaluation
+
+### LLM Test Pyramid
+
+```
+                  ┌─────────┐
+                 / Red Team  \         수동, 비용 높음
+                /─────────────\        보안 + 엣지 케이스
+               / Human Eval   \       전문가 평가
+              /─────────────────\
+             / LLM-as-Judge     \     자동, 유연
+            /─────────────────────\    GPT-4: 85% human agreement
+           / RAGAS + Unit Eval    \   자동, 빠름
+          /─────────────────────────\  Faithfulness, Relevancy
+         └───────────────────────────┘
+```
+
+### RAGAS 핵심 메트릭
+
+| 메트릭 | 측정 대상 | 공식 |
+|--------|----------|------|
+| **Faithfulness** | 답변이 컨텍스트 기반인가 | 지지되는 문장 / 전체 문장 |
+| **Answer Relevancy** | 답변이 질문에 적합한가 | 역생성 질문 유사도 |
+| **Context Precision** | 검색 결과 정밀도 | 관련 문서 순위 기반 |
+| **Context Recall** | 검색 결과 재현율 | Ground Truth 대비 |
+
+### LLM-as-Judge 패턴
+
+```python
+# Pointwise Evaluation
+judge_prompt = """
+Rate the following response on a scale of 1-5:
+- Accuracy: {criteria}
+- Response: {response}
+- Reference: {reference}
+Score:
+"""
+
+# Pairwise Comparison
+compare_prompt = """
+Which response is better? A or B?
+- Question: {question}
+- Response A: {response_a}
+- Response B: {response_b}
+Winner:
+"""
+```
+
+**주의**: Position Bias (~40%) → 순서 교체 후 평균
+
+### Regression Testing for LLM
+
+```yaml
+# CI/CD 통합 (promptfoo)
+on:
+  push:
+    paths: ['prompts/**', 'config/**']
+
+jobs:
+  eval:
+    steps:
+      - run: promptfoo eval -c eval_config.yaml
+      - run: |
+          if [ "$SCORE" -lt "$THRESHOLD" ]; then
+            echo "Regression detected!" && exit 1
+          fi
+```
+
+**발견**: 58.8% 프롬프트+모델 조합에서 API 업데이트 시 정확도 하락 발생
+
+### Eval Framework 비교
+
+| Framework | 특화 | CI/CD | 가격 |
+|-----------|------|-------|------|
+| **RAGAS** | RAG 메트릭 | ✅ | OSS |
+| **DeepEval** | 종합 메트릭 | ✅ | OSS |
+| **Promptfoo** | 프롬프트 반복 | ✅ | OSS |
+| **Braintrust** | Eval + Observability | ✅ | SaaS |
+
 ## 사용 시점
 - 테스트 전략 수립
 - Contract Testing 도입
 - TDD/BDD 적용
 - 테스트 커버리지 개선
 - 테스트 인프라 설계
+- LLM Evaluation 파이프라인 설계
+- RAG 품질 평가 (RAGAS)
+- LLM Regression Testing 구축
+- Red Teaming 전략 수립
+
+## 참고 조사
+- LLM Evaluation 상세: [research/ai-backend/evaluation.md](../../../research/ai-backend/evaluation.md)

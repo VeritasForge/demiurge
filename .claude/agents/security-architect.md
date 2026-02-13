@@ -8,6 +8,7 @@ model: opus
 permissionMode: default
 skills:
   - security
+  - ai-safety
   - deep-research
 ---
 

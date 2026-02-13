@@ -12,6 +12,7 @@
 | **Log Investigator** | `log-investigator.md` | `LOG` | 로그, 에러, 런타임 데이터 분석 |
 | **History Investigator** | `history-investigator.md` | `HIST` | Git 이력, PR, blame 분석 |
 | **Counter-Reviewer** | `counter-reviewer.md` | `CR` | 발견사항 반박, false positive 제거 |
+| **Release Investigator** | `release-investigator.md` | `REL` | 릴리즈 핸드오프 문서 검증, 배포 준비 상태 분석 |
 
 ---
 
@@ -50,6 +51,16 @@
 | `regression` | REGRESSION | 동작 변경점 이진 탐색 | "언제부터 깨졌는지" 추적 |
 | `refactor-history` | REFACTORHIST | 리팩토링 이력, 구조 변경 추적 | 아키텍처 변경으로 인한 부작용 |
 
+### REL (Release Investigator) Perspectives
+
+| Perspective | 약어 | 설명 | 적합 상황 |
+|-------------|------|------|-----------|
+| `artifact-completeness` | ARTCOMP | 핸드오프 문서 각 섹션 완전성 검증 | 문서 누락 체크, 변경 등급별 필수 섹션 |
+| `deployment-readiness` | DEPLOY | 배포 절차/인프라 준비 상태 분석 | 배포 전 검증, 사전 조건 충족 |
+| `risk-assessment` | RISK | 변경 리스크, 롤백 계획 적절성 | Breaking changes, 마이그레이션 |
+| `infra-impact` | INFRA | 인프라 요구사항 변경 영향 | 리소스, 네트워크, 방화벽, 신규 모듈 인프라 |
+| `ops-readiness` | OPS | 운영 준비 상태 (모니터링, 장애 대응) | 스모크 테스트, 헬스체크, 관찰 기간 |
+
 ### CR (Counter-Reviewer) Perspectives
 
 | Perspective | 약어 | 설명 | 적합 상황 |
@@ -70,6 +81,7 @@ TYPE:
   LOG  = log-investigator
   HIST = history-investigator
   CR   = counter-reviewer
+  REL  = release-investigator
 
 예시:
   CODE-CALLCHAIN-R1       → 코드 조사관, 호출 체인, Round 1
@@ -77,6 +89,9 @@ TYPE:
   HIST-BLAME-R1           → 이력 조사관, blame 분석, Round 1
   CR-AGREED-R3            → 반박자, AGREED 검증, Round 3
   CODE-DATAFLOW-R3-DEEP   → 코드 조사관, 데이터 흐름, Round 3 심화
+  REL-ARTCOMP-R1          → 릴리즈 조사관, 문서 완전성, Round 1
+  REL-DEPLOY-R1           → 릴리즈 조사관, 배포 준비, Round 1
+  REL-RISK-R1             → 릴리즈 조사관, 리스크 분석, Round 1
 ```
 
 ### Round Suffix 규칙
@@ -117,6 +132,9 @@ TYPE:
 | **간헐적 버그** | CODE-CONCURRENCY + LOG-PATTERN + LOG-TIMELINE | 타이밍 관련 원인 탐색 |
 | **설정 관련** | CODE-CONFIG + LOG-PATTERN + HIST-RECENT | 설정 변경 영향 추적 |
 | **보안 취약점** | CODE-CALLCHAIN + CODE-TYPECONTRACT + CODE-DEPENDENCY | 입력 흐름 + 계약 + 의존성 |
+| **릴리즈 핸드오프 문서 검증** | REL-ARTCOMP + REL-RISK + REL-DEPLOY + CODE-DEPENDENCY | 문서 완전성 + 리스크 + 배포 준비 + 의존성 교차 검증 |
+| **배포 준비 상태 확인** | REL-DEPLOY + REL-INFRA + CODE-CONFIG | 배포 절차 + 인프라 + 설정 변경 |
+| **신규 모듈 전달 검증** | REL-ARTCOMP + REL-OPS + REL-INFRA + CODE-CALLCHAIN | 문서 + 운영 준비 + 인프라 + 코드 구조 |
 
 ### Quick Mode 기준
 
