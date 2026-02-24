@@ -173,7 +173,7 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 | Skill | 내용 |
 |-------|------|
 | `architect-orchestration` | 다중 아키텍트 오케스트레이션, 라우팅 전략, 합의 프로토콜 |
-| `deep-research` | 3단계 심층 조사 프로토콜 (광역 탐색, 심화 탐색, 지식 합성) |
+| `deep-research` | 3단계 심층 조사 프로토콜 (광역 탐색, 심화 탐색, 지식 합성) + Error Resilience + MCP Browser Fallback |
 
 ### Architecture Patterns
 
@@ -346,11 +346,30 @@ Use **`/wrap`** to validate and sync documentation:
 ## Version & Changelog
 
 - Created: 2026-01-27
-- Last Updated: 2026-02-13
-- Version: 4.9
+- Last Updated: 2026-02-24
+- Version: 5.1
 
 ### Changelog
 
+- v5.1: Deep Research Anti-Hallucination 강화 — Prevention-First 설계
+  - Phase 1 Authority Discovery 추가: Semantic Scholar API로 인용 수 기반 권위 논문/저자 사전 식별 (Step 1-2)
+  - Phase 2 Iterative Retrieval 강화: Step 2-0 (지식 갭 분석 + 쿼리 재생성), Step 2-1 (원문 직접 확인 강화 + source_verification 기록), Step 2-4 (근거 충분성 검증)
+  - Phase 3 Anti-Hallucination Gate 신설 (Evidence-First, Attribution Specificity, Synthesis Necessity Check)
+  - 확신도 태깅에 [Synthesized] 태그 추가 + [Confirmed] 부여 조건 강화 (원문 확인 필수)
+  - 교차 검증에 서술/규범 구분 + 독립 출처 검증 규칙 추가
+  - 품질 기준 "최소 N개" → 조건부 유연화 + "N/A" 허용
+  - Quick Research 결과에 [QuickResearch] 접두어 + Full Research 오염 방지 경고 추가
+  - Playwright fallback 한계 문서화: Cloudflare/Google Scholar 수준 보안은 headless도 차단됨
+  - 차용 패턴: superpowers (Evidence-First), compound-engineering (Source Attribution), spec-kit ([NEEDS CLARIFICATION])
+  - 연구 근거: IM-RAG, Auto-RAG, Self-Refine 등 Iterative Retrieval이 Post-hoc Detection보다 효과적
+  - 검증 완료: Semantic Scholar API (WebFetch) 정상 동작 확인 (2026-02-24 테스트)
+- v5.0: Deep Research 스킬 고도화 — Error Resilience + Playwright MCP Fallback
+  - `deep-research` SKILL.md에 Error Resilience Protocol 섹션 추가 (Fallback Tool Chain, 403 대응표, Graceful Degradation)
+  - 병렬 호출 안전 전략 추가: WebSearch 최대 3개 배치, WebFetch 최대 2개 배치, cascade 실패 방지
+  - Playwright MCP 설정 가이드 추가 + Tool Selection Matrix (상황별 도구 선택)
+  - `.mcp.json` 생성: Playwright MCP headless 설정
+  - SKILL.md allowed-tools 확장: `mcp__playwright__*` 추가
+  - 해결 대상: WebFetch 403 봇 차단, Sibling tool call cascade 버그 (Claude Code Issue #22264)
 - v4.9: Seth Godin Marketing Skill 추가 — 비즈니스/마케팅 도메인 확장
   - `.claude/skills/business/seth-godin-marketing/` 신규 생성 (1 SKILL.md + 5 reference docs)
   - NEW PATTERN: business/ 카테고리 폴더 도입 (향후 마케팅/세일즈 스킬 확장 기반)
