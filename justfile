@@ -23,7 +23,8 @@ status:
     echo "=== Skills (symlinked) ==="
     for d in ~/.claude/skills/*/; do
         name=$(basename "$d")
-        if [ -L "${d%/}" ]; then
+        # --no-folding: 디렉토리 자체가 심링크이거나, 내부에 심링크 파일이 있으면 OK
+        if [ -L "${d%/}" ] || [ -L "${d}SKILL.md" ] || find "${d}" -maxdepth 2 -type l -print -quit 2>/dev/null | grep -q .; then
             echo "  ✅ $name"
         else
             echo "  ⚠️  $name (not from product)"
