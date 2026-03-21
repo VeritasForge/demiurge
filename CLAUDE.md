@@ -33,10 +33,21 @@ AI가 답변 시 준수할 원칙:
 
 ## Repository Structure
 
-- `.claude/agents/` — 15 architect agents + 5 investigation agents (20 total)
+### Product (전역 배포 — `stow -t ~ product`)
+
+- `product/.claude/skills/` — 31 skills (architecture + AI backend + business + investigation + release + utility)
+- `product/.claude/agents/` — 15 architect agents + 5 investigation agents (20 total)
+- `product/.claude/commands/` — Slash commands (`commit`, `rl`, `new_rl`, `save_obsi`, `tdd-lfg`)
+
+### Project-local (demiurge 개발 전용)
+
 - `.claude/rules/` — 8 governance rules auto-applied based on file glob patterns
-- `.claude/skills/` — 25 skill cards (architecture patterns + AI backend + business + investigation + release)
-- `.claude/commands/` — Slash commands (`commit`, `rl`, `wrap`, `save_obsi`)
+- `.claude/commands/wrap.md` — CLAUDE.md 동기화 커맨드
+
+### Tooling
+
+- `justfile` — 태스크 러너 (`just link`, `just unlink`, `just status`, `just new-skill`, `just new-command`)
+- `bootstrap.sh` — 최초 셋업 스크립트 (brew install stow just + just link)
 
 ## Orchestration Flow
 
@@ -166,7 +177,7 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 | `counter-reviewer` | 발견사항 반박 | Boris Cherny "poking holes", false positive 제거 |
 | `release-investigator` | 릴리즈 핸드오프 검증 | 문서 완전성, 배포 준비, 리스크, 인프라 영향, 운영 준비 |
 
-## Skills (25개)
+## Skills (31개)
 
 ### Orchestration
 
@@ -227,6 +238,29 @@ Context 비대화 방지를 위해 3단계 계층 출력을 사용합니다.
 | Skill | 내용 |
 |-------|------|
 | `seth-godin-marketing` | Seth Godin 마케팅 철학 (보랏빛 소, 퍼미션 마케팅, 트라이브, 최소 유효 시장, 변화 중심). 전략·카피·이메일·콘텐츠·론칭 생성. |
+
+### Utility Skills
+
+| Skill | 내용 |
+|-------|------|
+| `concept-explainer` | 기술 개념을 8가지 관점에서 심층 분석, 시각화 리포트 생성 |
+| `organize` | 대화 내용을 원문 보존하며 구조화된 문서로 정리 |
+| `qa` | 번호 매긴 기술 질문 리스트에 증거 기반 답변 생성 |
+| `ralph-loop-guide` | Ralph Loop 사용 가이드 (프롬프트 작성법, 안전 장치, 템플릿) |
+| `rl-verify` | 수렴 검증 플랜 생성 + 실행 |
+| `save-confluence` | 직전 대화 출력을 Confluence에 업로드 (새 페이지/기존 페이지) |
+
+## Stow Distribution
+
+demiurge의 skills/commands/agents는 `product/.claude/`에 원본이 있으며, GNU Stow를 통해 `~/.claude/`에 심링크로 배포됩니다.
+
+```bash
+just link      # 심링크 생성/갱신
+just unlink    # 심링크 해제
+just status    # 심링크 상태 확인
+just new-skill <name>    # 새 스킬 생성 + 자동 link
+just new-command <name>  # 새 커맨드 생성 + 자동 link
+```
 
 ## Rules Auto-Application (8개)
 
@@ -346,11 +380,20 @@ Use **`/wrap`** to validate and sync documentation:
 ## Version & Changelog
 
 - Created: 2026-01-27
-- Last Updated: 2026-02-24
-- Version: 5.1
+- Last Updated: 2026-03-21
+- Version: 6.0
 
 ### Changelog
 
+- v6.0: Product Stow Distribution — 전역 배포 아키텍처 전환
+  - `product/.claude/` 디렉토리 신설: 전역 배포 대상(skills, commands, agents) 원본 관리
+  - GNU Stow 기반 심링크 배포: `stow -t ~ product`로 `~/.claude/`에 자동 심링크
+  - `~/.claude/` 전역 스킬 7개 통합: concept-explainer, organize, qa, ralph-loop-guide, rl-verify, save-confluence + deep-research 최신본
+  - `~/.claude/` 전역 커맨드 4개 통합: new_rl, rl, save_obsi, tdd-lfg
+  - justfile 태스크 러너 추가: link, unlink, status, new-skill, new-command
+  - bootstrap.sh 최초 셋업 스크립트 추가
+  - `.claude/`는 프로젝트 전용으로 축소: CLAUDE.md, rules/, commands/wrap.md만 유지
+  - Skills 수: 25 → 31, Commands 수: 4 → 5 (전역) + 1 (프로젝트 전용)
 - v5.1: Deep Research Anti-Hallucination 강화 — Prevention-First 설계
   - Phase 1 Authority Discovery 추가: Semantic Scholar API로 인용 수 기반 권위 논문/저자 사전 식별 (Step 1-2)
   - Phase 2 Iterative Retrieval 강화: Step 2-0 (지식 갭 분석 + 쿼리 재생성), Step 2-1 (원문 직접 확인 강화 + source_verification 기록), Step 2-4 (근거 충분성 검증)
