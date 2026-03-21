@@ -8,12 +8,12 @@ default:
 
 # 전역 심링크 생성/갱신
 link:
-    stow -v -R -t ~ product
+    stow -v -R --no-folding -t ~ product
     @echo "✅ product → ~/.claude linked"
 
 # 전역 심링크 해제
 unlink:
-    stow -v -D -t ~ product
+    stow -v -D --no-folding -t ~ product
     @echo "🔓 symlinks removed"
 
 # 심링크 상태 확인
@@ -42,10 +42,9 @@ status:
     done
     echo ""
     echo "=== Agents (symlinked) ==="
-    if [ -L ~/.claude/agents ]; then
-        echo "  ✅ agents/ (directory symlink)"
-    elif [ -d ~/.claude/agents ]; then
+    if [ -d ~/.claude/agents ]; then
         for f in ~/.claude/agents/*; do
+            [ -e "$f" ] || continue
             name=$(basename "$f")
             if [ -L "$f" ]; then
                 echo "  ✅ $name"
