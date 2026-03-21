@@ -1,76 +1,90 @@
 # Demiurge
 
-**Shaping Claude Code into an omnipotent architect-creator.**
+**Claude Code를 전지전능한 아키텍트-창조자로 빚어내다.**
 
 ---
 
-## The Name: Demiurge (데미우르고스)
+## 이름: Demiurge (데미우르고스)
 
-In Plato's *Timaeus*, the **Demiurge** (δημιουργός) is the divine craftsman who gazes upon eternal Forms and shapes the raw, chaotic material of the cosmos into an ordered universe. Not a god who creates from nothing, but an artisan who *molds* what already exists into something purposeful.
+플라톤의 *티마이오스*에서 **데미우르고스**(δημιουργός)는 영원한 형상(Forms)을 응시하며 혼돈의 질료를 질서 있는 우주로 빚어내는 신적 장인이다. 무에서 창조하는 신이 아니라, 이미 있는 것을 목적에 맞게 *형상화*하는 존재다.
 
-In the Gnostic tradition, the Demiurge is the creator who fashions the entire physical world — the bridge between abstract intention and concrete reality.
+이 프로젝트는 그 이름을 의도적으로 빌려왔다. Claude Code는 강력한 원재료다. **Demiurge**는 이 원재료를 구조화된 다중 전문가 시스템으로 빚어내는 메타-설정(meta-configuration)이다. 신화의 데미우르고스가 혼돈에서 코스모스를 빚듯, 이 프로젝트는 Claude Code를 빈 캔버스에서 어떤 소프트웨어 아키텍처 문제든 추론할 수 있는 거버넌스 시스템으로 변환한다.
 
-This project carries that name deliberately. Claude Code is powerful raw material — a general-purpose AI coding assistant. **Demiurge** is the configuration that molds it into an all-capable architect and builder. Just as the mythic Demiurge shapes cosmos from chaos, this project shapes Claude Code from a blank slate into a structured, governed, multi-specialist system that can reason about any software architecture challenge.
+## 철학
 
-## Philosophy (철학)
+Demiurge는 하나의 확신 위에 세워졌다: **올바른 지식 구조와 거버넌스가 Claude Code를 소프트웨어 엔지니어링에서 전지전능하게 만들 수 있다.**
 
-Demiurge is built on a single conviction: **the right structure of knowledge and governance can make Claude Code omnipotent for software engineering.**
+이 저장소에는 소스 코드가 없다. 에이전트, 규칙, 스킬, 오케스트레이션 프로토콜로 이루어진 **순수한 메타-설정**이다.
 
-This repository contains no source code. It is a **meta-configuration** — a carefully designed system of agents, rules, skills, and orchestration protocols. The belief is that:
+- 각 분야의 전문 아키텍트들이 어떤 시스템 설계 문제든 집단적으로 추론한다.
+- 거버넌스 규칙이 적절한 경계에서 자동 적용되어 품질을 보장한다.
+- 계층적 리뷰, 병렬 평가, 합의 투표로 단일 관점보다 우수한 의사결정을 도출한다.
+- 코드가 아닌 **지식이 지렛대**다. 올바른 패턴, 원칙, 프레임워크가 Claude Code를 모든 아키텍처 도메인의 전문가로 만든다.
 
-- A well-defined cast of specialist architects, each with deep domain knowledge, can collectively reason about any system design problem.
-- Governance rules automatically applied at the right boundaries enforce quality without manual oversight.
-- An orchestration protocol with tiered review, parallel evaluation, and consensus voting produces decisions superior to any single perspective.
-- Knowledge, not code, is the lever. The right patterns, principles, and frameworks — structured for retrieval — make Claude Code an expert in any architectural domain.
+## Components at a Glance
 
-Demiurge doesn't build software. It makes Claude Code capable of building *anything*.
+| Component | Count | Description |
+|-----------|-------|-------------|
+| **Agents** | 20 | 15 architect + 5 investigation |
+| **Skills** | 31 | Architecture, AI Backend, Business, Investigation, Utility |
+| **Rules** | 8 | 파일 경로 기반 자동 적용 거버넌스 (DDD, Security, API 등) |
+| **Commands** | 6 | 5 global + 1 project-local |
 
-## What This Is
+소스 코드 없음. 런타임 의존성 없음. 순수 `.claude/` 설정.
 
-A **multi-agent architecture governance template** for Claude Code:
+## Quick Start
 
-- **16 agents** — 12 specialist architects + 4 investigation agents
-- **18 skill cards** — architecture patterns, investigation orchestration, deep research, job analysis, and more
-- **8 governance rules** — auto-applied based on file paths
-- **2 orchestration systems** — architect review (consensus protocol) + investigation (evidence-based judgment)
+```bash
+git clone <repo> ~/lab/demiurge
+cd ~/lab/demiurge
+./bootstrap.sh          # stow + just 설치, ~/.claude/ 심링크 생성
+```
 
-No application code. No runtime dependencies. Pure `.claude/` configuration.
+> **Prerequisites:** macOS + Homebrew
+
+이제 아무 프로젝트에서:
+
+```
+/architect-orchestration <요구사항>     # 다중 아키텍트 합의 리뷰
+/deep-research <주제>                   # 3단계 심층 조사
+/investigation-orchestration <조사>     # 코드베이스 조사
+```
 
 ## How It Works
 
 ### Orchestration Flow
 
 ```
-[Requirement] → [Analysis & Routing] → [Tier 1: Strategic] → [Tier 2: Design] → [Tier 3: Quality] → [Consensus] → [Result]
-                                         (Sequential)          (Parallel)         (Parallel)          (Round-based voting)
+[요구사항] → [분석 & 라우팅] → [Tier 1: Strategic] → [Tier 2: Design] → [Tier 3: Quality] → [합의] → [결과]
+                                  (Sequential)          (Parallel)         (Parallel)          (라운드 기반 투표)
 ```
 
 ### Agent Tiers
 
 | Tier | Agents | Execution |
 |------|--------|-----------|
-| **1 Strategic** (required) | Solution Architect, Domain Architect | Sequential |
-| **2 Design** (conditional) | Application, Data, Integration, Healthcare Informatics | Parallel |
-| **3 Quality** (conditional) | Security, SRE, Cloud-Native | Parallel |
-| **4 Enabling** (on-demand) | EDA Specialist, ML Platform, Concurrency | On-demand |
-| **Investigation** (on-demand) | Code, Log, History Investigators + Counter-Reviewer | Parallel |
+| **1 Strategic** | Solution Architect, Domain Architect | Sequential |
+| **2 Design** | Application, Data, Integration, Healthcare, LLM, RAG | Parallel |
+| **3 Quality** | Security, SRE, Cloud-Native, AI Safety | Parallel |
+| **4 Enabling** | EDA, ML Platform, Concurrency | On-demand |
+| **Investigation** | Code, Log, History, Counter-Reviewer, Release | Parallel |
 
 ### Consensus Protocol
 
-- **Threshold**: 2/3 agreement (67%)
-- **Veto power**: Tier 1 architects
-- **Max rounds**: 5
-- **Minority opinions**: always recorded
+- **임계값**: 2/3 합의 (67%)
+- **거부권**: Tier 1 아키텍트
+- **최대 라운드**: 5
+- **소수 의견**: 항상 기록
 
 ## Usage
 
-### Multi-agent orchestration (complex, cross-cutting decisions)
+### 다중 에이전트 오케스트레이션 (복잡한, 횡단적 의사결정)
 
 ```
-/architect-orchestration 스킬을 실행하여 요구사항 분석 및 다중 아키텍트 리뷰 수행
+/architect-orchestration 요구사항 분석 및 다중 아키텍트 리뷰 수행
 ```
 
-### Individual agent review (focused analysis)
+### 개별 에이전트 리뷰 (집중 분석)
 
 ```
 domain-architect: 도메인 모델 및 Bounded Context 검토
@@ -78,90 +92,59 @@ security-architect: 보안 위협 분석 및 암호화 검증
 solution-architect: 전체 시스템 아키텍처 설계
 ```
 
-### Skill reference (quick pattern lookup)
+### 스킬 참조 (패턴 빠른 조회)
 
 ```
-.claude/skills/domain-driven-design/SKILL.md
-.claude/skills/eda/SKILL.md
-.claude/skills/cloud-native/SKILL.md
+domain-driven-design, eda, cloud-native, rag-architecture, ai-agent, prompt-engineering ...
 ```
 
-### Codebase investigation (bug, performance, structure analysis)
+### 코드베이스 조사 (버그, 성능, 구조 분석)
 
 ```
-/investigation-orchestration 코드베이스 조사 (버그, 성능, 구조 분석 등)
+/investigation-orchestration 코드베이스 조사 실행
 ```
 
-### Documentation sync
+### 문서 동기화
 
 ```
-/wrap          # Analyze + detect drift + update CLAUDE.md
-/wrap --check  # Analyze + detect drift only (no changes)
+/wrap          # CLAUDE.md 분석 + 드리프트 감지 + 업데이트
+/wrap --check  # 분석 + 드리프트 감지만 (변경 없음)
+```
+
+### Stow 관리
+
+```bash
+just status    # 심링크 상태 확인
+just link      # 심링크 생성/갱신
+just unlink    # 심링크 해제
 ```
 
 ## Structure
 
 ```
 demiurge/
-├── CLAUDE.md                          # Project instructions (single source of truth)
-├── README.md                          # This file
-├── .claude/
-│   ├── agents/                        # 16 agent definitions
-│   │   ├── solution-architect.md      #   12 architect agents
-│   │   ├── domain-architect.md
-│   │   ├── application-architect.md
-│   │   ├── data-architect.md
-│   │   ├── integration-architect.md
-│   │   ├── security-architect.md
-│   │   ├── sre-architect.md
-│   │   ├── cloud-native-architect.md
-│   │   ├── eda-specialist.md
-│   │   ├── concurrency-architect.md
-│   │   ├── ml-platform-architect.md
-│   │   ├── healthcare-informatics-architect.md
-│   │   ├── code-investigator.md       #   4 investigation agents
-│   │   ├── log-investigator.md
-│   │   ├── history-investigator.md
-│   │   └── counter-reviewer.md
-│   ├── rules/                         # 8 governance rules (auto-applied by glob)
-│   │   ├── architecture-principles.md
-│   │   ├── security-requirements.md
-│   │   ├── ddd-patterns.md
-│   │   ├── api-design.md
-│   │   ├── cloud-native.md
-│   │   ├── messaging-patterns.md
-│   │   ├── healthcare-compliance.md
-│   │   └── architect-review.md
-│   ├── skills/                        # 18 skill cards
-│   │   ├── architect-orchestration/
-│   │   ├── investigation-orchestration/
-│   │   ├── deep-research/
-│   │   ├── job-analysis/
-│   │   ├── solution-architecture/
-│   │   ├── domain-driven-design/
-│   │   ├── application-architecture/
-│   │   ├── eda/
-│   │   ├── concurrency-patterns/
-│   │   ├── cloud-native/
-│   │   ├── api-design/
-│   │   ├── testing-architecture/
-│   │   ├── data-architecture/
-│   │   ├── integration/
-│   │   ├── security/
-│   │   ├── sre/
-│   │   ├── ml-platform/
-│   │   └── healthcare-informatics/
-│   └── commands/                      # Slash commands
-│       ├── commit.md
-│       ├── rl.md
-│       ├── wrap.md
-│       └── save_obsi.md
-├── docs/                              # Design documentation
-│   ├── investigation-orchestration-system.md       # Deep research (기반 연구)
-│   └── investigation-orchestration-implementation.md # 설계/구현 문서
-└── adr_1.md
+├── product/.claude/          # 전역 배포 (GNU Stow 경유 → ~/.claude/)
+│   ├── skills/ (31)
+│   ├── agents/ (20)
+│   └── commands/ (5)
+├── .claude/                  # 프로젝트 로컬
+│   ├── rules/ (8)
+│   └── commands/wrap.md
+├── justfile                  # Task runner
+├── bootstrap.sh              # 최초 설정
+├── CLAUDE.md                 # Single source of truth
+└── README.md
+```
+
+개별 에이전트·스킬·규칙 목록은 `CLAUDE.md` 참조.
+
+## Extending
+
+```bash
+just new-skill <name>       # 스킬 템플릿 생성 + 자동 심링크
+just new-command <name>     # 커맨드 템플릿 생성 + 자동 심링크
 ```
 
 ## License
 
-This project is a configuration template. Use it however you see fit.
+이 프로젝트는 설정 템플릿입니다. 자유롭게 사용하세요.
