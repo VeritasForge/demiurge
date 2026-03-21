@@ -424,48 +424,55 @@ edge_cases:
 
 #### Step 3-3: 최종 출력 형식
 
-```markdown
-## Deep Research: [주제]
+**시각화 규칙:**
+- 섹션 제목에 이모티콘을 포함하라 (📋 Summary, 🔍 Findings, 📊 Comparisons, ⚠️ Caveats, 📎 Sources)
+- 비교 항목은 반드시 테이블로 정리하라
+- 핵심 발견에 확신도별 이모티콘을 사용하라 (✅ Confirmed, 🟡 Likely, 🔄 Synthesized, ❓ Uncertain, ⚪ Unverified)
+- 구조나 흐름을 설명할 때 ASCII 다이어그램을 적극 활용하라
+- 장점/단점이 있으면 ✅/❌ 이모티콘을 사용하라
 
-### Executive Summary
+```markdown
+## 🔬 Deep Research: [주제]
+
+### 📋 Executive Summary
 [핵심 결론 3-5줄 요약]
 
-### Findings
+### 🔍 Findings
 
 #### 1. [주요 발견 1]
 [상세 설명]
-- **확신도**: [Confirmed] / [Likely] / [Synthesized] / [Uncertain] / [Unverified]
+- ✅ **확신도**: [Confirmed] / 🟡 [Likely] / 🔄 [Synthesized] / ❓ [Uncertain] / ⚪ [Unverified]
 - **출처**: [URL 또는 문서명]
 - **근거**: [왜 이 결론에 도달했는지]
 
 #### 2. [주요 발견 2]
 ...
 
-### Comparisons (해당 시)
+### 📊 Comparisons (해당 시)
 
 | 기준 | Option A | Option B | Option C |
 |------|----------|----------|----------|
 | ... | ... | ... | ... |
 
-**권장**: [권장 옵션] — [Confirmed] 근거: ...
+💡 **권장**: [권장 옵션] — ✅ [Confirmed] 근거: ...
 
-### Edge Cases & Caveats
+### ⚠️ Edge Cases & Caveats
 - [특수 상황 1]: [영향]
 - [특수 상황 2]: [영향]
 
-### Contradictions Found
+### ⚔️ Contradictions Found
 - [모순 1]: [출처 A] vs [출처 B] → [해결/미해결]
 
-### Sources
+### 📎 Sources
 1. [출처 1 제목](URL) — [출처 유형]
 2. [출처 2 제목](URL) — [출처 유형]
 ...
 
-### Research Metadata
+### 📊 Research Metadata
 - 검색 쿼리 수: N (일반 N + SNS N)
 - 수집 출처 수: N
 - 출처 유형 분포: 공식 N, 1차 N, 블로그 N, 커뮤니티 N, SNS N
-- 확신도 분포: Confirmed N, Likely N, Synthesized N, Uncertain N, Unverified N
+- 확신도 분포: ✅ Confirmed N, 🟡 Likely N, 🔄 Synthesized N, ❓ Uncertain N, ⚪ Unverified N
 - SNS 출처: Reddit N건, X N건, Instagram N건, Facebook N건
 - SNS 접근 방법: "WebSearch site: operator" | "MCP API"
 ```
