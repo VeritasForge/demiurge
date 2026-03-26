@@ -175,7 +175,7 @@ vote_detail:
 
 #### Layer 3: Full Report (제한 없음)
 
-`review/{review-id}/artifacts/T4-ML-R{N}-full-report.md`에 저장.
+`docs/demiurge/architect-orchestration/{review-id}/artifacts/T4-ML-R{N}-full-report.md`에 저장.
 모델 서빙 설계, MLOps 파이프라인, 모델 카드 등을 포함합니다.
 
 ### 참고 자료

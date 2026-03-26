@@ -386,7 +386,7 @@ vote_detail:
 
 #### Layer 3: Full Report (제한 없음)
 
-`review/{review-id}/artifacts/T2-APP-R{N}-full-report.md`에 저장.
+`docs/demiurge/architect-orchestration/{review-id}/artifacts/T2-APP-R{N}-full-report.md`에 저장.
 레이어 설계, SAGA 설계서, 의존성 다이어그램 등을 포함합니다.
 
 ### 참고 자료

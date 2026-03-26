@@ -363,7 +363,7 @@ vote_detail:
 
 ### Layer 3: Full Report (제한 없음)
 
-`review/{review-id}/artifacts/T3-CN-R{N}-full-report.md`에 저장.
+`docs/demiurge/architect-orchestration/{review-id}/artifacts/T3-CN-R{N}-full-report.md`에 저장.
 12-Factor 평가, 컨테이너 전략, 배포 전략, 복원력 설계 등을 포함합니다.
 
 ## 사용 시점

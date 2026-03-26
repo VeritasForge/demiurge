@@ -300,7 +300,7 @@ vote_detail:
 
 #### Layer 3: Full Report (제한 없음)
 
-`review/{review-id}/artifacts/T1-DA-R{N}-full-report.md`에 저장.
+`docs/demiurge/architect-orchestration/{review-id}/artifacts/T1-DA-R{N}-full-report.md`에 저장.
 Context Map, Aggregate Design, Ubiquitous Language 용어집 등을 포함합니다.
 
 ### 참고 자료

@@ -317,7 +317,7 @@ vote_detail:
 
 ### Layer 3: Full Report (제한 없음)
 
-`review/{review-id}/artifacts/T4-CON-R{N}-full-report.md`에 저장.
+`docs/demiurge/architect-orchestration/{review-id}/artifacts/T4-CON-R{N}-full-report.md`에 저장.
 동시성 아키텍처, 스레드 안전성 분석, 성능 고려사항 등을 포함합니다.
 
 ## 사용 시점

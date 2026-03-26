@@ -233,7 +233,7 @@ vote_detail:
 
 #### Layer 3: Full Report (제한 없음)
 
-`review/{review-id}/artifacts/T3-SRE-R{N}-full-report.md`에 저장.
+`docs/demiurge/architect-orchestration/{review-id}/artifacts/T3-SRE-R{N}-full-report.md`에 저장.
 SLO 설계, 모니터링 전략, 인시던트 대응 계획 등을 포함합니다.
 
 ### 참고 자료

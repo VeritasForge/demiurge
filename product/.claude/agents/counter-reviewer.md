@@ -185,7 +185,7 @@ counter_reviews:
 
 #### Layer 3: Full Report
 
-`investigation/{id}/artifacts/{IID}-report.md` 파일에 전체 반박 분석을 저장합니다.
+`docs/demiurge/investigation-orchestration/{id}/artifacts/{IID}-report.md` 파일에 전체 반박 분석을 저장합니다.
 (파일 저장은 orchestrator가 담당)
 
 ---

@@ -230,7 +230,7 @@ vote_detail:
 
 #### Layer 3: Full Report (제한 없음)
 
-`review/{review-id}/artifacts/T3-SEC-R{N}-full-report.md`에 저장.
+`docs/demiurge/architect-orchestration/{review-id}/artifacts/T3-SEC-R{N}-full-report.md`에 저장.
 위협 모델, 보안 설계 문서, 취약점 보고서 등을 포함합니다.
 
 ### 참고 자료

@@ -378,7 +378,7 @@ vote_detail:
 
 #### Layer 3: Full Report (제한 없음)
 
-`review/{review-id}/artifacts/T1-SA-R{N}-full-report.md`에 저장.
+`docs/demiurge/architect-orchestration/{review-id}/artifacts/T1-SA-R{N}-full-report.md`에 저장.
 상세 분석, ADR, System Design Document, 다이어그램 등을 포함합니다.
 
 ### 참고 자료

@@ -23,12 +23,12 @@ argument-hint: "[--force] <작업 설명 또는 문서 경로>"
 - 최대 30자
 - 예: `security-audit`, `api-design`, `readme-check`, `pr-6168`
 
-결과 폴더: `docs/verify-{slug}/`
-산출물: `docs/verify-{slug}/plan.md`, `docs/verify-{slug}/report.md`
+결과 폴더: `docs/demiurge/rl-verify/{slug}/`
+산출물: `docs/demiurge/rl-verify/{slug}/plan.md`, `docs/demiurge/rl-verify/{slug}/report.md`
 
 ### 0-2. 기존 산출물 감지
 
-`docs/verify-{slug}/plan.md`가 존재하는지 감지합니다.
+`docs/demiurge/rl-verify/{slug}/plan.md`가 존재하는지 감지합니다.
 
 ```
 기존 폴더 존재?
@@ -36,11 +36,11 @@ argument-hint: "[--force] <작업 설명 또는 문서 경로>"
   └─ YES
        ├─ --force 옵션 있음
        │   → 기존 폴더를 타임스탬프로 리네임 후 신규 생성
-       │     (verify-{slug}/ → verify-{slug}.{YYYYMMDD-HHmm}/)
+       │     ({slug}/ → {slug}.{YYYYMMDD-HHmm}/)
        │
        └─ --force 옵션 없음
             → 사용자에게 질문:
-              "이전 검증 결과가 있습니다. (docs/verify-{slug}/)"
+              "이전 검증 결과가 있습니다. (docs/demiurge/rl-verify/{slug}/)"
               "1) 이어서 검증 (기존 plan/report 유지)"
               "2) 새로 시작 (기존 폴더 아카이브)"
               - 1) 선택 시 → 기존 plan/report 유지, Phase 2 스킵, Phase 4로 진행
@@ -152,7 +152,7 @@ Tier별 최소 관점 수에 맞춰 검증 관점을 결정합니다.
 
 ## Phase 3: 산출물 2개 생성
 
-### 산출물 1: `docs/verify-{slug}/report.md` — 빈 리포트 초기화
+### 산출물 1: `docs/demiurge/rl-verify/{slug}/report.md` — 빈 리포트 초기화
 
 ```markdown
 # 수렴 검증 리포트
@@ -165,7 +165,7 @@ Tier별 최소 관점 수에 맞춰 검증 관점을 결정합니다.
 ## (Iteration 1에서 결과가 추가됩니다)
 ```
 
-### 산출물 2: `docs/verify-{slug}/plan.md` — 상세 플랜
+### 산출물 2: `docs/demiurge/rl-verify/{slug}/plan.md` — 상세 플랜
 
 이 파일에 반드시 포함해야 하는 섹션:
 

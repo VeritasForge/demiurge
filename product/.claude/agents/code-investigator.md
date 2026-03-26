@@ -197,7 +197,7 @@ key_findings:
 
 #### Layer 3: Full Report
 
-`investigation/{id}/artifacts/{IID}-report.md` 파일에 전체 분석 결과를 저장합니다.
+`docs/demiurge/investigation-orchestration/{id}/artifacts/{IID}-report.md` 파일에 전체 분석 결과를 저장합니다.
 (파일 저장은 orchestrator가 담당 — 조사관은 Full Report 내용을 텍스트로 반환)
 
 ---
