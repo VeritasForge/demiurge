@@ -119,33 +119,52 @@ Tier별 최소 관점 수에 맞춰 검증 관점을 결정합니다.
 
 ### 2-3. 관점별 Agent 할당
 
-1. **사용 가능한 리소스 탐색:**
-   - 대화에 나열된 available skill 목록의 description 스캔
-   - 대화에 나열된 available subagent_type 목록 스캔
+#### Step 1: 매핑 테이블 조회 → 실행 목록 생성
 
-2. **각 관점에 가장 적합한 도구를 매칭:**
+Phase 1에서 추출한 도메인 키워드를 아래 매핑 테이블에서 매칭한다.
+복수 도메인이면 **합산** 후, **(이름 + 소스) 튜플 기준으로 중복 제거**한다.
 
-   ```
-   ┌─ custom agent 있음 → 해당 subagent_type 사용
-   │   예: 보안 전문성 → security-sentinel agent
-   │   예: Rails 코드 → dhh-rails-reviewer agent
-   │   예: 성능 관점 → performance-oracle agent
-   │   예: 아키텍처 → architecture-strategist agent
-   │
-   ├─ skill만 있음 → Explore/general agent에 skill 호출 지시
-   │   예: systematic-debugging → "Skill 도구로 systematic-debugging 호출 후 진행"
-   │   예: deep-research → "Skill 도구로 deep-research 호출 후 진행"
-   │
-   └─ 둘 다 없음 → Explore agent + 전문가 페르소나 + 구체적 검증 지침
-       예: "당신은 Go 동시성 전문가입니다. 다음 관점에서 검증하세요: ..."
-   ```
+> **중복 판별 기준**: 이름이 같아도 소스가 다르면 별개 (예: `deep-research (demiurge)` ≠ `deep-research (ouroboros)`).
+> 동일 소스에서 동일 이름이 여러 행에서 중복 출현한 경우만 제거.
 
-3. **필수 역할 포함 확인:** Tier별 필수 역할(CONTRARIAN, RESEARCHER, EVALUATOR)이 관점에 포함되었는지 확인
+합산 결과는 "후보 풀"이 아니라 **실행 목록**이다. Tier별 최소 관점 수는 하한선(floor)으로만 작용하며, 매핑 테이블에서 나온 에이전트/스킬은 **전부 실행**한다.
+
+| 도메인 키워드 | CONTRARIAN | ARCHITECT | RESEARCHER | SIMPLIFIER |
+|---|---|---|---|---|
+| 보안, OWASP, 인증, 암호화 | contrarian (ouroboros) | security-architect (demiurge), security-sentinel (compound) | deep-research (demiurge), best-practices-researcher (compound) | simplifier (ouroboros), code-simplicity-reviewer (compound) |
+| 아키텍처, MSA, 설계, 패턴 | contrarian (ouroboros) | solution-architect (demiurge), application-architect (demiurge), architecture-strategist (compound) | deep-research (demiurge), repo-research-analyst (compound) | simplifier (ouroboros) |
+| 데이터, DB, 마이그레이션, CQRS | contrarian (ouroboros) | data-architect (demiurge), data-integrity-guardian (compound), schema-drift-detector (compound) | deep-research (demiurge) | simplifier (ouroboros) |
+| AI, LLM, RAG, 프롬프트, ML | contrarian (ouroboros) | llm-architect (demiurge), rag-architect (demiurge) | deep-research (demiurge), framework-docs-researcher (compound) | simplifier (ouroboros) |
+| 성능, 확장성, 부하, 최적화 | contrarian (ouroboros) | sre-architect (demiurge), performance-oracle (compound) | deep-research (demiurge), best-practices-researcher (compound) | simplifier (ouroboros) |
+| 클라우드, 인프라, K8s, Terraform | contrarian (ouroboros) | cloud-native-architect (demiurge), deployment-verification-agent (compound) | deep-research (demiurge) | simplifier (ouroboros) |
+| API, 통합, 이벤트, EDA | contrarian (ouroboros) | integration-architect (demiurge) | deep-research (demiurge) | simplifier (ouroboros) |
+| 코드 리뷰, PR, 코드 품질 | contrarian (ouroboros) | pattern-recognition-specialist (compound), architecture-strategist (compound) | repo-research-analyst (compound), requesting-code-review (superpowers skill) | code-simplicity-reviewer (compound) |
+| 테스트, TDD, QA | contrarian (ouroboros) | testing-architecture (demiurge skill), test-driven-development (superpowers skill) | deep-research (demiurge) | simplifier (ouroboros) |
+| 프론트엔드, UI, UX | contrarian (ouroboros) | frontend-design (compound skill) | framework-docs-researcher (compound), agent-browser (compound skill) | simplifier (ouroboros) |
+| 리서치, 조사, 분석, Fact-Check | contrarian (ouroboros) | interview (ouroboros skill) | deep-research (demiurge), best-practices-researcher (compound), notion-research-documentation (notion skill) | simplifier (ouroboros) |
+| 문서화, README, API 문서, 기술 문서 | contrarian (ouroboros) | writing-plans (superpowers skill), writing-skills (superpowers skill) | document-review (compound skill), compound-docs (compound skill) | simplifier (ouroboros), document-review (compound skill) |
+| 디버깅, 버그, 오류 | contrarian (ouroboros) | systematic-debugging (superpowers skill) | deep-research (demiurge) | simplifier (ouroboros) |
+
+**공통 EVALUATOR**: evaluator (ouroboros agent) — 모든 도메인에서 사용
+
+#### Step 2: 실행 (이름 기반 호출)
+
+매핑 테이블의 실행 목록을 다음 우선순위로 호출한다. 파일시스템 경로/버전 조회 불필요 — Claude Code가 이름으로 해결.
+
+```
+agent 항목  → Agent 도구 (subagent_type="{이름}")
+skill 항목  → Skill 도구 ("{이름}")
+매핑 테이블에 없는 도메인 → Explore agent + 전문가 페르소나 + 구체적 검증 지침
+```
+
+#### 필수 역할 포함 확인
+
+Tier별 필수 역할(CONTRARIAN, RESEARCHER, EVALUATOR)이 실행 목록에 포함되었는지 확인한다.
 
 **Orchestration 원칙:**
-1. **Tier별 최소 관점 수 준수** — Tier 1: 2개, Tier 2: 3개, Tier 3: 4개
+1. **Tier별 최소 관점 수는 하한선** — 매핑 테이블 결과가 더 많으면 전부 실행
 2. **관점 간 독립성** — 같은 agent가 두 관점을 맡지 않도록 분리
-3. **불일치 발생 시 제3 관점 투입** — EVALUATOR가 CONTESTED 판정 시 다음 iteration에서 새 관점 추가. 제3 관점 agent도 기존 할당 로직(custom agent → skill → 페르소나)을 따르되, CONTESTED 사유와 양쪽 이견을 프롬프트에 명시
+3. **불일치 발생 시 제3 관점 투입** — EVALUATOR가 CONTESTED 판정 시 다음 iteration에서 새 관점 추가. 제3 관점 agent도 매핑 테이블 또는 페르소나 폴백을 따르되, CONTESTED 사유와 양쪽 이견을 프롬프트에 명시
 4. **EVALUATOR는 매 iteration foreground subagent로 실행** — 검증 agent들의 출력을 종합하여 판정 라벨 부여. Main agent는 오케스트레이터로서 EVALUATOR 출력을 받아 안정 카운터 업데이트 + 리포트 갱신
 
 ---
