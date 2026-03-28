@@ -42,6 +42,13 @@ status:
         fi
     done
     echo ""
+    echo "=== CLAUDE.md ==="
+    if [ -L ~/.claude/CLAUDE.md ]; then
+        echo "  ✅ CLAUDE.md (symlinked)"
+    else
+        echo "  ⚠️  CLAUDE.md (not from product)"
+    fi
+    echo ""
     echo "=== Agents (symlinked) ==="
     if [ -d ~/.claude/agents ]; then
         for f in ~/.claude/agents/*; do
