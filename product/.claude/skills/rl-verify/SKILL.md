@@ -146,7 +146,7 @@ Phase 1에서 추출한 도메인 키워드를 아래 매핑 테이블에서 매
 | 디버깅, 버그, 오류 | contrarian (ouroboros) | systematic-debugging (superpowers skill) | deep-research (demiurge) | simplifier (ouroboros) |
 | Claude Code, plan mode, 스킬, Hook, 설정 | contrarian (ouroboros) | claude-code-guide (agent) | claude-code-guide (agent) | simplifier (ouroboros) |
 
-**공통 EVALUATOR**: evaluator (ouroboros agent) — 모든 도메인에서 사용
+**공통 EVALUATOR**: convergence-evaluator (demiurge agent) — 모든 도메인에서 사용. 판정 라벨 부여 + 안정 카운터 업데이트 + report.md 갱신까지 담당.
 
 #### Step 2: 실행 (이름 기반 호출)
 
@@ -165,8 +165,8 @@ Tier별 필수 역할(CONTRARIAN, RESEARCHER, EVALUATOR)이 실행 목록에 포
 **Orchestration 원칙:**
 1. **Tier별 최소 관점 수는 하한선** — 매핑 테이블 결과가 더 많으면 전부 실행
 2. **관점 간 독립성** — 같은 agent가 두 관점을 맡지 않도록 분리
-3. **불일치 발생 시 제3 관점 투입** — EVALUATOR가 CONTESTED 판정 시 다음 iteration에서 새 관점 추가. 제3 관점 agent도 매핑 테이블 또는 페르소나 폴백을 따르되, CONTESTED 사유와 양쪽 이견을 프롬프트에 명시
-4. **EVALUATOR는 매 iteration foreground subagent로 실행** — 검증 agent들의 출력을 종합하여 판정 라벨 부여. Main agent는 오케스트레이터로서 EVALUATOR 출력을 받아 안정 카운터 업데이트 + 리포트 갱신
+3. **불일치 발생 시 제3 관점 투입** — convergence-evaluator가 CONTESTED 판정 시 다음 iteration에서 새 관점 추가. 제3 관점 agent도 매핑 테이블 또는 페르소나 폴백을 따르되, CONTESTED 사유와 양쪽 이견을 프롬프트에 명시
+4. **convergence-evaluator는 매 iteration foreground subagent로 실행** — 검증 agent들의 출력을 종합하여 판정 라벨 부여 + 안정 카운터 업데이트 + report.md 갱신. Main agent는 순수 오케스트레이터로서 report.md를 읽고 수렴 여부만 판정
 
 ---
 
@@ -192,13 +192,10 @@ Tier별 필수 역할(CONTRARIAN, RESEARCHER, EVALUATOR)이 실행 목록에 포
 1. **검증 항목** 테이블
 2. **Tier 및 필수 역할**
 3. **검증 관점 및 Agent 할당** 테이블
-4. **Agent별 상세 프롬프트** (EVALUATOR 포함)
-5. **EVALUATOR 판정 기준**
-6. **안정 카운터 업데이트 규칙**
-7. **수렴 판정 기준**
-8. **리포트 갱신 형식** (iteration별, 최종 리포트)
-9. **완료 조건**
-10. **하지 말 것**
+4. **Agent별 상세 프롬프트** (검증 Agent만 — convergence-evaluator는 자체 프롬프트 내장)
+5. **수렴 판정 기준**
+6. **완료 조건**
+7. **하지 말 것**
 
 **플랜 파일 템플릿:**
 
@@ -228,51 +225,14 @@ Tier별 필수 역할(CONTRARIAN, RESEARCHER, EVALUATOR)이 실행 목록에 포
 - Agent: {agent type}
 - 프롬프트: {구체적 검증 지시}
 
-### EVALUATOR
-- Agent: {agent type}
-- 프롬프트: 위 관점 Agent들의 출력을 종합하여 각 발견사항에 판정 라벨을 부여하라.
+### convergence-evaluator (공통)
+- Agent: convergence-evaluator (demiurge agent)
+- 별도 프롬프트 불필요 — agent 정의에 판정 라벨 기준, 안정 카운터 규칙, report.md 갱신 형식이 내장되어 있음
+- 입력: 위 검증 Agent들의 출력 전체 + report.md 경로
 
-## EVALUATOR 판정 기준
-| 라벨 | 조건 |
-|------|------|
-| CONFIRMED | 다수 agent 동의 + 외부 근거 존재 |
-| LIKELY | 다수 agent 동의, 외부 근거 미확인 |
-| CONTESTED | Agent 간 의견 분열 (핵심 이견 명시) |
-| REFUTED | 다수 agent 반대 또는 외부 근거가 반박 |
-| UNGROUNDED | 외부 검증 불가 + 자기 참조만 존재 |
-
-## 안정 카운터 업데이트 규칙
-- EVALUATOR 판정이 이전과 동일 → 안정 카운터 +1
-- EVALUATOR 판정이 이전과 다름 → 안정 카운터 = 0
-- 신규 발견 → 안정 카운터 = 0, "신규" 표시
-  + 기존 합의 항목에 영향 시 해당 항목 안정 카운터 리셋
-- CONTESTED → 다음 iteration에서 제3 관점 투입
-- 이전 발견이 이번에 없음 → "취소 후보", 안정 카운터 = 0
-
-## 수렴 판정 기준
-- Tier 1-2: 모든 발견사항의 안정 카운터 >= 2 (EVALUATOR 판정 2회 연속 동일)
-- Tier 3: 모든 발견사항의 안정 카운터 >= 3 (EVALUATOR 판정 3회 연속 동일)
-- 새로운 발견 0건
-- CONTESTED 항목 0건
-
-## 리포트 갱신 형식
-
-### Iteration별 갱신
-| # | 항목 | EVALUATOR 판정 | 신뢰도 | 근거 요약 | 안정 카운터 |
-|---|------|---------------|--------|----------|-------------|
-
-### 최종 리포트
-#### 확정된 발견사항 (안정 카운터 >= {Tier별 임계값})
-| # | 심각도 | 내용 | 판정 라벨 | 검증 관점 | 안정 카운터 | 확정 iteration |
-
-#### 취소된 발견사항 (재검증으로 부정됨)
-| # | 내용 | 취소 사유 | 취소 관점 | iteration |
-
-#### Orchestration 기록
-| 관점 | 역할 | 사용 Agent/Skill | 담당 항목 |
-
-## 완료 기준
-- [ ] 모든 발견사항의 안정 카운터 >= {Tier별 임계값: Tier 1-2는 2, Tier 3는 3}
+## 수렴/완료 기준
+- [ ] Tier 1-2: 모든 발견사항의 안정 카운터 >= 2 (판정 라벨 2회 연속 동일)
+- [ ] Tier 3: 모든 발견사항의 안정 카운터 >= 3 (판정 라벨 3회 연속 동일)
 - [ ] 새로운 발견 0건
 - [ ] CONTESTED 항목 0건
 
@@ -305,34 +265,30 @@ plan.md를 읽고 수렴 검증을 직접 실행합니다.
 매 iteration:
 
 ```
-report.md 읽기 → plan.md 읽기
+plan.md 읽기
     ↓
 검증 Agent 실행 (Tier별 관점 수, foreground subagent)
   + CONTESTED 항목 있으면 제3 관점 agent 추가 투입
     ↓
-EVALUATOR 실행 (foreground subagent): 모든 Agent 출력 종합 → 판정 라벨 부여
+convergence-evaluator 실행 (foreground subagent):
+  1. report.md 읽기 (이전 iteration 상태)
+  2. 모든 Agent 출력 종합 → 판정 라벨 부여
+  3. 이전 대비 안정 카운터 업데이트
+  4. report.md 갱신
     ↓
-Main agent가 안정 카운터 업데이트 (EVALUATOR 판정 기준):
-  - 동일 판정 → +1
-  - 다른 판정 → 0
-  - 신규 → 0 (영향받는 기존 항목도 리셋)
-  - CONTESTED → 다음 iteration에서 제3 관점 투입
-  - 소멸 → "취소 후보", 0
-    ↓
-report.md 갱신
-    ↓
-모든 항목 안정 >= {Tier별: 2 또는 3} + CONTESTED 0건 → COMPLETE
+Main agent가 report.md를 읽고 수렴 여부만 판정:
+  모든 항목 안정 >= {Tier별: 2 또는 3} + CONTESTED 0건 → COMPLETE
 ```
 
 **안정 카운터 예시:**
 ```
-항목 A: Turn1=발견, Turn2=EVALUATOR확인(안정1), Turn3=새발견C로 재검토(안정0), Turn4=EVALUATOR재확인(안정1), Turn5=EVALUATOR확인(안정2) OK
-항목 B: Turn1=발견, Turn2=EVALUATOR확인(안정1), Turn3=EVALUATOR확인(안정2) OK
-항목 C: Turn3=신규(안정0), Turn4=EVALUATOR확인(안정1), Turn5=EVALUATOR확인(안정2) OK
+항목 A: Turn1=발견, Turn2=확인(안정1), Turn3=새발견C로 재검토(안정0), Turn4=재확인(안정1), Turn5=확인(안정2) OK
+항목 B: Turn1=발견, Turn2=확인(안정1), Turn3=확인(안정2) OK
+항목 C: Turn3=신규(안정0), Turn4=확인(안정1), Turn5=확인(안정2) OK
 → Turn5에서 모든 항목 안정>=2 → COMPLETE (Tier 1-2 기준)
 ```
 
-수렴 조건 충족 시 최종 리포트 작성 후 종료.
+수렴 조건 충족 시 main agent가 convergence-evaluator에 최종 리포트 작성을 요청하고 종료.
 
 ---
 
