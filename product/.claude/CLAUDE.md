@@ -82,3 +82,11 @@ Task는 반드시 순차 실행한다 (병렬 실행 금지). /rl이 .claude/ral
 
 ### Step 2: rl-verify (기술적 정확성)
 document-review 완료 후 /rl-verify를 실행하여 기술적 사실 여부, 실현 가능성, 기술적 타당성을 검증할 것. 검증 결과를 플랜에 반영하여 최종 플랜을 출력할 것.
+
+# Skills/Agents 호출 규칙
+- Claude Code 내부 동작/기능/설정 확인 시 → claude-code-guide 에이전트 사용
+- 여러 출처를 교차 검증하는 조사가 필요한 경우 → /deep-research 스킬 사용 (WebSearch/WebFetch를 직접 여러 번 쓰지 말고)
+- 이력서/문서에서 AI 톤을 제거할 때 → /humanize-writing 스킬 사용
+- 새 스킬이나 에이전트를 생성할 때 → /superpowers:writing-skills 스킬 사용
+- 구현 전 아이디어를 정리하고 설계할 때 → /superpowers:brainstorming 스킬 사용
+- 플랜이나 문서의 품질을 검증할 때 → /compound-engineering:document-review 스킬 사용

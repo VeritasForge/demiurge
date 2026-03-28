@@ -144,6 +144,7 @@ Phase 1에서 추출한 도메인 키워드를 아래 매핑 테이블에서 매
 | 리서치, 조사, 분석, Fact-Check | contrarian (ouroboros) | interview (ouroboros skill) | deep-research (demiurge), best-practices-researcher (compound), notion-research-documentation (notion skill) | simplifier (ouroboros) |
 | 문서화, README, API 문서, 기술 문서 | contrarian (ouroboros) | writing-plans (superpowers skill), writing-skills (superpowers skill) | document-review (compound skill), compound-docs (compound skill) | simplifier (ouroboros), document-review (compound skill) |
 | 디버깅, 버그, 오류 | contrarian (ouroboros) | systematic-debugging (superpowers skill) | deep-research (demiurge) | simplifier (ouroboros) |
+| Claude Code, plan mode, 스킬, Hook, 설정 | contrarian (ouroboros) | claude-code-guide (agent) | claude-code-guide (agent) | simplifier (ouroboros) |
 
 **공통 EVALUATOR**: evaluator (ouroboros agent) — 모든 도메인에서 사용
 
