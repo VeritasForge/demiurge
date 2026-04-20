@@ -64,6 +64,65 @@ allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, mcp__playwright__*
 
 ---
 
+## 도메인별 보조 도구 조합
+
+기술 논의/학습 시 deep-research 단독이 아닌 **도메인에 맞는 보조 도구를 조합**하여 정확도를 높입니다.
+
+| 도메인 | 보조 도구 | 용도 | 조합 방법 |
+|--------|----------|------|----------|
+| **프레임워크/라이브러리** | `context7` MCP | 공식 문서의 최신 API, 설정, 버전별 차이 확인 | Phase 2에서 context7으로 공식 문서 확인 → deep-research 출처와 교차 검증 |
+| **Claude Code 기능/설정** | `claude-code-guide` 에이전트 | Claude Code 내부 동작, 스킬, MCP, 설정 확인 | Phase 1 전에 claude-code-guide로 내부 지식 확인 → deep-research는 외부 사례/패턴 보완 |
+| **기술 개념/아키텍처** | (보조 도구 없음) | 학습 데이터 + 외부 근거 | deep-research 단독, 단 학습 데이터의 주장을 반드시 외부 근거로 검증 |
+
+### 보조 도구 사용 시점
+
+```
+도메인 판별
+    │
+    ├── 프레임워크/라이브러리 관련?
+    │    └── Phase 2에서 context7 resolve-library-id → query-docs 호출
+    │         → 공식 문서와 deep-research 결과 교차 검증
+    │
+    ├── Claude Code 관련?
+    │    └── Phase 1 전에 claude-code-guide 에이전트로 내부 지식 확인
+    │         → deep-research는 외부 사례/커뮤니티 정보 보완
+    │
+    └── 기술 개념/아키텍처?
+         └── deep-research 단독 수행
+              → 학습 데이터 기반 초벌 → 외부 근거로 검증/보강
+```
+
+---
+
+## 출력 파이프라인: deep-research → rl-verify → organize
+
+deep-research 완료 후 다음 파이프라인을 통해 최종 문서를 완성합니다:
+
+```
+deep-research (Phase 1~3)
+    │
+    ▼
+/rl-verify (기술적 정확성 검증)
+    │  • deep-research 결과의 기술적 사실 여부 검증
+    │  • 학습 데이터와 외부 근거 간 모순 식별
+    │  • 검증 실패 항목은 수정 또는 [Uncertain] 태깅
+    │
+    ▼
+/organize (구조화된 최종 문서 출력)
+    │  • 검증된 내용을 구조화된 포맷으로 정리
+    │  • 시각화 (표, 다이어그램, 시퀀스) 포함
+    │  • 출처 및 확신도 태그 보존
+    │
+    ▼
+최종 문서 출력
+```
+
+**파이프라인 실행 조건**:
+- 사용자가 명시적으로 `/deep-research`를 호출한 경우 → 파이프라인 전체 실행
+- 대화 중 기술 논의에서 근거 보강이 필요한 경우 → deep-research 에이전트만 백그라운드 실행, 결과를 대화에 통합 (rl-verify + organize는 생략 가능)
+
+---
+
 ## Execution Instructions
 
 ### Phase 1: 광역 탐색 (Broad Exploration)
