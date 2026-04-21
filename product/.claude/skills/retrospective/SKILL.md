@@ -144,43 +144,65 @@ AskUserQuestion으로 3가지 질문:
 
 **mcp__sequential-thinking__sequentialthinking**을 사용하여 분류 판단을 수행.
 
-### 6개 반영 대상
+### 반영 대상
 
 | 대상 | 분류 기준 | 반영 방식 |
 |------|----------|----------|
-| **Skills** | 특정 스킬 실행 중 발생한 문제 | SKILL.md 수정 |
-| **CLAUDE.md** | 모든 세션에 적용되는 범용 규칙 | CLAUDE.md에 규칙 추가 |
-| **Memory** | 사용자 선호도, 프로젝트 맥락, 피드백 | memory/ 파일 생성/수정 |
-| **Hooks** | 반복적으로 실패하는 패턴을 자동 방지 | settings.json 수정 |
-| **Workarounds** | Claude Code 자체의 한계/버그 | Memory에 reference 타입으로 저장 |
-| **Workflow** | 작업 방식/프로세스 개선 | CLAUDE.md 또는 Memory에 반영 |
+| **CLAUDE.md** | 항상 적용되는 짧은 규칙 (전체 200줄 이하 권장) | Edit으로 규칙 추가 |
+| **rules/*.md** | 도메인별 분리, path 스코핑이 필요한 규칙 | .claude/rules/ 에 파일 생성/수정 |
+| **CLAUDE.local.md** | 나만의 프로젝트별 지시사항 (git 제외) | 프로젝트 루트에 생성/수정 |
+| **skills/*.md** | 특정 스킬 실행 중 발생한 문제 | 해당 SKILL.md 수정 |
+| **memory/** | Claude의 학습 기록, 사용자 선호/피드백 | memory/ 파일 생성/수정 |
+| **Hooks** | 규칙으로는 안 지켜지는 패턴을 자동 방지 | settings.json (update-config 스킬 사용) |
 
-### 분류 판단 로직
+### 분류 의사결정 트리
 
-교훈 하나에 대해 (복수 대상 가능):
+모든 교훈은 **동일한 트리**를 순차 실행하여 분류한다. 특정 유형을 shortcut으로 건너뛰지 마라.
 
 ```
-1. 특정 스킬에서만 발생? → Skills
-2. 모든 세션에 적용? → CLAUDE.md
-3. 사용자 개인 선호/맥락? → Memory
-4. 자동 강제가 필요? (규칙으로는 안 지켜짐) → Hooks
-5. Claude Code 도구 한계? → Workarounds
-6. 작업 방식 변경? → Workflow
+교훈 발생
+  │
+  ├─ Q1. 자동 강제가 필요한가? (규칙으로 안 지켜질 때)
+  │    └─ YES → Hooks (settings.json)
+  │
+  ├─ Q2. 특정 스킬의 워크플로우에서 발생한 문제인가?
+  │    └─ YES → Skills (해당 SKILL.md 수정)
+  │
+  └─ Q3. 지시사항/규칙/학습 기록이다 → 3단계로 결정:
+       │
+       ├─ Q3-1. 성격: "사람이 쓰는 지시사항인가, Claude 학습 기록인가?"
+       │    ├─ 지시사항 → Q3-2로
+       │    └─ 학습 기록 (선호, 맥락, 발견한 패턴) → memory/
+       │
+       ├─ Q3-2. 범위: "이 프로젝트에만 해당하는가?"
+       │    ├─ YES, 이 프로젝트만 → .claude/ (프로젝트)
+       │    └─ NO, 모든 프로젝트 → ~/.claude/ (전역)
+       │
+       └─ Q3-3. 저장소 형태:
+            ├─ 팀원도 필요 + 짧음 (1-3줄) → CLAUDE.md
+            ├─ 팀원도 필요 + 도메인별 분리 or path 스코핑 → rules/*.md
+            ├─ 나만 필요 (개인 프로젝트 설정) → CLAUDE.local.md
+            └─ 컨텍스트 절약 필요 (on-demand 로딩) → skills/*.md
 ```
 
-### CLAUDE.md vs Memory 판별 기준
+> 각 저장소의 상세 동작이 궁금하면 `@claude-code-guide` 에이전트에게 질의하라.
+
+### 분류 세부 판별 기준
 
 핵심 질문: **"이것을 제거하면 팀 누구라도 실수할까?"**
-- Yes → CLAUDE.md (프로젝트 규칙)
-- No, 나만 해당 → Memory (개인 학습)
+- Yes → CLAUDE.md 또는 rules (팀 공유 규칙)
+- No, 나만 해당 → CLAUDE.local.md 또는 memory
 
-| 기준 | CLAUDE.md | Memory |
-|------|-----------|--------|
-| 성격 | 지시사항 (해야 할 것/하면 안 되는 것) | 학습 기록 (발견한 것/교정된 것) |
-| 공유 | git 체크인, 팀 공유 | 로컬, 개인용 |
-| 예시 | "`:bd` 대신 mini.bufremove 사용" | "lazy.nvim config는 lazy-load 후 실행됨" |
+**rules를 선택하는 기준** (CLAUDE.md 대신):
+- 특정 파일 유형에만 적용 → `paths` frontmatter로 스코핑
+- CLAUDE.md가 이미 길어서 추가하면 200줄 초과 → rules로 분리
+- 여러 규칙이 하나의 주제로 묶임 → rules 파일 1개로 모듈화
 
-**CLAUDE.md에 넣으면 안 되는 것**: 코드에서 유추 가능한 것, 도구 워크어라운드, 개인 선호
+**전역 vs 프로젝트 판별**:
+- "다른 프로젝트에서도 이 규칙이 필요한가?" → YES: 전역, NO: 프로젝트
+- "이 프로젝트의 기술 스택에 종속되는가?" → YES: 프로젝트
+
+**CLAUDE.md/rules에 넣으면 안 되는 것**: 코드에서 유추 가능한 것, 개인 선호
 **Memory에 넣으면 안 되는 것**: 팀 공유 규칙, 빌드 명령어, 위험 행동 금지 규칙
 
 ### 우선순위 판단
@@ -228,20 +250,22 @@ AskUserQuestion으로 전체 교훈 목록을 테이블 형태로 제시:
 반드시 아래 순서로 반영 (의존성 고려):
 
 ```
-1. Memory   → Write로 memory/ 파일 생성/수정 (feedback/user/project/reference 타입)
-              ⚠️ MEMORY.md 인덱스도 함께 업데이트할 것
-2. CLAUDE.md → Edit으로 규칙 추가
-              ⚠️ 기존 규칙과 중복되지 않는지 반드시 체크
-3. Skills    → Edit으로 해당 SKILL.md 수정
-4. Hooks     → Skill 도구로 update-config 스킬을 호출하여 settings.json 수정
-5. Workarounds → Memory에 reference 타입으로 저장
-6. Workflow  → CLAUDE.md 또는 Memory에 반영 (범용 규칙이면 CLAUDE.md, 개인 맥락이면 Memory)
+1. Memory        → Write로 memory/ 파일 생성/수정
+                   ⚠️ MEMORY.md 인덱스도 함께 업데이트할 것
+2. CLAUDE.md     → Edit으로 규칙 추가 (전역 또는 프로젝트, 의사결정 트리에 따라)
+                   ⚠️ 기존 규칙과 중복되지 않는지 반드시 체크
+3. rules/*.md    → .claude/rules/ 에 파일 생성/수정 (전역 또는 프로젝트)
+4. CLAUDE.local.md → 프로젝트 루트에 생성/수정 (개인 프로젝트 설정)
+5. Skills        → Edit으로 해당 SKILL.md 수정
+6. Hooks         → Skill 도구로 update-config 스킬을 호출하여 settings.json 수정
 ```
 
 ### 반영 시 주의사항
 
 - **Memory 반영**: memory/ 하위에 파일 생성/수정 후, MEMORY.md의 인덱스 섹션에 링크를 추가
-- **CLAUDE.md 반영**: 반영 전 기존 CLAUDE.md를 Read하여 중복 규칙이 없는지 확인. CLAUDE.md가 너무 길어지면 Claude가 무시하므로 간결하게 유지
+- **CLAUDE.md 반영**: 반영 전 기존 CLAUDE.md를 Read하여 중복 규칙이 없는지 확인. 200줄 초과 시 rules로 분리
+- **rules 반영**: 파일명은 주제를 나타내는 이름으로 (예: `ui-library.md`, `coding-safety.md`). path 스코핑이 필요하면 `paths` frontmatter 추가
+- **범위 판별**: 프로젝트 한정 규칙은 `.claude/`에, 전역 규칙은 `~/.claude/`에 반영. 반드시 의사결정 트리의 Q3-2를 거쳐 결정
 - **Hooks 반영**: 직접 settings.json을 수정하지 말고, `update-config` 스킬을 Skill 도구로 호출하여 안전하게 수행
 - **교훈 간 충돌**: 교훈 간 충돌이 있으면 사용자에게 AskUserQuestion으로 알리고 결정을 요청
 
