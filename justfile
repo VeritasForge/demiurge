@@ -8,12 +8,15 @@ default:
 
 # 전역 심링크 생성/갱신
 link:
+    mkdir -p ~/.local/bin
     stow -v -R --no-folding -t ~ product
-    @echo "✅ product → ~/.claude linked"
+    stow -v -R --no-folding -t ~ bin
+    @echo "✅ product → ~/.claude, bin → ~/.local/bin linked"
 
 # 전역 심링크 해제
 unlink:
     stow -v -D --no-folding -t ~ product
+    stow -v -D --no-folding -t ~ bin
     @echo "🔓 symlinks removed"
 
 # 심링크 상태 확인
@@ -62,6 +65,25 @@ status:
         done
     else
         echo "  ❌ agents/ not found"
+    fi
+    echo ""
+    echo "=== Bin (~/.local/bin, symlinked from product) ==="
+    if [ -d ~/.local/bin ]; then
+        found=false
+        for f in ~/.local/bin/*; do
+            [ -e "$f" ] || [ -L "$f" ] || continue
+            name=$(basename "$f")
+            target=$(readlink "$f" 2>/dev/null || echo "")
+            if [ -L "$f" ] && [[ "$target" == *"/demiurge/bin/"* ]]; then
+                echo "  ✅ $name"
+                found=true
+            fi
+        done
+        if [ "$found" = "false" ]; then
+            echo "  ❌ no demiurge bin links found"
+        fi
+    else
+        echo "  ❌ ~/.local/bin not found"
     fi
 
 # 새 스킬 생성 + 심링크

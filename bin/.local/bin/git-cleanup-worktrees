@@ -1,0 +1,354 @@
+#!/bin/bash
+set -euo pipefail
+
+# === 설정 ===
+DEFAULT_BASE="main"
+FORCE=false
+
+# === 도움말 ===
+show_help() {
+  echo "git worktree를 상태별로 분석하고 interactive하게 정리하는 스크립트"
+  echo ""
+  echo "Usage: $(basename "$0") [options] [base-branch]"
+  echo ""
+  echo "  base-branch  머지 여부 판단 기준 브랜치 (기본값: $DEFAULT_BASE)"
+  echo ""
+  echo "Options:"
+  echo "  -f, --force  modified/untracked files가 있어도 강제 삭제"
+  echo "  -h, --help   도움말 출력"
+  echo ""
+  echo "예시:"
+  echo "  $(basename "$0")              # base = develop"
+  echo "  $(basename "$0") main         # base = main"
+  echo "  $(basename "$0") --force      # 강제 삭제 모드"
+  echo "  $(basename "$0") -f main      # 강제 삭제 + base = main"
+}
+
+# === 인자 파싱 ===
+BASE_BRANCH=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    -h|--help)
+      show_help
+      exit 0
+      ;;
+    -f|--force)
+      FORCE=true
+      shift
+      ;;
+    -*)
+      echo "❌ 알 수 없는 옵션: $1"
+      show_help
+      exit 1
+      ;;
+    *)
+      BASE_BRANCH="$1"
+      shift
+      ;;
+  esac
+done
+BASE_BRANCH="${BASE_BRANCH:-$DEFAULT_BASE}"
+
+# === base branch 검증 ===
+if ! git rev-parse --verify "$BASE_BRANCH" >/dev/null 2>&1; then
+  echo "❌ base branch '$BASE_BRANCH'가 로컬에 존재하지 않습니다."
+  echo "   'git fetch origin $BASE_BRANCH' 또는 'git checkout $BASE_BRANCH'로 가져온 뒤 다시 실행하세요."
+  exit 1
+fi
+
+echo "🔍 Worktree 상태 분석 중... (base: $BASE_BRANCH)"
+
+# === worktree 파싱 ===
+MAIN_WORKTREE=""
+CURRENT_DIR="$(pwd -P)"
+
+# 배열: 각 worktree 정보 저장
+declare -a WT_PATHS=()
+declare -a WT_BRANCHES=()
+declare -a WT_STATUSES=()
+declare -a WT_COMMITS=()
+
+parse_worktrees() {
+  local path="" branch="" commit="" prunable="false" detached="false" first="true"
+
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    if [[ "$line" == "worktree "* ]]; then
+      # 이전 worktree 저장 (path가 있으면 MAIN 포함 항상 저장)
+      if [[ -n "$path" ]]; then
+        save_worktree "$path" "$branch" "$commit" "$prunable" "$detached"
+      fi
+      path="${line#worktree }"
+      if [[ "$first" == "true" ]]; then
+        MAIN_WORKTREE="$path"
+        first="false"
+      fi
+      branch=""
+      commit=""
+      prunable="false"
+      detached="false"
+    elif [[ "$line" == "HEAD "* ]]; then
+      commit="${line#HEAD }"
+    elif [[ "$line" == "branch "* ]]; then
+      branch="${line#branch refs/heads/}"
+    elif [[ "$line" == "detached" ]]; then
+      detached="true"
+    elif [[ "$line" == "prunable"* ]]; then
+      prunable="true"
+    fi
+  done < <(git worktree list --porcelain)
+
+  # 마지막 worktree 저장
+  if [[ -n "$path" ]]; then
+    save_worktree "$path" "$branch" "$commit" "$prunable" "$detached"
+  fi
+}
+
+save_worktree() {
+  local path="$1" branch="$2" commit="$3" prunable="$4" detached="$5"
+  local real_path
+
+  # 상태 분류 (우선순위 순서)
+  local status=""
+  real_path="$(cd "$path" 2>/dev/null && pwd -P 2>/dev/null || echo "")"
+
+  if [[ "$path" == "$MAIN_WORKTREE" ]]; then
+    status="MAIN"
+  elif [[ -n "$real_path" && "$real_path" == "$CURRENT_DIR" ]]; then
+    status="CURRENT"
+  elif [[ "$prunable" == "true" ]]; then
+    status="PRUNABLE"
+  elif [[ "$detached" == "true" || -z "$branch" ]]; then
+    # detached HEAD: 커밋 기준으로 머지 여부 판단
+    if [[ -n "$commit" ]] && git merge-base --is-ancestor "$commit" "$BASE_BRANCH" 2>/dev/null; then
+      status="MERGED"
+    else
+      status="UNMERGED"
+    fi
+  else
+    # 브랜치 기준: base에 포함되지 않은 커밋이 있는지 확인
+    if ! git rev-parse --verify "$branch" >/dev/null 2>&1; then
+      status="UNMERGED"
+    else
+      local unmerged_count
+      unmerged_count=$(git log "$BASE_BRANCH".."$branch" --oneline 2>/dev/null | wc -l | tr -d ' ') || unmerged_count="0"
+      if [[ "$unmerged_count" -eq 0 ]]; then
+        status="MERGED"
+      else
+        # squash merge 감지: remote branch가 삭제됐으면 PR 머지된 것으로 판단
+        if ! git ls-remote --heads origin "$branch" 2>/dev/null | grep -q .; then
+          status="MERGED"
+        else
+          status="UNMERGED"
+        fi
+      fi
+    fi
+  fi
+
+  # detached HEAD인 경우 "(detached at <7-char-sha>)" 형식으로 브랜치명 표시
+  local display_branch="$branch"
+  if [[ "$detached" == "true" || -z "$branch" ]]; then
+    display_branch="(detached at ${commit:0:7})"
+  fi
+
+  WT_PATHS+=("$path")
+  WT_BRANCHES+=("$display_branch")
+  WT_STATUSES+=("$status")
+  WT_COMMITS+=("$commit")
+}
+
+parse_worktrees
+
+# === 테이블 출력 ===
+
+# 선택 가능한 항목 번호 매핑
+declare -a SELECTABLE_INDICES=()
+declare -a NUM_TO_INDEX=()   # 인덱스 배열: NUM_TO_INDEX[n] = WT_PATHS 배열 인덱스 (n은 1-based)
+MERGED_COUNT=0
+UNMERGED_COUNT=0
+PRUNABLE_COUNT=0
+
+truncate_path() {
+  local path="$1" max_len="${2:-45}"
+  if [[ ${#path} -gt $max_len ]]; then
+    echo "...${path: -$((max_len - 3))}"
+  else
+    echo "$path"
+  fi
+}
+
+status_emoji() {
+  case "$1" in
+    MAIN)     echo "📌 MAIN    " ;;
+    CURRENT)  echo "🔧 CURRENT " ;;
+    MERGED)   echo "✅ MERGED  " ;;
+    UNMERGED) echo "⚠️  UNMERGED" ;;
+    PRUNABLE) echo "💀 PRUNABLE" ;;
+  esac
+}
+
+print_table() {
+  local num=0
+
+  printf "\n %-3s %-12s %-40s %s\n" "#" "상태" "브랜치" "경로"
+  printf "%s\n" "──────────────────────────────────────────────────────────────────────────────"
+
+  for i in "${!WT_PATHS[@]}"; do
+    local status="${WT_STATUSES[$i]}"
+    local branch="${WT_BRANCHES[$i]}"
+    local path
+    path="$(truncate_path "${WT_PATHS[$i]}")"
+    local emoji
+    emoji="$(status_emoji "$status")"
+
+    case "$status" in
+      MAIN|CURRENT)
+        printf " %-3s %s %-40s %s\n" "-" "$emoji" "$branch" "$path"
+        ;;
+      MERGED)
+        num=$((num + 1))
+        SELECTABLE_INDICES+=("$i")
+        NUM_TO_INDEX[$num]=$i
+        printf " %-3s %s %-40s %s\n" "$num" "$emoji" "$branch" "$path"
+        MERGED_COUNT=$((MERGED_COUNT + 1))
+        ;;
+      UNMERGED)
+        num=$((num + 1))
+        SELECTABLE_INDICES+=("$i")
+        NUM_TO_INDEX[$num]=$i
+        printf " %-3s %s %-40s %s\n" "$num" "$emoji" "$branch" "$path"
+        UNMERGED_COUNT=$((UNMERGED_COUNT + 1))
+        ;;
+      PRUNABLE)
+        num=$((num + 1))
+        SELECTABLE_INDICES+=("$i")
+        NUM_TO_INDEX[$num]=$i
+        printf " %-3s %s %-40s %s\n" "$num" "$emoji" "$branch" "$path"
+        PRUNABLE_COUNT=$((PRUNABLE_COUNT + 1))
+        ;;
+    esac
+  done
+
+  echo ""
+  echo " ✅ MERGED: ${MERGED_COUNT}개  ⚠️  UNMERGED: ${UNMERGED_COUNT}개  💀 PRUNABLE: ${PRUNABLE_COUNT}개"
+
+  if [[ ${#SELECTABLE_INDICES[@]} -eq 0 ]]; then
+    echo ""
+    echo "정리할 worktree가 없습니다 🎉"
+    exit 0
+  fi
+}
+
+print_table
+
+# === Interactive 선택 ===
+
+SELECTED_INDICES=()
+
+read_selection() {
+  echo ""
+  read -rp "삭제할 번호 입력 (공백 구분), 'all-merged', 'all', 또는 'q': " input || { echo ""; echo "취소했습니다."; exit 0; }
+
+  if [[ "$input" == "q" ]]; then
+    echo "취소했습니다."
+    exit 0
+  fi
+
+  SELECTED_INDICES=()
+
+  if [[ "$input" == "all-merged" ]]; then
+    for i in "${!WT_STATUSES[@]}"; do
+      if [[ "${WT_STATUSES[$i]}" == "MERGED" ]]; then
+        SELECTED_INDICES+=("$i")
+      fi
+    done
+  elif [[ "$input" == "all" ]]; then
+    SELECTED_INDICES=("${SELECTABLE_INDICES[@]}")
+  else
+    local total_selectable=${#SELECTABLE_INDICES[@]}
+    local -a nums
+    read -ra nums <<< "$input"
+    for num in "${nums[@]}"; do
+      if [[ "$num" =~ ^[0-9]+$ ]] && [[ "$num" -ge 1 && "$num" -le "$total_selectable" ]]; then
+        local idx="${NUM_TO_INDEX[$num]}"
+        local already_selected=false
+        if [[ ${#SELECTED_INDICES[@]} -gt 0 ]]; then
+          for existing in "${SELECTED_INDICES[@]}"; do
+            if [[ "$existing" == "$idx" ]]; then
+              already_selected=true
+              break
+            fi
+          done
+        fi
+        if [[ "$already_selected" == "false" ]]; then
+          SELECTED_INDICES+=("$idx")
+        fi
+      else
+        echo "⚠️  잘못된 번호: $num (무시됨)"
+      fi
+    done
+  fi
+
+  if [[ ${#SELECTED_INDICES[@]} -eq 0 ]]; then
+    echo "선택된 항목이 없습니다."
+    exit 0
+  fi
+}
+
+confirm_and_delete() {
+  echo ""
+  local force_label=""
+  if [[ "$FORCE" == "true" ]]; then
+    force_label=" (⚡ force 모드)"
+  fi
+  echo "다음 ${#SELECTED_INDICES[@]}개 worktree를 삭제합니다:${force_label}"
+  for i in "${SELECTED_INDICES[@]}"; do
+    echo "  - ${WT_BRANCHES[$i]} (${WT_PATHS[$i]})"
+  done
+
+  echo ""
+  read -rp "계속하시겠습니까? [y/N]: " confirm || { echo ""; echo "취소했습니다."; exit 0; }
+  if [[ "$confirm" != "y" && "$confirm" != "Y" ]]; then
+    echo "취소했습니다."
+    exit 0
+  fi
+
+  # 삭제 실행
+  local success=0 fail=0 pruned=0
+
+  for i in "${SELECTED_INDICES[@]}"; do
+    local path="${WT_PATHS[$i]}"
+    local branch="${WT_BRANCHES[$i]}"
+    local status="${WT_STATUSES[$i]}"
+
+    if [[ "$status" == "PRUNABLE" ]]; then
+      pruned=$((pruned + 1))
+      continue
+    fi
+
+    local err remove_args=("$path")
+    if [[ "$FORCE" == "true" ]]; then
+      remove_args=("--force" "$path")
+    fi
+    if err=$(git worktree remove "${remove_args[@]}" 2>&1); then
+      success=$((success + 1))
+    else
+      echo "  ❌ 삭제 실패: $branch — $err"
+      fail=$((fail + 1))
+    fi
+  done
+
+  # prunable 항목 정리
+  if [[ $pruned -gt 0 ]]; then
+    git worktree prune
+  fi
+
+  # 결과 요약
+  echo ""
+  echo "🧹 정리 완료!"
+  [[ $success -gt 0 ]] && echo "  ✅ 삭제 성공: ${success}개"
+  [[ $fail -gt 0 ]]    && echo "  ❌ 삭제 실패: ${fail}개"
+  [[ $pruned -gt 0 ]]  && echo "  💀 Pruned: ${pruned}개"
+}
+
+read_selection
+confirm_and_delete
