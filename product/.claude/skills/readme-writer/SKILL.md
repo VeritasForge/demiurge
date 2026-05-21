@@ -125,11 +125,115 @@ AskUserQuestion:
 
 ## Phase 3: 초안 생성
 
-(Task 7에서 채움)
+3-Layer 구조로 README 본문을 생성한다.
+
+### Layer 1: 공통 골격 (모든 그룹 공통)
+
+```
+Title → Description → Badges → Installation → Usage → Contributing → License
+```
+
+각 섹션 작성 가이드:
+- **Title**: 자동 탐지된 프로젝트명 (package.json의 `name`, Cargo.toml의 `[package].name` 등). 모호하면 사용자에게 질문.
+- **Description**: 한 줄 핵심 가치. 120자 미만 (Standard Readme 표준). 모호한 표현("A tool for...") 금지 (anti-patterns.md #1).
+- **Badges**: Phase 2-4에서 선택한 프리셋에 따라 Shields.io URL 생성.
+- **Installation**: 자동 탐지된 패키지 매니저로 명령 작성 (npm install / pip install / cargo add 등).
+- **Usage**: 실제 코드 예제 (foo/bar/baz 금지, anti-patterns.md #4).
+- **Contributing**: 짧으면 인라인, 길면 `CONTRIBUTING.md` 링크.
+- **License**: 자동 탐지된 LICENSE 파일과 일치 (없으면 사용자에게 질문).
+
+### Layer 2: 그룹별 추가 섹션
+
+`references/project-groups.md`의 각 그룹 정의 참조.
+
+| 그룹 | 추가 섹션 |
+|------|----------|
+| Package (Library) | API |
+| Package (CLI) | Synopsis, Options, Exit Status, Environment Variables |
+| Application (Web) | Demo, Screenshots, Tech Stack, Architecture |
+| Application (Monorepo) | Packages Table (자식 패키지 목록 + 링크) |
+| AI Asset | Intended Use, Limitations/Bias, Training Data, Evaluation |
+| Curated List | Contents (TOC), Categories (통일된 항목 형식) |
+| Metadata-bound | Configuration 표 (values.yaml/action.yml/*.tf 동기화) |
+
+### Layer 3: 플랫폼 메타데이터
+
+`references/platform-metadata.md` 참조.
+
+- GitHub: 500 KiB 경고 체크
+- npm: package.json의 description/keywords 활용
+- PyPI: long_description_content_type 안내 (Phase 6에서)
+- Cargo: lib.rs doc-comment sync 패턴 안내 (Phase 6에서)
+- HF: YAML frontmatter 자동 채움 (AI Asset 그룹 전용)
+
+### 언어 처리
+
+- `--lang ko` (기본): README.md 한국어로 작성
+- `--lang en`: README.md 영어로 작성
+- `--lang both`:
+  1. README.md 한국어로 작성
+  2. README.en.md 영어로 작성 (섹션 구조 동일, 제목·본문만 번역)
+  3. 두 파일 상단에 스위처 자동 삽입:
+     ```markdown
+     > [한국어](README.md) | [English](README.en.md)
+     ```
 
 ## Phase 4: 인라인 검증
 
-(Task 7에서 채움)
+`references/anti-patterns.md` 참조. 4종 인라인 검증 + 자동 수정.
+
+### 4-1. 섹션 순서 검증
+
+선택한 표준(`references/standards-comparison.md`)의 순서와 일치하는지 LLM이 직접 확인. 위반 시 재배치.
+
+예: Standard Readme 선택 시 — License가 마지막 위치인지 확인.
+
+### 4-2. Short Description 120자 검증
+
+```python
+# 의사 코드
+short_desc = extract_section(readme, "Description")
+if len(short_desc) >= 120:
+    short_desc = compress_to_under_120(short_desc)  # LLM이 직접 압축
+```
+
+Standard Readme + Make a README 모두 권장. HF Model Card는 별도 제약 없음.
+
+### 4-3. 안티패턴 매칭 (8개)
+
+`anti-patterns.md`의 8개 패턴에 대해:
+1. 탐지 신호로 매칭 시도
+2. 매칭 시 → 처방 적용 (LLM 자동 수정)
+3. 적용 제외 그룹이면 → 경고만 출력, 수정 안 함
+4. 수정 후 재검증 1회 (수정이 다른 패턴 유발했는지)
+5. 재검증 후에도 위반 남으면 → README 상단 HTML 주석으로 표시:
+   ```html
+   <!-- readme-writer: 수동 검토 필요 — 안티패턴 #N (이유) -->
+   ```
+
+### 4-4. YAML frontmatter 필드 검증 (AI Asset 그룹만)
+
+`platform-metadata.md`의 HF 섹션 필수 필드 체크:
+- `library_name` (2024.8 이후 명시 필수)
+- `pipeline_tag`
+- `license` 또는 (`license_name` + `license_link`)
+- `tags` 1개 이상
+
+누락 시 placeholder + 콘솔 안내:
+```yaml
+library_name: transformers  # TODO: 실제 라이브러리로 교체
+```
+
+### Phase 4 출력
+
+검증 결과 콘솔 요약:
+```
+✅ Phase 4 인라인 검증
+- 섹션 순서: PASS (Standard Readme 16-섹션 준수)
+- Short Description: PASS (98자)
+- 안티패턴: 1건 자동 수정 (#1 모호한 설명)
+- YAML frontmatter: N/A (Package 그룹)
+```
 
 ## Phase 5: 통합 호출 (humanize-writing + rl-verify)
 
