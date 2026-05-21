@@ -237,8 +237,127 @@ library_name: transformers  # TODO: 실제 라이브러리로 교체
 
 ## Phase 5: 통합 호출 (humanize-writing + rl-verify)
 
-(Task 8에서 채움)
+Phase 4 검증을 통과한 초안에 대해 두 스킬을 순차 자동 호출한다.
+
+### 5-A: humanize-writing 호출
+
+```
+Skill("humanize-writing", initial_draft)
+→ 출력: AI 톤 제거된 초안
+```
+
+실패 시:
+- 콘솔 경고: "humanize-writing 호출 실패. 원본 초안으로 진행합니다."
+- 사용자 안내: "수동으로 `/humanize-writing README.md` 실행을 권장합니다."
+- 원본 초안 유지하고 Phase 5-B로 계속.
+
+### 5-B: rl-verify 호출
+
+```
+Skill("rl-verify", "다음 README의 사실 정확성을 Tier 1로 검증하라: <humanized_draft>")
+→ 출력: PASS / PARTIAL / FAIL 리포트
+```
+
+Tier 1 (경량) — 단일 문서, 영향 범위 제한.
+
+결과 분기:
+- **PASS** → Phase 6 진행
+- **PARTIAL** 또는 **FAIL** → Phase 3 재진입 (1회만):
+  - rl-verify의 FAIL/PARTIAL 항목을 수정 지시로 변환
+  - Phase 3 Layer 1-3 재작성 (수정 지시 반영)
+  - Phase 4 인라인 검증 재실행
+  - Phase 5 재진입 안 함 (무한 루프 방지)
+  - 재시도 후에도 FAIL 항목 있으면 → README 상단 HTML 주석으로 표시:
+    ```html
+    <!-- readme-writer: rl-verify FAIL 항목 N개 — 수동 확인 필요 -->
+    ```
+
+rl-verify 호출 자체가 실패하면:
+- 콘솔 경고: "rl-verify 호출 실패. 검증을 건너뜁니다."
+- 사용자 안내: "수동으로 `/rl-verify README.md` 실행을 권장합니다."
+- 검증 스킵하고 Phase 6 진행.
 
 ## Phase 6: 출력 + 외부 도구 안내
 
-(Task 8에서 채움)
+### 6-A: 파일 출력
+
+```
+모드 결정:
+  --force 옵션 + 기존 README.md 존재 → README.md 덮어쓰기 (사용자 확인 후)
+  기존 README.md 부재 → README.md 생성 (신규 모드)
+  기존 README.md 존재 (--force 없음) → README.v2.md 생성 (비파괴 모드)
+
+언어 처리:
+  --lang ko (기본): README.md (또는 README.v2.md) 1개
+  --lang en: 동일, 영어
+  --lang both: README.md + README.en.md (또는 .v2.md + .en.v2.md) 2개 + 스위처
+```
+
+비파괴 모드일 때 diff 요약 콘솔 출력:
+```
+📋 비파괴 출력: README.v2.md 생성 완료
+- 추가된 섹션: Installation, Configuration (2개)
+- 수정된 섹션: Description (한 줄 압축)
+- 보존된 섹션: About, Acknowledgments (사용자 손작성)
+```
+
+### 6-B: 외부 도구 명령 안내
+
+선택한 그룹/플랫폼에 따라 콘솔에 복사-붙여넣기 가능한 명령 안내. `references/platform-metadata.md` 참조.
+
+```
+🛠️  추천 외부 검증 도구
+
+# 마크다운 일반 (모든 그룹)
+markdownlint README.md
+lychee README.md
+
+# PyPI (Package 그룹 + pyproject.toml 탐지 시)
+twine check dist/*
+
+# Helm (Metadata-bound + Chart.yaml 탐지 시)
+helm-docs --chart-search-root=.
+```
+
+미설치 도구 자동 감지 + 설치 명령 함께 출력:
+```bash
+# 의사 코드
+for tool in [markdownlint, lychee, twine, helm-docs]:
+    if not command_exists(tool):
+        print(f"# {tool} 미설치. 설치 명령:")
+        print(install_command_for(tool))
+```
+
+설치 명령 예시:
+```bash
+# markdownlint
+npm install -g markdownlint-cli
+
+# lychee
+brew install lychee
+
+# twine
+pip install --upgrade twine
+
+# helm-docs
+brew install norwoodj/tap/helm-docs
+```
+
+### 6-C: 최종 종료 메시지
+
+```
+✅ README 생성 완료
+- 파일: README.md (또는 README.v2.md)
+- 표준: Standard Readme
+- 그룹: Package (Library)
+- 언어: ko
+- 검증: 인라인 PASS, humanize PASS, rl-verify PASS
+- 다음 단계: 위 외부 도구 명령을 실행하세요.
+```
+
+비파괴 모드 시 추가 안내:
+```
+ℹ️  비파괴 출력 모드:
+README.v2.md를 검토한 뒤 README.md로 옮기려면:
+    mv README.md README.bak.md && mv README.v2.md README.md
+```
