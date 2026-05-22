@@ -156,7 +156,9 @@ TDD 진행 시 각 Task의 RED phase는 아래 **3개 카테고리에서 각각 
 - AI 협업 세션 회고/교훈 추출 시 → /retrospective 스킬 사용
 - 버그·에러·테스트 실패·예상치 못한 동작을 디버깅할 때 → /debug 스킬 사용 (라우터가 상황 판별 후 systematic-debugging 또는 ce-debug를 자동 선택)
 - Frontend (웹) 개발 시
-  - React/Next.js 코드 구조·성능 설계 → /vercel-react-best-practices
+  - **Next.js/React 코드 작성·수정·리뷰 시 → /vercel-react-best-practices, /vercel-composition-patterns 필수 호출** (기능 추가/버그 수정/리팩터링 모두 포함. "구조·성능 설계"에 한정하지 말 것 — 단순한 변경에서도 안티패턴이 들어올 수 있음)
+  - **플랜 작성 시 각 Task에 적용 Vercel 룰을 명시** (예: `client-swr-dedup`, `async-parallel`, `server-parallel-fetching`, `async-suspense-boundaries`, `bundle-dynamic-imports`)
+  - **코드 리뷰 단계에서 Vercel 룰 기준 audit** (compound-engineering:ce-code-review 호출 시 "Vercel best-practices 기준" 명시)
   - 컴포넌트 설계 패턴 → /vercel-composition-patterns
   - 비주얼 디자인 품질 (타이포, 컬러, 모션) → /compound-engineering:frontend-design
   - 구현 후 접근성·웹 표준 감사 → /web-design-guidelines
