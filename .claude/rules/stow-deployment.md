@@ -1,7 +1,6 @@
 ---
 paths:
   - "**/justfile"
-  - "**/.stowrc*"
   - "**/bootstrap.sh"
   - "**/.claude/CLAUDE.md"
 ---

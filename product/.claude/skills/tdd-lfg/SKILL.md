@@ -6,8 +6,6 @@ argument-hint: "[feature description] [--fast|--full]"
 disable-model-invocation: true
 ---
 
-<!-- model intentionally omitted — chain된 skill들이 같은 turn 안에서 실행되어 override가 후속 skill까지 전파될 위험. 결정 근거: plans/product-claude-commands-command-compressed-aho.md FR-1 -->
-
 # TDD-LFG: CE compound-knowledge planning + SP TDD execution pipeline
 
 Parse $ARGUMENTS: extract mode flag (--fast|--full) and feature description.

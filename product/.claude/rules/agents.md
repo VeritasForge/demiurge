@@ -5,24 +5,11 @@ paths:
 
 # Agent (Subagent) 작성 규칙
 
-Claude Code subagent를 생성·수정할 때 적용. **skill과 본질적으로 다른 컨셉**이므로 [[skills]] rule과 별도로 관리. 공식 docs: [sub-agents.md](https://code.claude.com/docs/en/sub-agents.md).
+Claude Code subagent를 생성·수정할 때 적용. 공식 docs: [sub-agents.md](https://code.claude.com/docs/en/sub-agents.md).
 
-## 1. Agent vs Skill 본질적 차이 (가장 중요)
+> **참고**: "agent로 만들지 skill로 만들지" 선택 가이드는 별도 자료로 분리 (이 rule은 agent 작성에 집중). agent로 만들기로 결정한 뒤 아래 규칙 적용.
 
-| 항목 | Agent | Skill |
-|---|---|---|
-| 컨텍스트 | **Fresh context** — 새 window, 부모 대화사 없음 | 부모 세션 context 상속 |
-| 호출 방식 | Task tool의 `subagent_type` 또는 자동 위임 | Skill tool의 `skill` 또는 자동 로드 |
-| `model` 동작 | **그 subagent 수명 내내 적용** (skill의 "rest of current turn"과 다름) | turn 끝나면 세션 모델 복귀 |
-| 자동 호출 차단 | `disable-model-invocation` 같은 필드 **없음**. `.claude/settings.json` permissions.deny로만 차단 | `disable-model-invocation: true` |
-| 사용 시점 | context overflow 방지 + 독립 권한·모델 필요 | 재사용 프롬프트, 부모 context 참조 필요 |
-
-### 선택 기준
-
-- **Agent 선택**: 작업이 무겁고 부모 context를 오염시키지 말아야 할 때 (예: 코드 전체 조사, 적대적 검토, 병렬 검증), 다른 권한·모델을 강제해야 할 때
-- **Skill 선택**: 부모 대화의 context가 필요할 때, 한두 번의 tool 호출로 끝나는 워크플로우, frontmatter로 model override만 필요할 때
-
-## 2. Frontmatter 필드 (총 16개)
+## 1. Frontmatter 필드 (총 16개)
 
 ### 필수
 | 필드 | 형식 | 비고 |
@@ -52,9 +39,9 @@ Claude Code subagent를 생성·수정할 때 적용. **skill과 본질적으로
 | `maxTurns` | 정수 — agentic turn 수 제한 |
 | `initialPrompt` | 자연어 — 첫 turn 자동 제출 |
 
-## 3. `model` 필드 결정 원칙 (skill과 다름!)
+## 2. `model` 필드 결정 원칙
 
-skill의 model 결정 원칙([[skills]] rule 1번 참조)을 그대로 적용하면 **안 됨**. agent는 fresh context에서 시작부터 끝까지 명시된 모델로 실행되므로 trade-off가 다르다.
+agent는 fresh context에서 시작부터 끝까지 명시된 모델로 실행된다 (skill의 model override가 "rest of the current turn" 동안만 적용되는 것과 다름). 작업 복잡도에 맞춰 명시.
 
 | 케이스 | 권장 model | 근거 |
 |---|---|---|
@@ -65,16 +52,16 @@ skill의 model 결정 원칙([[skills]] rule 1번 참조)을 그대로 적용하
 
 > **원칙**: 부모 모델보다 작업 자체의 요구가 더 중요. agent는 fresh context라 부모와 분리되므로, 작업 복잡도에 맞춰 명시.
 
-## 4. Plugin Agent 제약
+## 3. Plugin Agent 제약
 
 플러그인이 제공하는 agent는 다음 필드가 **무시됨**:
 - `hooks`, `mcpServers`, `permissionMode`
 
 이 필드들을 활용해야 한다면 정의를 `product/.claude/agents/`로 복사하여 override.
 
-## 5. 자동 호출 차단
+## 4. 자동 호출 차단
 
-skill처럼 `disable-model-invocation` 필드가 **없다**. agent를 명시 호출만 받게 하려면:
+agent에는 `disable-model-invocation` 같은 필드가 **없다**. agent를 명시 호출만 받게 하려면:
 
 ```json
 // .claude/settings.json
@@ -87,11 +74,11 @@ skill처럼 `disable-model-invocation` 필드가 **없다**. agent를 명시 호
 
 위 설정으로 Claude가 해당 agent를 자동 위임하지 못하게 차단.
 
-## 6. demiurge 컨벤션
+## 5. demiurge 컨벤션
 
-현재 demiurge에는 21개 agent가 `product/.claude/agents/`에 정의. 공통 패턴:
-- `architect` 계열 (12개): T2-T3 tier로 도메인별 아키텍처 자문
-- `investigation` 계열 (5개): 코드/로그/히스토리 조사 (Explore 패턴)
-- `convergence-evaluator`, `contrarian` 등: rl-verify, 적대적 검토 등 메타 워크플로우 지원
+현재 demiurge에는 21개 agent가 `product/.claude/agents/`에 정의 (정확한 인벤토리는 `ls product/.claude/agents/` 확인). 공통 계열:
+- `architect` 계열 (14개): T2-T3 tier로 도메인별 아키텍처 자문
+- `investigation` 계열 (4개): 코드/로그/히스토리 조사 (Explore 패턴)
+- `meta-workflow` 계열 (3개): convergence-evaluator, counter-reviewer, eda-specialist 등 rl-verify·적대적 검토 지원
 
 신규 agent 추가 시 `product/.claude/agents/{name}.md` 생성 → `just link` → AID 컨벤션({Tier}-{Role}-R{Round}) 따르기.

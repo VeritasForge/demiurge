@@ -6,8 +6,6 @@ argument-hint: "[commit message]"
 model: claude-haiku-4-5
 ---
 
-<!-- model: claude-haiku-4-5 — turn 전체가 commit 작업이므로 명시. 다른 3개 skill(/rl, /rl-fresh, /tdd-lfg)은 사용자 task 진입점이라 model 미명시. 결정 근거: plans/product-claude-commands-command-compressed-aho.md FR-1 -->
-
 # Commit & Push Changes
 
 변경사항을 커밋하고 원격 저장소로 푸시합니다.
@@ -54,7 +52,6 @@ Co-Authored-By: Claude <noreply@anthropic.com>
 - agents: .claude/agents/ 변경
 - rules: .claude/rules/ 변경
 - skills: .claude/skills/ 변경
-- commands: .claude/commands/ 변경
 - orchestration: 오케스트레이션 관련 변경
 - docs: CLAUDE.md, ARCHITECTURE-INDEX.md, ADR 등
 

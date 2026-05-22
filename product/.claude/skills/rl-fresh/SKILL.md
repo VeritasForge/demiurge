@@ -5,8 +5,6 @@ allowed-tools: Read, Grep, Glob, Bash, WebSearch, WebFetch, Edit, Write, Task
 argument-hint: "<prompt> [--max-iterations N]"
 ---
 
-<!-- model intentionally omitted — 요구사항 분해 + 디스패처가 같은 turn에 머무름. model을 sonnet으로 고정하면 사용자 세션이 silently downgrade됨. 결정 근거: plans/product-claude-commands-command-compressed-aho.md FR-1 -->
-
 # Fresh Context Ralph Loop Runner
 
 subagent(Task tool)를 활용하여 각 요구사항을 신선한 컨텍스트에서 실행합니다.

@@ -137,11 +137,12 @@ demiurge/
 ├── product/.claude/          # 전역 배포 (GNU Stow 경유 → ~/.claude/)
 │   ├── skills/ (42)
 │   ├── agents/ (21)
-│   ├── rules/ (3)            # 항상/조건부 로드 규칙 (paths frontmatter 지원)
+│   ├── rules/ (2)            # 전역 룰: skills.md, agents.md (paths frontmatter 지원)
 │   └── commands/ (0, /rl·/rl-fresh·/commit·/tdd-lfg는 skills/로 마이그레이션됨)
 ├── bin/.local/bin/           # 전역 CLI 배포 (GNU Stow 경유 → ~/.local/bin/)
 │   └── git-cleanup-worktrees
-├── .claude/                  # 프로젝트 로컬
+├── .claude/                  # 프로젝트 로컬 (demiurge 한정)
+│   ├── rules/stow-deployment.md  # demiurge 전용 stow 배포 운영 규칙
 │   └── commands/wrap.md
 ├── justfile                  # Task runner
 ├── bootstrap.sh              # 최초 설정

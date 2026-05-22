@@ -2,7 +2,6 @@
 paths:
   - "**/SKILL.md"
   - "**/skills/**/*.md"
-  - "**/commands/**/*.md"
 ---
 
 # Skill / Command 작성 규칙
@@ -42,7 +41,7 @@ Claude Code skill 또는 command를 생성·수정할 때 적용. 공식 입장:
 | `description` | `description` + `when_to_use` 합쳐 최대 1536자 (listing에서 truncate) | "Use when..." 트리거 명시, workflow 요약 금지 |
 | `allowed-tools` | 본문에서 실제 사용하는 tool만 | grep으로 본문 vs frontmatter 일치 검증 |
 | `argument-hint` | 인자 받는 skill만 | 예: `"<prompt> [--max-iterations N]"` |
-| `disable-model-invocation` | `true` 시 사용자 명시 호출만 가능 (자동 미감지) | `/commit`, `/tdd-lfg` 같이 의도 명확한 명령형에 적합 |
+| `disable-model-invocation` | `true` 시 사용자 명시 호출만 가능 (자동 미감지) | `/tdd-lfg` 같이 의도 명확한 명령형에 적합 (/commit은 frontmatter `model` 고정으로 충분하여 미사용) |
 | `model` | 위 1번 원칙대로 | Anthropic API: `claude-haiku-4-5`, `claude-sonnet-4-6`, `claude-opus-4-7` 형식 |
 
 ## 3. Skill takes precedence over command

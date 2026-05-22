@@ -5,8 +5,6 @@ allowed-tools: Read, Grep, Glob, Bash, WebSearch, WebFetch, Edit, Write, Task
 argument-hint: "<prompt> [--max-iterations N] [--template <name>]"
 ---
 
-<!-- model intentionally omitted — skill body 직후 같은 turn 안에서 사용자 task 첫 iteration이 실행됨. model을 sonnet으로 고정하면 사용자 opus 세션이 silently downgrade됨. 결정 근거: plans/product-claude-commands-command-compressed-aho.md FR-1 -->
-
 # Ralph Loop Runner
 
 Ralph Loop (Ralph Wiggum Technique)을 sequential-thinking MCP와 함께 실행합니다.
