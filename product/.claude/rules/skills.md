@@ -2,13 +2,14 @@
 paths:
   - "**/SKILL.md"
   - "**/skills/**/*.md"
-  - "**/agents/**/*.md"
   - "**/commands/**/*.md"
 ---
 
-# Skill 작성 규칙
+# Skill / Command 작성 규칙
 
-Claude Code skill/agent/command를 생성·수정할 때 적용. 공식 docs 근거: [custom-skills.md](https://code.claude.com/docs/en/custom-skills.md), [model-config.md](https://code.claude.com/docs/en/model-config.md).
+Claude Code skill 또는 command를 생성·수정할 때 적용. 공식 입장: "Custom commands have been merged into skills" — command와 skill은 동일한 frontmatter/동작을 공유. agent는 별개 컨셉이므로 [[agents]] rule을 참조.
+
+공식 docs 근거: [custom-skills.md](https://code.claude.com/docs/en/custom-skills.md), [model-config.md](https://code.claude.com/docs/en/model-config.md).
 
 ## 1. `model` frontmatter 결정 원칙
 

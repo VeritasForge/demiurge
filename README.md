@@ -137,7 +137,7 @@ demiurge/
 ├── product/.claude/          # 전역 배포 (GNU Stow 경유 → ~/.claude/)
 │   ├── skills/ (42)
 │   ├── agents/ (21)
-│   ├── rules/ (2)            # 항상/조건부 로드 규칙 (paths frontmatter 지원)
+│   ├── rules/ (3)            # 항상/조건부 로드 규칙 (paths frontmatter 지원)
 │   └── commands/ (0, /rl·/rl-fresh·/commit·/tdd-lfg는 skills/로 마이그레이션됨)
 ├── bin/.local/bin/           # 전역 CLI 배포 (GNU Stow 경유 → ~/.local/bin/)
 │   └── git-cleanup-worktrees
