@@ -1,7 +1,11 @@
 ---
-description: "Ralph Loop Runner - sequential-thinking MCP 기반 자율 반복 실행"
+name: rl
+description: Ralph Loop(자율 반복 실행)이 필요할 때 사용. sequential-thinking 기반으로 동일 프롬프트를 반복 주입하여 완료 promise까지 실행. /rl로 직접 호출. ⚠️ 첫 iteration은 현재 세션 모델로 실행되므로 어려운 task는 사전에 /model opus로 전환할 것.
 allowed-tools: Read, Grep, Glob, Bash, WebSearch, WebFetch, Edit, Write, Task
+argument-hint: "<prompt> [--max-iterations N] [--template <name>]"
 ---
+
+<!-- model intentionally omitted — skill body 직후 같은 turn 안에서 사용자 task 첫 iteration이 실행됨. model을 sonnet으로 고정하면 사용자 opus 세션이 silently downgrade됨. 결정 근거: plans/product-claude-commands-command-compressed-aho.md FR-1 -->
 
 # Ralph Loop Runner
 
@@ -108,6 +112,8 @@ Where:
 - {max-iterations} = parsed value or default 20
 - {current-timestamp} = current UTC timestamp in ISO format (YYYY-MM-DDTHH:MM:SSZ)
 - {final_prompt} = augmented prompt from Step 3
+
+> Step 3-1 collision check: 이 파일이 이미 존재하면 사용자에게 "⚠️ 기존 ralph-loop가 활성화되어 있습니다. 덮어쓰시겠습니까?" 확인 후 진행. 거부 시 STOP.
 
 2. **Display startup message** to the user:
 

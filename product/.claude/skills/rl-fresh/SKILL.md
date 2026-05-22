@@ -1,17 +1,22 @@
 ---
-description: "Fresh Context Ralph Loop - subagent 기반 요구사항별 신선한 컨텍스트 실행"
+name: rl-fresh
+description: 요구사항이 여러 개인 작업을 fresh context로 실행하고 싶을 때 사용. 메인 에이전트는 디스패처 역할만, 각 요구사항은 subagent가 신선한 컨텍스트에서 실행. /rl-fresh로 직접 호출. ⚠️ 요구사항 분해 품질이 중요하므로 어려운 task는 사전에 /model opus로 전환할 것.
 allowed-tools: Read, Grep, Glob, Bash, WebSearch, WebFetch, Edit, Write, Task
-argument-hint: "PROMPT [--max-iterations N]"
+argument-hint: "<prompt> [--max-iterations N]"
 ---
+
+<!-- model intentionally omitted — 요구사항 분해 + 디스패처가 같은 turn에 머무름. model을 sonnet으로 고정하면 사용자 세션이 silently downgrade됨. 결정 근거: plans/product-claude-commands-command-compressed-aho.md FR-1 -->
 
 # Fresh Context Ralph Loop Runner
 
 subagent(Task tool)를 활용하여 각 요구사항을 신선한 컨텍스트에서 실행합니다.
 메인 에이전트는 경량 디스패처 역할만 수행하여 컨텍스트 오염을 방지합니다.
 
+> 이전 이름이 `/new_rl`이었습니다. underscore 불가 spec 제약으로 `/rl-fresh`로 변경되었습니다.
+
 **Usage:**
-- `/new_rl <prompt>` — 기본 20회 반복
-- `/new_rl <prompt> --max-iterations 30` — 최대 반복 횟수 지정
+- `/rl-fresh <prompt>` — 기본 20회 반복
+- `/rl-fresh <prompt> --max-iterations 30` — 최대 반복 횟수 지정
 
 ```
 Parse the user's input from: $ARGUMENTS

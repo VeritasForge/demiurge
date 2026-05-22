@@ -1,9 +1,14 @@
 ---
 name: tdd-lfg
-description: "TDD-LFG: CE compound-knowledge planning + SP TDD execution pipeline"
+description: compound-engineering의 계획 + superpowers의 TDD 실행을 한 번에 파이프라이닝하고 싶을 때 사용. --fast(단계 2,4,5만) 또는 --full(전 단계). /tdd-lfg로 직접 호출.
+allowed-tools: Read, Skill, Task
 argument-hint: "[feature description] [--fast|--full]"
 disable-model-invocation: true
 ---
+
+<!-- model intentionally omitted — chain된 skill들이 같은 turn 안에서 실행되어 override가 후속 skill까지 전파될 위험. 결정 근거: plans/product-claude-commands-command-compressed-aho.md FR-1 -->
+
+# TDD-LFG: CE compound-knowledge planning + SP TDD execution pipeline
 
 Parse $ARGUMENTS: extract mode flag (--fast|--full) and feature description.
 

@@ -135,9 +135,9 @@ just unlink    # 심링크 해제
 ```
 demiurge/
 ├── product/.claude/          # 전역 배포 (GNU Stow 경유 → ~/.claude/)
-│   ├── skills/ (31)
-│   ├── agents/ (20)
-│   └── commands/ (5)
+│   ├── skills/ (42)
+│   ├── agents/ (21)
+│   └── commands/ (0, /rl·/rl-fresh·/commit·/tdd-lfg는 skills/로 마이그레이션됨)
 ├── bin/.local/bin/           # 전역 CLI 배포 (GNU Stow 경유 → ~/.local/bin/)
 │   └── git-cleanup-worktrees
 ├── .claude/                  # 프로젝트 로컬
