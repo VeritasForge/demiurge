@@ -59,6 +59,7 @@
 
 ### Task 등록 (필수)
 플랜 실행 시작 전에 반드시 플랜의 Task List 전체를 TaskCreate로 등록할 것. 플랜 문서만으로 실행하지 말 것.
+**도구 무관** (plan mode / superpowers:writing-plans / subagent-driven-development / compound-engineering:ce-plan / ouroboros 등) 모든 플랜의 Task를 TaskCreate sub-task로 등록한다. Task가 많아도(5개 이상) **전부** 등록할 것 — 누락 시 "task tools haven't been used" reminder가 매 turn 반복되고 진행 추적이 불투명해진다.
 
 ### Task 실행 순서
 Task는 반드시 순차 실행한다 (병렬 실행 금지). /rl이 .claude/ralph-loop.local.md 단일 상태 파일을 사용하므로 병렬 실행 시 파일 충돌이 발생한다.
@@ -67,6 +68,17 @@ Task는 반드시 순차 실행한다 (병렬 실행 금지). /rl이 .claude/ral
 각 Task 완료 후 /rl을 실행하여 검증한다.
 - /rl 프롬프트에는 해당 Task의 완료조건을 포함할 것
 - /rl 실행 중 발견한 새로운 사실이나 오류가 있으면 해당 Task를 수정하여 재수행
+
+### 코드 리뷰 Loop (코드 작성 Task)
+코드를 작성·수정하는 Task에는 검증과 별도로 코드 리뷰 루프를 적용한다.
+이 루프는 **실행 도구 무관**(plan mode / superpowers:executing-plans / subagent-driven-development / compound-engineering:ce-plan / ouroboros 등)하게 적용한다. superpowers처럼 자체 리뷰 워크플로우를 가진 도구에서도, 내장 리뷰를 **대체하지 않고 추가 게이트로 병행**한다 (내장 리뷰 통과 ≠ 이 Loop 면제).
+- **Task별**: 각 코드 작성 Task 완료 후 /code-review (Claude Code built-in)를 실행 → 발견된 P0/P1을 수정 → 다시 /code-review → **잔존 P0/P1 0건이 될 때까지 반복**한다.
+- **플랜 전체 완료 후**: /compound-engineering:ce-code-review loop를 1회 실행하여 다관점 정밀 검증(spec compliance + code quality)을 수행한다.
+- **비용 관리**: /code-review(경량, 반복용) vs /ce-code-review(다관점·고비용, 최종 게이트용). 빠른 반복엔 /code-review, 최종 정밀 검증엔 /ce-code-review.
+- **React/Next.js 코드**를 리뷰할 때는 /code-review·/ce-code-review **모두** /vercel-react-best-practices, /vercel-composition-patterns 기준을 반드시 포함한다 (호출 프롬프트에 "Vercel best-practices 기준" 명시).
+- **superpowers 경로별 적용**:
+  - `subagent-driven-development`: 내장 2단계 리뷰(spec reviewer → code-quality reviewer)와 final reviewer는 그대로 수행하되, 각 코드 작성 Task가 내장 리뷰를 통과한 뒤 **추가로** /code-review(P0/P1 0건까지 반복)를 실행하고, 전체 완료 후 /ce-code-review 1회를 추가 게이트로 실행한다.
+  - `executing-plans`: 자체 코드 리뷰 단계가 없으므로, 각 Task 완료 후 /code-review, 전체 완료 후 /ce-code-review를 **명시적으로 삽입**한다.
 
 ### 플랜 최종 검증
 모든 Task 완료 후 /rl을 실행하여 플랜 단위 완료조건을 최종 검증한다.
@@ -79,6 +91,13 @@ Task는 반드시 순차 실행한다 (병렬 실행 금지). /rl이 .claude/ral
 
 ## 선택 섹션 (필요시 추가)
 - 기타 플랜 맥락에 필요한 섹션 자유 추가
+
+## 코드 Inventory 검증 (spec·플랜 작성 시 필수)
+
+spec·플랜이 참조하는 **모든 파일 경로**(수정 대상, import 경로, 디렉토리, "수정 대상" 표의 항목)는 작성 시 Bash `ls`/`grep`으로 **실제 존재를 검증**한다.
+- 존재하지 않는 파일/디렉토리를 전제로 spec을 쓰면(phantom path) 구현 단계에서 차단되거나 재작성이 필요하다.
+- "그럴듯한 경로"를 상상해서 명세하지 말 것 — 예: `src/domain/run/escape-counter.ts`를 가정했으나 실제 `src/domain/run/` 디렉토리 자체가 없었던 사례.
+- 검증 절차: spec 초안의 모든 경로를 `ls -d <path>` 또는 `grep -rn <symbol> src/`로 확인 → 부재 시 실제 코드 구조에 맞게 정정.
 
 ## 플랜 검증 (2단계)
 
@@ -162,3 +181,11 @@ TDD 진행 시 각 Task의 RED phase는 아래 **3개 카테고리에서 각각 
   - 컴포넌트 설계 패턴 → /vercel-composition-patterns
   - 비주얼 디자인 품질 (타이포, 컬러, 모션) → /compound-engineering:frontend-design
   - 구현 후 접근성·웹 표준 감사 → /web-design-guidelines
+
+# 진단·검증 시 추측 금지 (통제 실험 + 1차 출처)
+
+원인 규명·동작 확인 시 **추측으로 단정하지 말 것**. 추측 단정은 반복 오진단의 근원이다.
+
+- **변수 격리 (통제 실험)**: 설정·환경 변경의 효과를 검증할 때 변수를 **하나씩만** 바꾼다. 여러 변수(예: 설정 파일 수정 + session 재시작)를 동시에 바꾸고 "마지막에 바꾼 것이 원인"이라 단정하지 말 것 — 나머지를 고정한 채 한 변수만 토글하는 통제 실험으로 인과를 확정한다.
+- **1차 출처 확인**: Claude Code 내부 동작·설정·권한 메커니즘은 추측하지 말고 **claude-code-guide 에이전트** 또는 공식 docs(code.claude.com)로 확인한다. (관련: Red Flags "스킬 실행" 규칙과 동일 정신 — "안다"는 자신감보다 검증 우선)
+- 사례: code-review skill의 사용자 호출 차단 원인을 "`Skill(name)` allow 필요" → "`skillOverrides`가 핵심"으로 **2번 오진단**했으나, 사용자의 통제 실험(settings.local.json만 제거·나머지 고정)으로 settings 자체가 무관했음이 입증됨. 진짜 변수는 session 재시작이었을 가능성.
