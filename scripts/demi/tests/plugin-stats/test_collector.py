@@ -138,3 +138,60 @@ def test_scan_mcp_servers_all_missing():                # [Error]
 def test_builtin_agents_present():                      # [Boundary]
     assert "general-purpose" in BUILTIN_AGENTS
     assert any(a.id == "general-purpose" for a in scan_builtin_agents())
+
+
+from datetime import datetime, timezone, timedelta
+from demi.plugin_stats.collector import collect_calls
+
+def _line(ts, name, inp, tid="t1"):
+    return json.dumps({"timestamp": ts, "message": {"content": [
+        {"type": "tool_use", "id": tid, "name": name, "input": inp}]}})
+
+def test_collect_calls_counts(tmp_path):                # [Happy]
+    log = tmp_path / "a.jsonl"
+    now = datetime.now(timezone.utc).isoformat()
+    log.write_text("\n".join([
+        _line(now, "Skill", {"skill": "deep-research"}, "1"),
+        _line(now, "Skill", {"skill": "deep-research"}, "2"),
+        _line(now, "Task", {"subagent_type": "llm-architect"}, "3"),
+    ]))
+    stats = collect_calls(tmp_path, since_days=183)
+    assert stats["deep-research"].count == 2 and stats["llm-architect"].count == 1
+
+def test_collect_calls_mcp_server_key(tmp_path):        # [Boundary]
+    log = tmp_path / "m.jsonl"
+    now = datetime.now(timezone.utc).isoformat()
+    log.write_text("\n".join([
+        _line(now, "mcp__context7__query_docs", {}, "m1"),
+        _line(now, "mcp__plugin_Notion_notion__find", {}, "m2"),
+    ]))
+    stats = collect_calls(tmp_path, since_days=183)
+    assert "context7" in stats and "notion" in stats
+
+def test_collect_calls_agent_name_fallback(tmp_path):   # [Boundary]
+    log = tmp_path / "a.jsonl"
+    now = datetime.now(timezone.utc).isoformat()
+    log.write_text(_line(now, "Agent", {"name": "specialist", "prompt": "x"}, "n1"))
+    assert "specialist" in collect_calls(tmp_path, since_days=183)
+
+def test_collect_calls_window_excludes_old(tmp_path):   # [Boundary]
+    log = tmp_path / "o.jsonl"
+    old = (datetime.now(timezone.utc) - timedelta(days=400)).isoformat()
+    log.write_text(_line(old, "Skill", {"skill": "deep-research"}, "o1"))
+    assert "deep-research" not in collect_calls(tmp_path, since_days=183)
+
+def test_collect_calls_dedup(tmp_path):                 # [Boundary]
+    log = tmp_path / "d.jsonl"
+    now = datetime.now(timezone.utc).isoformat()
+    line = _line(now, "Skill", {"skill": "deep-research"}, "dup")
+    log.write_text(line + "\n" + line)
+    assert collect_calls(tmp_path, since_days=183)["deep-research"].count == 1
+
+def test_collect_calls_broken_line(tmp_path):           # [Error]
+    log = tmp_path / "b.jsonl"
+    now = datetime.now(timezone.utc).isoformat()
+    log.write_text("{broken\n" + _line(now, "Skill", {"skill": "deep-research"}, "g1"))
+    assert collect_calls(tmp_path, since_days=183)["deep-research"].count == 1
+
+def test_collect_calls_no_logs(tmp_path):               # [Error]
+    assert collect_calls(tmp_path / "nope", since_days=183) == {}

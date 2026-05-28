@@ -256,3 +256,75 @@ def scan_builtin_agents() -> list[Asset]:
         Asset(id=n, type="agent", source="builtin", aliases=frozenset({n}))
         for n in BUILTIN_AGENTS
     ]
+
+
+# src/demi/plugin_stats/collector.py (이어서)
+from datetime import datetime, timezone, timedelta
+from .models import CallStat
+
+def _normalize_mcp_key(name: str) -> str | None:
+    """mcp__<server>__<tool> 또는 mcp__plugin_<plugin>_<server>__<tool> → 서버 토큰(소문자)."""
+    parts = name.split("__")
+    if len(parts) < 2:
+        return None
+    server = parts[1]
+    if server.startswith("plugin_"):
+        tokens = server.split("_")
+        server = tokens[-1] if len(tokens) >= 3 else server[len("plugin_"):]
+    return server.lower()
+
+def collect_calls(projects_root: Path, since_days: int = 183) -> dict[str, CallStat]:
+    since = datetime.now(timezone.utc) - timedelta(days=since_days)
+    counts: dict[str, int] = {}; last: dict[str, str] = {}; seen: set[str] = set()
+    if not projects_root.is_dir():
+        return {}
+    for fp in projects_root.rglob("*.jsonl"):
+        try:
+            with fp.open(encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    if '"tool_use"' not in line:
+                        continue
+                    try:
+                        d = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    ts = d.get("timestamp")
+                    if not ts:
+                        continue
+                    try:
+                        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                    except ValueError:
+                        continue
+                    # tz-naive 타임스탬프(드물지만 발생 시 TypeError 방지) → UTC로 가정
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=timezone.utc)
+                    if dt < since:
+                        continue
+                    content = (d.get("message") or {}).get("content")
+                    if not isinstance(content, list):
+                        continue
+                    for it in content:
+                        if not isinstance(it, dict) or it.get("type") != "tool_use":
+                            continue
+                        tid = it.get("id")
+                        if tid in seen:
+                            continue
+                        seen.add(tid)
+                        name = it.get("name"); inp = it.get("input") or {}
+                        if name == "Skill":
+                            key = inp.get("skill")
+                        elif name in ("Task", "Agent"):
+                            key = inp.get("subagent_type") or inp.get("name") or "general-purpose"
+                        elif isinstance(name, str) and name.startswith("mcp__"):
+                            key = _normalize_mcp_key(name)
+                        else:
+                            continue
+                        if not key:
+                            continue
+                        counts[key] = counts.get(key, 0) + 1
+                        iso = dt.date().isoformat()
+                        if key not in last or iso > last[key]:
+                            last[key] = iso
+        except OSError:
+            continue
+    return {k: CallStat(asset_id=k, count=v, last_used=last.get(k)) for k, v in counts.items()}
