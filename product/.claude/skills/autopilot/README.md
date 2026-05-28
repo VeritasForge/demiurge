@@ -50,11 +50,17 @@ autopilot은 평소 HITL 학습 기회를 보존하기 위해 *명시 호출 시
 
 ### 단계
 
-1. **로그 읽기**:
+1. **`DIGEST.md` 먼저 열기** (사람용 1페이지 요약):
    ```bash
-   cat <project>/docs/autopilot/<slug>/run.log
+   cat <project>/docs/autopilot/<slug>/DIGEST.md
+   # 또는 더 보기 좋게:
+   # /md-to-html docs/autopilot/<slug>/DIGEST.md  → 공유용 HTML
    ```
-   각 `[judgment #N]` 블록에서 context / sources / multi-agent-opinions / decision / rationale 확인.
+   - 🤔 **"한 번 더 봐주세요"** 섹션을 먼저 읽는다 — 다관점 의견이 갈렸거나 confidence가 낮았던 결정. 잘못 판단됐을 가능성이 가장 큰 곳.
+   - ✅ 자신 있게 한 결정은 간략 리스트로 — 의심 없으면 skip.
+   - 🚧 차단이 있으면 그 결정부터 처리.
+
+   `run.log`(raw 디테일)는 DIGEST의 특정 결정을 깊이 파볼 때만 열면 된다.
 
 2. **잘못된 결정 발견 시** (가장 흔한 케이스):
    - 해당 코드 직접 수정 + 커밋

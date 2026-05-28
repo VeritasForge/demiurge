@@ -152,15 +152,65 @@ argument-hint: "<plan-path or plain-task-description>"
 2. `Skill` 도구로 `compound-engineering:ce-compound` 호출(`mode:headless`), 식별된 교훈 전달. `docs/solutions/<topic>.md` 작성/갱신.
 3. **Telemetry 요약** 기록(run.log 마지막에):
    - `learning-impact:` 1줄 — "이번 실행이 N-1 실행 대비 무엇을 우회/단축했는가" 자가 보고.
-   - `judgment-points:` N (이번 실행에서 발동된 판단 지점 수 — 위 [judgment #1..N] 블록 개수와 일치).
-   - `decision-summary:` 핵심 결정 1~3개를 한 줄씩 요약 (사용자가 run.log 첫 부분만 봐도 무슨 결정이 있었는지 파악 가능하도록).
+   - `judgment-points:` N (이번 실행에서 발동된 판단 지점 수).
    - 누적 실행 횟수 카운터(`run.log`의 총 `-- run` 헤더 수).
-4. **사용자 학습 사이클 안내** 출력(skill 종료 직전):
+
+4. **🔥 `DIGEST.md` 자동 생성** (사람용 1페이지 요약 — 가장 중요):
+   - 경로: `docs/autopilot/<slug>/DIGEST.md`
+   - 자고 일어나 `cat run.log` 대신 **이 파일만 보면 어디 검토할지 즉시 파악**.
+   - 형식 (이대로 채워 쓸 것):
+     ```markdown
+     # 📒 Autopilot Run Digest — <slug>
+     *<YYYY-MM-DD HH:MM> · 소요 ~<분> · plan: <경로>*
+
+     ## TL;DR
+     - ✅ <X>개 task 완주 / 검증 명령 exit <0|N>
+     - 🤔 검토 권고 결정 <K>개 (아래 섹션)
+     - 🚧 차단 <M>건
+
+     ## 🤔 한 번 더 봐주세요 (다관점 의견 분기·낮은 confidence)
+     순서: importance 높음 → 낮음. 비어있으면 "없음".
+
+     ### #<N>. <짧은 제목>
+     - **위치**: <task-id>, <파일:라인>
+     - **컨텍스트**: 1줄
+     - **분기점**: 다관점에서 어떤 의견 차이가 있었는지 1~2줄
+     - **내 결정**: <decision>
+     - **근거**: <rationale 요약>
+     - 👉 잘못됐으면: `<수정 위치 힌트>` 수정 + 하니스 후보(`<CLAUDE.md/rules/skill>`)
+
+     ## ✅ 자신 있게 한 결정 (간략 리스트)
+     - [#<N>] <decision 1줄> — <rationale 핵심 5단어>
+     - ...
+
+     ## 🚧 차단 (사용자 결정 필요)
+     없음 / 또는 각 `blocked-*.md` 링크 + 사유 한 줄.
+
+     ## 📊 통계
+     - 판단 지점: 총 <N> (높음 <a> / 중간 <b> / 낮음 <c>)
+     - 다관점 호출: <ce-doc-review N회 / code-review M회 / rl-verify K회>
+     - 외부 조사: <deep-research N / context7 M>
+     - 토큰(추정): ~<X>
+
+     ## 📚 학습
+     - 추가: `docs/solutions/<topic>.md` (Phase 5에서 자동)
+     - 참조: <Phase 1 learning-reference 목록>
+
+     ## 🔗 상세 / 다음 액션
+     - raw: `run.log`
+     - 차단: (없음) 또는 `blocked-*.md`
+     - 검토 후 잘못된 결정 있으면: 직접 수정 + 하니스 업데이트
+     - 더 봐주고 싶으면: `/md-to-html` 호출해 공유용 HTML 변환 가능
+     ```
+
+5. **사용자 학습 사이클 안내** 출력(skill 종료 직전):
    ```
-   📒 결정 로그: docs/autopilot/<slug>/run.log
-      → 잘못된 결정 발견 시: 코드 수정 + CLAUDE.md/rules/<해당 skill> 업데이트
-      → 좋은 패턴 발견 시: ce-compound 추가 호출 (docs/solutions/)
-      → 반복 실수 발견 시: /retrospective
+   📒 한 페이지 요약: docs/autopilot/<slug>/DIGEST.md
+      → 🤔 섹션 먼저 검토 (다관점 분기가 있었던 결정)
+      → 잘못된 결정 발견: 코드 수정 + 하니스 업데이트(CLAUDE.md/rules/skill)
+      → 좋은 패턴: ce-compound (이미 자동, 추가 다듬기 옵션)
+      → 반복 실수: /retrospective
+   📜 raw 로그: docs/autopilot/<slug>/run.log
    ```
 4. 누적 10회 도달 또는 마지막 refresh 30일 경과 시 출력:
    ```
