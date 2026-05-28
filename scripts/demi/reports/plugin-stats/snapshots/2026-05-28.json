@@ -1,0 +1,2449 @@
+{
+  "generated_at": "2026-05-28T07:31:32.787865+00:00",
+  "window": {
+    "since": "2025-11-26",
+    "until": "2026-05-28",
+    "days": 183
+  },
+  "totals": {
+    "skill": {
+      "total": 154,
+      "active": 33,
+      "live": 19,
+      "dead": 102
+    },
+    "agent": {
+      "total": 92,
+      "active": 35,
+      "live": 0,
+      "dead": 57
+    },
+    "command": {
+      "total": 1,
+      "active": 1,
+      "live": 0,
+      "dead": 0
+    },
+    "plugin": {
+      "total": 10,
+      "active": 2,
+      "live": 0,
+      "dead": 8
+    },
+    "mcp_server": {
+      "total": 4,
+      "active": 4,
+      "live": 0,
+      "dead": 0
+    }
+  },
+  "assets": [
+    {
+      "id": "ai-agent",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "rag-architect"
+      ]
+    },
+    {
+      "id": "ai-safety",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "ai-safety-architect",
+        "security-architect"
+      ]
+    },
+    {
+      "id": "api-design",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "application-architecture",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "application-architect"
+      ]
+    },
+    {
+      "id": "architect-orchestration",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "cloud-native",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "cloud-native-architect"
+      ]
+    },
+    {
+      "id": "commit",
+      "type": "skill",
+      "source": "global",
+      "calls": 2,
+      "last_used": "2026-04-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "concept-explainer",
+      "type": "skill",
+      "source": "global",
+      "calls": 12,
+      "last_used": "2026-05-22",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "concurrency-patterns",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "concurrency-architect"
+      ]
+    },
+    {
+      "id": "data-architecture",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "data-architect"
+      ]
+    },
+    {
+      "id": "debug",
+      "type": "skill",
+      "source": "global",
+      "calls": 3,
+      "last_used": "2026-05-21",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "deep-research",
+      "type": "skill",
+      "source": "global",
+      "calls": 32,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": [
+        "ai-safety-architect",
+        "application-architect",
+        "cloud-native-architect",
+        "concurrency-architect",
+        "data-architect",
+        "domain-architect",
+        "eda-specialist",
+        "healthcare-informatics-architect",
+        "integration-architect",
+        "llm-architect",
+        "ml-platform-architect",
+        "rag-architect",
+        "security-architect",
+        "solution-architect",
+        "sre-architect"
+      ]
+    },
+    {
+      "id": "domain-driven-design",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "domain-architect"
+      ]
+    },
+    {
+      "id": "eda",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "eda-specialist"
+      ]
+    },
+    {
+      "id": "group-job-analysis",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "healthcare-informatics",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "healthcare-informatics-architect"
+      ]
+    },
+    {
+      "id": "humanize-writing",
+      "type": "skill",
+      "source": "global",
+      "calls": 2,
+      "last_used": "2026-05-01",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "humanize-writing-portable",
+      "type": "skill",
+      "source": "global",
+      "calls": 2,
+      "last_used": "2026-05-01",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "integration",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "integration-architect"
+      ]
+    },
+    {
+      "id": "interview-prep",
+      "type": "skill",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-06",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "investigation-orchestration",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "job-analysis",
+      "type": "skill",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-04",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "llm-gateway",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "llm-architect",
+        "ml-platform-architect",
+        "sre-architect"
+      ]
+    },
+    {
+      "id": "md-to-html",
+      "type": "skill",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "ml-platform",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "ml-platform-architect"
+      ]
+    },
+    {
+      "id": "organize",
+      "type": "skill",
+      "source": "global",
+      "calls": 3,
+      "last_used": "2026-05-24",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "prompt-engineering",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "llm-architect"
+      ]
+    },
+    {
+      "id": "qa",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "rag-architecture",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "rag-architect"
+      ]
+    },
+    {
+      "id": "ralph-loop-guide",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "readme-writer",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "release-handoff",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "resume-optimizer",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "retrospective",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "review-pr",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "rl",
+      "type": "skill",
+      "source": "global",
+      "calls": 2,
+      "last_used": "2026-04-14",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "rl-fresh",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "rl-verify",
+      "type": "skill",
+      "source": "global",
+      "calls": 34,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "save-confluence",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "security",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "ai-safety-architect",
+        "security-architect"
+      ]
+    },
+    {
+      "id": "skill-routing-learner",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "solution-architecture",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "solution-architect"
+      ]
+    },
+    {
+      "id": "sre",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "sre-architect"
+      ]
+    },
+    {
+      "id": "tdd-lfg",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "testing-architecture",
+      "type": "skill",
+      "source": "global",
+      "calls": 3,
+      "last_used": "2026-05-23",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "vercel-composition-patterns",
+      "type": "skill",
+      "source": "global",
+      "calls": 3,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "vercel-react-best-practices",
+      "type": "skill",
+      "source": "global",
+      "calls": 4,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "vercel-react-native-skills",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "web-design-guidelines",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ai-safety-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "application-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "cloud-native-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "code-investigator",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "concurrency-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "convergence-evaluator",
+      "type": "agent",
+      "source": "global",
+      "calls": 3,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "counter-reviewer",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "data-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-14",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "domain-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "eda-specialist",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "healthcare-informatics-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "history-investigator",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "integration-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "llm-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "log-investigator",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ml-platform-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "rag-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "release-investigator",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "security-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "solution-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "sre-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "save_obsi",
+      "type": "command",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-25",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "general-purpose",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 411,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "Explore",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 69,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "Plan",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 5,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "claude",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "claude-code-guide",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 43,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "statusline-setup",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ralph-loop",
+      "type": "plugin",
+      "source": "plugin:ralph-loop",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "Notion",
+      "type": "plugin",
+      "source": "plugin:Notion",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering",
+      "type": "plugin",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers",
+      "type": "plugin",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros",
+      "type": "plugin",
+      "source": "plugin:ouroboros",
+      "calls": 14,
+      "last_used": "2026-03-22",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "context7",
+      "type": "plugin",
+      "source": "plugin:context7",
+      "calls": 114,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "codex",
+      "type": "plugin",
+      "source": "plugin:codex",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "typescript-lsp",
+      "type": "plugin",
+      "source": "plugin:typescript-lsp",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "frontend-design",
+      "type": "plugin",
+      "source": "plugin:frontend-design",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "notion-workspace-plugin",
+      "type": "plugin",
+      "source": "plugin:notion-workspace-plugin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "Notion:knowledge-capture",
+      "type": "skill",
+      "source": "plugin:Notion",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "Notion:meeting-intelligence",
+      "type": "skill",
+      "source": "plugin:Notion",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "Notion:research-documentation",
+      "type": "skill",
+      "source": "plugin:Notion",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "Notion:spec-to-implementation",
+      "type": "skill",
+      "source": "plugin:Notion",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-agent-native-architecture",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-agent-native-audit",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-brainstorm",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 1,
+      "last_used": "2026-05-20",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-clean-gone-branches",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-code-review",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 15,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-commit",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-commit-push-pr",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-compound",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-compound-refresh",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-debug",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 4,
+      "last_used": "2026-05-21",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-demo-reel",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-dhh-rails-style",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-doc-review",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 16,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-dogfood-beta",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-frontend-design",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 1,
+      "last_used": "2026-05-25",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-gemini-imagegen",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-ideate",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-optimize",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-plan",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-polish-beta",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-product-pulse",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-proof",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-release-notes",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-report-bug",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-resolve-pr-feedback",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-riffrec-feedback-analysis",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-sessions",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-setup",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-simplify-code",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-slack-research",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-strategy",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-test-browser",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-test-xcode",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-update",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-work",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-work-beta",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-worktree",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:lfg",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-adversarial-document-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 69,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-adversarial-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 9,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-agent-native-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 9,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-ankane-readme-writer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-api-contract-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 3,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-architecture-strategist",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 27,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-best-practices-researcher",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 32,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-code-simplicity-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 12,
+      "last_used": "2026-05-23",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-coherence-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 19,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-correctness-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 40,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-data-integrity-guardian",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 3,
+      "last_used": "2026-05-09",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-data-migration-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-deployment-verification-agent",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-design-implementation-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-design-iterator",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-design-lens-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 4,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-feasibility-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 26,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-figma-design-sync",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-framework-docs-researcher",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 5,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-git-history-analyzer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-issue-intelligence-analyst",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-julik-frontend-races-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 6,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-learnings-researcher",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 11,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-maintainability-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 21,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-pattern-recognition-specialist",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-performance-oracle",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-performance-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 6,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-pr-comment-resolver",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-previous-comments-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-product-lens-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 6,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-project-standards-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 18,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-reliability-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 8,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-repo-research-analyst",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 11,
+      "last_used": "2026-05-21",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-scope-guardian-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 14,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-security-lens-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 8,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-security-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 9,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-security-sentinel",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 7,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-session-historian",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-slack-researcher",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-spec-flow-analyzer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-swift-ios-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-testing-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 29,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "compound-engineering:ce-web-researcher",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 40,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:brainstorming",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 2,
+      "last_used": "2026-05-16",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:dispatching-parallel-agents",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:executing-plans",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 1,
+      "last_used": "2026-05-22",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:finishing-a-development-branch",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 4,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:receiving-code-review",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:requesting-code-review",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:subagent-driven-development",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 16,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:systematic-debugging",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 3,
+      "last_used": "2026-05-21",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:test-driven-development",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 1,
+      "last_used": "2026-05-21",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:using-git-worktrees",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 2,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:using-superpowers",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:verification-before-completion",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:writing-plans",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 16,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "superpowers:writing-skills",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 4,
+      "last_used": "2026-05-26",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:auto",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:brownfield",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:cancel",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:evaluate",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:evolve",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:help",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 1,
+      "last_used": "2026-03-20",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:interview",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:pm",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:publish",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:qa",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:ralph",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:resume-session",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:run",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:seed",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 1,
+      "last_used": "2026-03-20",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:setup",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:status",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:tutorial",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:unstuck",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:update",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:welcome",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:auto",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:brownfield",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:cancel",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:evaluate",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:evolve",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:help",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 1,
+      "last_used": "2026-03-20",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:interview",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:pm",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:publish",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:qa",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:ralph",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:resume-session",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:run",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:seed",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 1,
+      "last_used": "2026-03-20",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:setup",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:status",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:tutorial",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:unstuck",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:update",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:welcome",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:run",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:advocate",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:analysis-agent",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:architect",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:breadth-keeper",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:code-executor",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:codebase-explorer",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:consensus-reviewer",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:contrarian",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:evaluator",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:hacker",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:judge",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:ontologist",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:ontology-analyst",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:qa-judge",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:research-agent",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:researcher",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:seed-architect",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:seed-closer",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:semantic-evaluator",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:simplifier",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros:socratic-interviewer",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "codex:codex-cli-runtime",
+      "type": "skill",
+      "source": "plugin:codex",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "codex:codex-rescue"
+      ]
+    },
+    {
+      "id": "codex:codex-result-handling",
+      "type": "skill",
+      "source": "plugin:codex",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "codex:gpt-5-4-prompting",
+      "type": "skill",
+      "source": "plugin:codex",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "codex:codex-rescue"
+      ]
+    },
+    {
+      "id": "codex:codex-rescue",
+      "type": "agent",
+      "source": "plugin:codex",
+      "calls": 1,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "frontend-design:frontend-design",
+      "type": "skill",
+      "source": "plugin:frontend-design",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "notion-workspace-plugin:knowledge-capture",
+      "type": "skill",
+      "source": "plugin:notion-workspace-plugin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "notion-workspace-plugin:meeting-intelligence",
+      "type": "skill",
+      "source": "plugin:notion-workspace-plugin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "notion-workspace-plugin:research-documentation",
+      "type": "skill",
+      "source": "plugin:notion-workspace-plugin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "notion-workspace-plugin:spec-to-implementation",
+      "type": "skill",
+      "source": "plugin:notion-workspace-plugin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": []
+    },
+    {
+      "id": "mcp-atlassian",
+      "type": "mcp_server",
+      "source": "mcp",
+      "calls": 592,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "notion",
+      "type": "mcp_server",
+      "source": "mcp",
+      "calls": 12,
+      "last_used": "2026-05-01",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "ouroboros",
+      "type": "mcp_server",
+      "source": "mcp",
+      "calls": 14,
+      "last_used": "2026-03-22",
+      "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "playwright",
+      "type": "mcp_server",
+      "source": "mcp",
+      "calls": 7,
+      "last_used": "2026-05-01",
+      "grade": "active",
+      "referenced_by": []
+    }
+  ]
+}
