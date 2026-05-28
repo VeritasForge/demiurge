@@ -29,6 +29,40 @@ def write_snapshot(snapshot: dict, path: Path) -> None:
     path.write_text(json.dumps(snapshot, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
+CHART_TOP_N = 15
+CHART_BAR_WIDTH = 30
+
+
+def _ascii_bar(value: int, max_value: int, width: int = CHART_BAR_WIDTH) -> str:
+    """`█` 채움 + `░` 빈칸 — 정규화된 막대."""
+    if max_value <= 0:
+        return "░" * width
+    n = round(width * value / max_value)
+    n = max(1, n) if value > 0 else 0  # 작은 값도 최소 1칸 보이게 (0은 그대로)
+    n = min(width, n)
+    return "█" * n + "░" * (width - n)
+
+
+def _render_bar_chart(
+    items: list[tuple[str, int]],
+    title: str,
+    top_n: int = CHART_TOP_N,
+) -> list[str]:
+    """(name, count) 튜플 리스트 → 마크다운 코드블록 안 ASCII bar chart."""
+    items = [(n, v) for n, v in items if v > 0][:top_n]
+    block = ["", f"### {title}"]
+    if not items:
+        block += ["```", "(데이터 없음)", "```"]
+        return block
+    max_v = max(v for _, v in items)
+    name_w = max(len(n) for n, _ in items)
+    block += ["```"]
+    for name, v in items:
+        block.append(f"  {name:<{name_w}}  {_ascii_bar(v, max_v)}  {v}")
+    block += ["```"]
+    return block
+
+
 def render_markdown(snapshot: dict, prev: dict | None = None) -> str:
     w = snapshot["window"]
     lines = ["# demi plugin-stats 리포트", "",
@@ -39,15 +73,34 @@ def render_markdown(snapshot: dict, prev: dict | None = None) -> str:
              "|---|---:|---:|---:|---:|"]
     for typ, t in sorted(snapshot["totals"].items()):
         lines.append(f"| {typ} | {t['total']} | {t['active']} | {t['live']} | {t['dead']} |")
+
+    # ── 사용 빈도 그래프 (Top N) — 통합 + skill/agent/command 별도 ──
+    lines += ["", f"## 사용 빈도 그래프 (Top {CHART_TOP_N})"]
+    assets = snapshot["assets"]
+    SAC = ("skill", "agent", "command")  # 그래프 대상 유형
+
+    combined = sorted(
+        [(a["id"], a["calls"]) for a in assets if a["type"] in SAC],
+        key=lambda x: -x[1],
+    )
+    lines += _render_bar_chart(combined, "통합 (skill + agent + command)")
+
+    for typ in SAC:
+        only = sorted(
+            [(a["id"], a["calls"]) for a in assets if a["type"] == typ],
+            key=lambda x: -x[1],
+        )
+        lines += _render_bar_chart(only, f"{typ}s")
+
     lines += ["", "## 활성 자산 (active)"]
-    active = [a for a in snapshot["assets"] if a["grade"] == "active"]
+    active = [a for a in assets if a["grade"] == "active"]
     if active:
         for a in sorted(active, key=lambda x: (x["type"], x["id"])):
             lines.append(f"- 🟢 `{a['id']}` ({a['type']}, {a['source']}, calls={a['calls']})")
     else:
         lines.append("- 없음")
     lines += ["", "## 정리 후보 (dead)"]
-    dead = [a for a in snapshot["assets"] if a["grade"] == "dead"]
+    dead = [a for a in assets if a["grade"] == "dead"]
     if dead:
         for a in sorted(dead, key=lambda x: (x["type"], x["id"])):
             lines.append(f"- 🔴 `{a['id']}` ({a['type']}, {a['source']})")

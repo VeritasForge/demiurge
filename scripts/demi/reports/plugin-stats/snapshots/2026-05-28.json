@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-28T07:31:32.787865+00:00",
+  "generated_at": "2026-05-28T09:00:15.697577+00:00",
   "window": {
     "since": "2025-11-26",
     "until": "2026-05-28",
@@ -8,9 +8,9 @@
   "totals": {
     "skill": {
       "total": 154,
-      "active": 33,
-      "live": 19,
-      "dead": 102
+      "active": 49,
+      "live": 17,
+      "dead": 88
     },
     "agent": {
       "total": 92,
@@ -85,9 +85,9 @@
       "id": "architect-orchestration",
       "type": "skill",
       "source": "global",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 1,
+      "last_used": "2026-05-19",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -105,8 +105,8 @@
       "id": "commit",
       "type": "skill",
       "source": "global",
-      "calls": 2,
-      "last_used": "2026-04-27",
+      "calls": 52,
+      "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
     },
@@ -114,7 +114,7 @@
       "id": "concept-explainer",
       "type": "skill",
       "source": "global",
-      "calls": 12,
+      "calls": 14,
       "last_used": "2026-05-22",
       "grade": "active",
       "referenced_by": []
@@ -145,7 +145,7 @@
       "id": "debug",
       "type": "skill",
       "source": "global",
-      "calls": 3,
+      "calls": 7,
       "last_used": "2026-05-21",
       "grade": "active",
       "referenced_by": []
@@ -154,7 +154,7 @@
       "id": "deep-research",
       "type": "skill",
       "source": "global",
-      "calls": 32,
+      "calls": 43,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": [
@@ -250,8 +250,8 @@
       "id": "interview-prep",
       "type": "skill",
       "source": "global",
-      "calls": 1,
-      "last_used": "2026-05-06",
+      "calls": 2,
+      "last_used": "2026-05-13",
       "grade": "active",
       "referenced_by": []
     },
@@ -268,8 +268,8 @@
       "id": "job-analysis",
       "type": "skill",
       "source": "global",
-      "calls": 1,
-      "last_used": "2026-05-04",
+      "calls": 3,
+      "last_used": "2026-05-16",
       "grade": "active",
       "referenced_by": []
     },
@@ -290,7 +290,7 @@
       "id": "md-to-html",
       "type": "skill",
       "source": "global",
-      "calls": 1,
+      "calls": 4,
       "last_used": "2026-05-27",
       "grade": "active",
       "referenced_by": []
@@ -310,8 +310,8 @@
       "id": "organize",
       "type": "skill",
       "source": "global",
-      "calls": 3,
-      "last_used": "2026-05-24",
+      "calls": 33,
+      "last_used": "2026-05-26",
       "grade": "active",
       "referenced_by": []
     },
@@ -330,9 +330,9 @@
       "id": "qa",
       "type": "skill",
       "source": "global",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 17,
+      "last_used": "2026-05-27",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -350,18 +350,18 @@
       "id": "ralph-loop-guide",
       "type": "skill",
       "source": "global",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 1,
+      "last_used": "2026-05-16",
+      "grade": "active",
       "referenced_by": []
     },
     {
       "id": "readme-writer",
       "type": "skill",
       "source": "global",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 1,
+      "last_used": "2026-05-21",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -377,27 +377,27 @@
       "id": "resume-optimizer",
       "type": "skill",
       "source": "global",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 2,
+      "last_used": "2026-05-01",
+      "grade": "active",
       "referenced_by": []
     },
     {
       "id": "retrospective",
       "type": "skill",
       "source": "global",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 7,
+      "last_used": "2026-05-28",
+      "grade": "active",
       "referenced_by": []
     },
     {
       "id": "review-pr",
       "type": "skill",
       "source": "global",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 6,
+      "last_used": "2026-05-26",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -422,7 +422,7 @@
       "id": "rl-verify",
       "type": "skill",
       "source": "global",
-      "calls": 34,
+      "calls": 65,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
@@ -501,7 +501,7 @@
       "id": "vercel-composition-patterns",
       "type": "skill",
       "source": "global",
-      "calls": 3,
+      "calls": 4,
       "last_used": "2026-05-27",
       "grade": "active",
       "referenced_by": []
@@ -510,7 +510,7 @@
       "id": "vercel-react-best-practices",
       "type": "skill",
       "source": "global",
-      "calls": 4,
+      "calls": 6,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
@@ -726,8 +726,8 @@
       "id": "save_obsi",
       "type": "command",
       "source": "global",
-      "calls": 1,
-      "last_used": "2026-05-25",
+      "calls": 18,
+      "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
     },
@@ -951,7 +951,7 @@
       "id": "compound-engineering:ce-code-review",
       "type": "skill",
       "source": "plugin:compound-engineering",
-      "calls": 15,
+      "calls": 21,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
@@ -1023,7 +1023,7 @@
       "id": "compound-engineering:ce-doc-review",
       "type": "skill",
       "source": "plugin:compound-engineering",
-      "calls": 16,
+      "calls": 15,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
@@ -1068,9 +1068,9 @@
       "id": "compound-engineering:ce-optimize",
       "type": "skill",
       "source": "plugin:compound-engineering",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 1,
+      "last_used": "2026-05-26",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -1257,7 +1257,7 @@
       "id": "compound-engineering:ce-adversarial-document-reviewer",
       "type": "agent",
       "source": "plugin:compound-engineering",
-      "calls": 69,
+      "calls": 68,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
@@ -1329,7 +1329,7 @@
       "id": "compound-engineering:ce-coherence-reviewer",
       "type": "agent",
       "source": "plugin:compound-engineering",
-      "calls": 19,
+      "calls": 18,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
@@ -1401,7 +1401,7 @@
       "id": "compound-engineering:ce-feasibility-reviewer",
       "type": "agent",
       "source": "plugin:compound-engineering",
-      "calls": 26,
+      "calls": 25,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
@@ -1644,8 +1644,8 @@
       "id": "superpowers:brainstorming",
       "type": "skill",
       "source": "plugin:superpowers",
-      "calls": 2,
-      "last_used": "2026-05-16",
+      "calls": 32,
+      "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
     },
@@ -1662,7 +1662,7 @@
       "id": "superpowers:executing-plans",
       "type": "skill",
       "source": "plugin:superpowers",
-      "calls": 1,
+      "calls": 3,
       "last_used": "2026-05-22",
       "grade": "active",
       "referenced_by": []
@@ -1698,7 +1698,7 @@
       "id": "superpowers:subagent-driven-development",
       "type": "skill",
       "source": "plugin:superpowers",
-      "calls": 16,
+      "calls": 20,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
@@ -1752,7 +1752,7 @@
       "id": "superpowers:writing-plans",
       "type": "skill",
       "source": "plugin:superpowers",
-      "calls": 16,
+      "calls": 20,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
@@ -1761,7 +1761,7 @@
       "id": "superpowers:writing-skills",
       "type": "skill",
       "source": "plugin:superpowers",
-      "calls": 4,
+      "calls": 8,
       "last_used": "2026-05-26",
       "grade": "active",
       "referenced_by": []
@@ -1806,9 +1806,9 @@
       "id": "ouroboros:evolve",
       "type": "skill",
       "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 2,
+      "last_used": "2026-03-20",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -1824,9 +1824,9 @@
       "id": "ouroboros:interview",
       "type": "skill",
       "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 2,
+      "last_used": "2026-03-20",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -1851,9 +1851,9 @@
       "id": "ouroboros:qa",
       "type": "skill",
       "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 17,
+      "last_used": "2026-05-27",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -1986,9 +1986,9 @@
       "id": "ouroboros:evolve",
       "type": "skill",
       "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 2,
+      "last_used": "2026-03-20",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -2004,9 +2004,9 @@
       "id": "ouroboros:interview",
       "type": "skill",
       "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 2,
+      "last_used": "2026-03-20",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -2031,9 +2031,9 @@
       "id": "ouroboros:qa",
       "type": "skill",
       "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
+      "calls": 17,
+      "last_used": "2026-05-27",
+      "grade": "active",
       "referenced_by": []
     },
     {
@@ -2328,9 +2328,9 @@
       "id": "codex:codex-cli-runtime",
       "type": "skill",
       "source": "plugin:codex",
-      "calls": 0,
-      "last_used": null,
-      "grade": "live",
+      "calls": 1,
+      "last_used": "2026-05-27",
+      "grade": "active",
       "referenced_by": [
         "codex:codex-rescue"
       ]
@@ -2348,9 +2348,9 @@
       "id": "codex:gpt-5-4-prompting",
       "type": "skill",
       "source": "plugin:codex",
-      "calls": 0,
-      "last_used": null,
-      "grade": "live",
+      "calls": 1,
+      "last_used": "2026-05-27",
+      "grade": "active",
       "referenced_by": [
         "codex:codex-rescue"
       ]
@@ -2413,7 +2413,7 @@
       "id": "mcp-atlassian",
       "type": "mcp_server",
       "source": "mcp",
-      "calls": 592,
+      "calls": 590,
       "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
@@ -2422,7 +2422,7 @@
       "id": "notion",
       "type": "mcp_server",
       "source": "mcp",
-      "calls": 12,
+      "calls": 3,
       "last_used": "2026-05-01",
       "grade": "active",
       "referenced_by": []

@@ -273,16 +273,33 @@ def _normalize_mcp_key(name: str) -> str | None:
         server = tokens[-1] if len(tokens) >= 3 else server[len("plugin_"):]
     return server.lower()
 
+# 사용자 직접 slash command는 user message 안에 <command-name>/cmd</command-name> wrapper로 기록됨.
+# Skill tool_use로 변환되지 않는 경우(/save_obsi 등)를 카운트하기 위해 추출.
+_USER_CMD_RE = re.compile(r'<command-name>/?([\w:-]+)</command-name>')
+
+
 def collect_calls(projects_root: Path, since_days: int = 183) -> dict[str, CallStat]:
+    """tool_use Skill/Task/MCP + user-direct slash command(<command-name>) 합산.
+
+    합산 정책 (옵션 B, v1.1):
+      - tool_use는 `tool_use.id`로 dedup
+      - user-direct wrapper는 (user message uuid, command) 튜플로 dedup
+      - 같은 명령이 양쪽에서 보이면 *둘 다* 카운트 (의도된 이중 카운트, README에 명시)
+        → save_obsi처럼 wrapper로만 호출되는 케이스의 false-dead를 막는 데 우선
+    """
     since = datetime.now(timezone.utc) - timedelta(days=since_days)
-    counts: dict[str, int] = {}; last: dict[str, str] = {}; seen: set[str] = set()
+    counts: dict[str, int] = {}
+    last: dict[str, str] = {}
+    seen_tool: set[str] = set()
+    seen_user: set[tuple] = set()
     if not projects_root.is_dir():
         return {}
     for fp in projects_root.rglob("*.jsonl"):
         try:
             with fp.open(encoding="utf-8", errors="replace") as f:
                 for line in f:
-                    if '"tool_use"' not in line:
+                    # 사전 필터 — tool_use 라인 또는 slash wrapper 라인만 파싱
+                    if '"tool_use"' not in line and '<command-name>' not in line:
                         continue
                     try:
                         d = json.loads(line)
@@ -295,36 +312,59 @@ def collect_calls(projects_root: Path, since_days: int = 183) -> dict[str, CallS
                         dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
                     except ValueError:
                         continue
-                    # tz-naive 타임스탬프(드물지만 발생 시 TypeError 방지) → UTC로 가정
                     if dt.tzinfo is None:
                         dt = dt.replace(tzinfo=timezone.utc)
                     if dt < since:
                         continue
-                    content = (d.get("message") or {}).get("content")
-                    if not isinstance(content, list):
-                        continue
-                    for it in content:
-                        if not isinstance(it, dict) or it.get("type") != "tool_use":
-                            continue
-                        tid = it.get("id")
-                        if tid in seen:
-                            continue
-                        seen.add(tid)
-                        name = it.get("name"); inp = it.get("input") or {}
-                        if name == "Skill":
-                            key = inp.get("skill")
-                        elif name in ("Task", "Agent"):
-                            key = inp.get("subagent_type") or inp.get("name") or "general-purpose"
-                        elif isinstance(name, str) and name.startswith("mcp__"):
-                            key = _normalize_mcp_key(name)
-                        else:
-                            continue
+                    msg = d.get("message") or {}
+                    iso = dt.date().isoformat()
+
+                    def _bump(key: str) -> None:
                         if not key:
-                            continue
+                            return
                         counts[key] = counts.get(key, 0) + 1
-                        iso = dt.date().isoformat()
                         if key not in last or iso > last[key]:
                             last[key] = iso
+
+                    # (A) tool_use 분기 (기존)
+                    content = msg.get("content")
+                    if isinstance(content, list):
+                        for it in content:
+                            if not isinstance(it, dict) or it.get("type") != "tool_use":
+                                continue
+                            tid = it.get("id")
+                            if tid in seen_tool:
+                                continue
+                            seen_tool.add(tid)
+                            name = it.get("name")
+                            inp = it.get("input") or {}
+                            if name == "Skill":
+                                _bump(inp.get("skill"))
+                            elif name in ("Task", "Agent"):
+                                _bump(inp.get("subagent_type") or inp.get("name") or "general-purpose")
+                            elif isinstance(name, str) and name.startswith("mcp__"):
+                                _bump(_normalize_mcp_key(name))
+
+                    # (B) user-direct slash wrapper 분기 — role=user 메시지에서 <command-name>
+                    if msg.get("role") == "user":
+                        texts: list[str] = []
+                        if isinstance(content, str):
+                            texts.append(content)
+                        elif isinstance(content, list):
+                            for it in content:
+                                if isinstance(it, dict) and it.get("type") == "text":
+                                    texts.append(it.get("text", "") or "")
+                                elif isinstance(it, str):
+                                    texts.append(it)
+                        uuid = d.get("uuid")
+                        for txt in texts:
+                            for m in _USER_CMD_RE.finditer(txt):
+                                cmd = m.group(1)
+                                dedup_key = (uuid, cmd)
+                                if dedup_key in seen_user:
+                                    continue
+                                seen_user.add(dedup_key)
+                                _bump(cmd)
         except OSError:
             continue
     return {k: CallStat(asset_id=k, count=v, last_used=last.get(k)) for k, v in counts.items()}

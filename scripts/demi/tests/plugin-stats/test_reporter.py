@@ -47,3 +47,42 @@ def test_write_snapshot_missing_parent(tmp_path):       # [Error]
     out = tmp_path / "deep" / "nested" / "snap.json"
     write_snapshot(snap, out)
     assert out.exists()
+
+
+def test_render_markdown_includes_charts():             # [Happy] 4 chart 섹션 + bar 문자
+    snap = build_snapshot([
+        _g("alpha", "skill", "active", 10),
+        _g("beta", "skill", "active", 5),
+        _g("gamma", "agent", "active", 7),
+        _g("delta", "command", "active", 3),
+    ], since="a", until="b", days=1)
+    md = render_markdown(snap)
+    # 그래프 섹션 헤더
+    assert "사용 빈도 그래프" in md
+    assert "통합 (skill + agent + command)" in md
+    assert "### skills" in md and "### agents" in md and "### commands" in md
+    # 막대 문자 + 자산 id 포함
+    assert "█" in md
+    assert "alpha" in md and "gamma" in md and "delta" in md
+
+
+def test_render_markdown_chart_handles_no_data():       # [Boundary] 빈 자산
+    snap = build_snapshot([], since="a", until="b", days=1)
+    md = render_markdown(snap)
+    # 4개 차트 모두 "(데이터 없음)" 출력
+    assert md.count("(데이터 없음)") == 4
+    # bar는 없어야
+    assert "█" not in md
+
+
+def test_render_markdown_chart_top_n_limit():           # [Boundary] Top N 절단
+    from demi.plugin_stats.reporter import CHART_TOP_N
+    items = [_g(f"s{i}", "skill", "active", calls=100 - i) for i in range(CHART_TOP_N + 5)]
+    snap = build_snapshot(items, since="a", until="b", days=1)
+    md = render_markdown(snap)
+    # "s0".."s(N-1)"은 포함, "s(N+4)"는 차트에 없음 (active 자산 섹션엔 있을 수 있음)
+    # 차트 코드블록만 검사
+    skills_section = md.split("### skills")[1].split("###")[0]
+    assert "s0" in skills_section
+    # N개 이후는 차트에서 잘림 — s(N), s(N+1) 등은 안 보임
+    assert f"s{CHART_TOP_N + 4}" not in skills_section

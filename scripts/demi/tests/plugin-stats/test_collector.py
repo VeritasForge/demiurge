@@ -195,3 +195,49 @@ def test_collect_calls_broken_line(tmp_path):           # [Error]
 
 def test_collect_calls_no_logs(tmp_path):               # [Error]
     assert collect_calls(tmp_path / "nope", since_days=183) == {}
+
+
+def _user_line(ts, text, uuid="u1"):
+    return json.dumps({"timestamp": ts, "uuid": uuid,
+                       "message": {"role": "user", "content": text}})
+
+
+def test_collect_calls_user_slash_wrapper(tmp_path):    # [Boundary] /save_obsi 같은 user-direct
+    log = tmp_path / "u.jsonl"
+    now = datetime.now(timezone.utc).isoformat()
+    log.write_text("\n".join([
+        _user_line(now, "<command-message>save_obsi</command-message>\n<command-name>/save_obsi</command-name>", "u1"),
+        _user_line(now, "<command-name>/save_obsi</command-name>", "u2"),
+        _user_line(now, "<command-name>/clear</command-name>", "u3"),
+    ]))
+    stats = collect_calls(tmp_path, since_days=183)
+    assert stats["save_obsi"].count == 2
+    assert stats["clear"].count == 1
+
+
+def test_collect_calls_user_wrapper_dedup(tmp_path):    # [Boundary] 같은 uuid는 한 번만
+    log = tmp_path / "u.jsonl"
+    now = datetime.now(timezone.utc).isoformat()
+    line = _user_line(now, "<command-name>/save_obsi</command-name>", "dup-uuid")
+    log.write_text(line + "\n" + line)  # 동일 라인 두 번 (예: 재플레이)
+    assert collect_calls(tmp_path, since_days=183)["save_obsi"].count == 1
+
+
+def test_collect_calls_tool_use_and_wrapper_both_count(tmp_path):  # [Boundary] 합산 (옵션 B)
+    log = tmp_path / "x.jsonl"
+    now = datetime.now(timezone.utc).isoformat()
+    log.write_text("\n".join([
+        _user_line(now, "<command-name>/rl-verify</command-name>", "u1"),
+        _line(now, "Skill", {"skill": "rl-verify"}, "t1"),
+    ]))
+    # wrapper 1 + tool_use 1 → 합산 2 (의도된 이중 카운트, README 명시)
+    assert collect_calls(tmp_path, since_days=183)["rl-verify"].count == 2
+
+
+def test_collect_calls_wrapper_ignored_when_role_not_user(tmp_path):  # [Error] role=assistant면 무시
+    log = tmp_path / "a.jsonl"
+    now = datetime.now(timezone.utc).isoformat()
+    log.write_text(json.dumps({"timestamp": now, "uuid": "u1",
+                               "message": {"role": "assistant",
+                                           "content": "<command-name>/save_obsi</command-name>"}}))
+    assert "save_obsi" not in collect_calls(tmp_path, since_days=183)

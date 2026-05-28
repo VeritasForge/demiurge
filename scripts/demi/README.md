@@ -31,6 +31,29 @@ uv run demi plugin-stats diff A.json B.json # 두 스냅샷 추세 비교
 
 > 단순 "호출 0회 = 미사용"이 아니라 **의존성 그래프**(inline `[a, b]` 및 block `- a` YAML 모두 파싱)를 반영해 false positive를 줄인다.
 
+## 호출 카운트 (v1.1)
+
+두 종류의 호출 신호를 **합산**한다:
+
+1. **`tool_use` Skill / Task / `mcp__*`** — assistant 메시지에서 모델이 호출한 도구. `tool_use.id`로 dedup.
+2. **`<command-name>/cmd</command-name>` wrapper** — user 메시지에 기록되는 *사용자 직접 입력* slash command. user message uuid로 dedup.
+
+> ⚠️ 같은 명령이 양쪽에 모두 기록되면(예: `/rl-verify`는 wrapper 32 + tool_use 34 → 카운트 66) **이중 카운트**가 발생한다. 이는 `/save_obsi`처럼 wrapper로만 호출되는 명령이 false-dead로 잘못 분류되는 위험을 막기 위한 의도적 선택이다. 절대 카운트는 부풀려질 수 있으나 *비례 비교*(어떤 자산을 더 자주 쓰는가)는 유지된다.
+
+## 리포트 (latest.md)
+
+`render_markdown`이 만드는 섹션:
+
+1. **요약** — 유형별 등급 표 (total/active/live/dead)
+2. **사용 빈도 그래프** (Top 15, ASCII bar) — `█`/`░` 막대로 4개 차트
+   - **통합** (skill + agent + command)
+   - **skills** 단독
+   - **agents** 단독
+   - **commands** 단독
+3. **활성 자산 (active)** — 호출된 자산 목록
+4. **정리 후보 (dead)** — 제거 후보
+5. **추세** — 이전 스냅샷 대비 신규 dead
+
 ## 추적 대상 (5종)
 
 - **plugins** — `~/.claude/plugins/installed_plugins.json`
