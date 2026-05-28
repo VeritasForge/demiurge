@@ -181,6 +181,7 @@ TDD 진행 시 각 Task의 RED phase는 아래 **3개 카테고리에서 각각 
   - 컴포넌트 설계 패턴 → /vercel-composition-patterns
   - 비주얼 디자인 품질 (타이포, 컬러, 모션) → /compound-engineering:frontend-design
   - 구현 후 접근성·웹 표준 감사 → /web-design-guidelines
+  - **UI 레이아웃 관련 브레인스토밍 질문(배치, 와이어프레임, 레이아웃 비교)은 브라우저 목업(visual companion)을 활용할 것** — /superpowers:brainstorming의 Visual Companion 기능 사용. 텍스트로 충분한 개념 질문(요구사항, 트레이드오프 등)은 터미널로 처리하고, 직접 눈으로 봐야 판단할 수 있는 레이아웃 질문에만 브라우저 사용.
 
 # 진단·검증 시 추측 금지 (통제 실험 + 1차 출처)
 
