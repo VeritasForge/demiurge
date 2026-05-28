@@ -98,3 +98,11 @@ new-command name:
     @printf '%s\n' '---' 'description: "TODO: 설명을 작성하세요"' 'allowed-tools: Read, Grep, Glob, Bash' '---' '' 'TODO: 커맨드 내용을 작성하세요.' > product/.claude/commands/{{name}}.md
     just link
     @echo "🆕 product/.claude/commands/{{name}}.md created"
+
+# 개발환경 사용 통계 리포트 생성 (demi plugin-stats report)
+stats:
+    cd scripts/demi && uv sync && uv run demi plugin-stats report
+
+# 미사용(dead) 자산 목록 출력
+stats-unused:
+    cd scripts/demi && uv run demi plugin-stats unused --grade dead
