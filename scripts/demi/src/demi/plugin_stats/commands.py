@@ -59,11 +59,13 @@ def _load_prev(snap_dir: Path, exclude: str) -> dict | None:
 @plugin_stats_app.command()
 def report(since_days: int = DEFAULT_DAYS):
     """전체 집계 → 마크다운 + JSON 스냅샷 저장."""
-    _, _, _, reports, _, _ = _resolve_paths()
+    home, _, projects_root, reports, _, _ = _resolve_paths()
     graded = _gather(since_days)
+    timeline = collector.collect_timeline(projects_root, since_days=since_days)
     until = datetime.now(timezone.utc); since = until - timedelta(days=since_days)
     snap = reporter.build_snapshot(graded, since.date().isoformat(),
-                                   until.date().isoformat(), since_days)
+                                   until.date().isoformat(), since_days,
+                                   timeline=timeline)
     date = until.date().isoformat()
     reporter.write_snapshot(snap, reports / "snapshots" / f"{date}.json")
     prev = _load_prev(reports / "snapshots", exclude=f"{date}.json")

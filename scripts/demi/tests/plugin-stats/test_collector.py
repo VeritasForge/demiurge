@@ -255,3 +255,45 @@ def test_collect_calls_wrapper_ignored_when_role_not_user(tmp_path):  # [Error] 
                                "message": {"role": "assistant",
                                            "content": "<command-name>/save_obsi</command-name>"}}))
     assert "save_obsi" not in collect_calls(tmp_path, since_days=183)
+
+
+# ──────────────── collect_timeline ────────────────
+from demi.plugin_stats.collector import collect_timeline
+
+
+def test_collect_timeline_buckets(tmp_path):            # [Happy]
+    """tool_use + wrapper 호출이 같은 주/월 bucket에 합산."""
+    log = tmp_path / "t.jsonl"
+    now = datetime.now(timezone.utc)
+    iso = now.isoformat()
+    log.write_text("\n".join([
+        _line(iso, "Skill", {"skill": "a"}, "t1"),
+        _line(iso, "Skill", {"skill": "b"}, "t2"),
+        _user_line(iso, "<command-name>/save_obsi</command-name>", "u1"),
+    ]))
+    tl = collect_timeline(tmp_path, since_days=183)
+    iso_y, iso_w, _ = now.isocalendar()
+    wk = f"{iso_y:04d}-W{iso_w:02d}"
+    mn = f"{now.year:04d}-{now.month:02d}"
+    assert tl["weekly"][wk] == 3
+    assert tl["monthly"][mn] == 3
+
+
+def test_collect_timeline_empty(tmp_path):              # [Boundary]
+    log = tmp_path / "e.jsonl"
+    log.write_text("")
+    tl = collect_timeline(tmp_path, since_days=183)
+    assert tl == {"weekly": {}, "monthly": {}}
+
+
+def test_collect_timeline_window_excludes_old(tmp_path):  # [Boundary]
+    log = tmp_path / "o.jsonl"
+    old = (datetime.now(timezone.utc) - timedelta(days=400)).isoformat()
+    log.write_text(_line(old, "Skill", {"skill": "x"}, "o1"))
+    tl = collect_timeline(tmp_path, since_days=183)
+    assert tl == {"weekly": {}, "monthly": {}}
+
+
+def test_collect_timeline_no_dir(tmp_path):             # [Error]
+    tl = collect_timeline(tmp_path / "nope", since_days=183)
+    assert tl == {"weekly": {}, "monthly": {}}

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-28T09:07:04.322764+00:00",
+  "generated_at": "2026-05-28T09:25:15.285113+00:00",
   "window": {
     "since": "2025-11-26",
     "until": "2026-05-28",
@@ -7,10 +7,10 @@
   },
   "totals": {
     "skill": {
-      "total": 133,
+      "total": 134,
       "active": 44,
       "live": 17,
-      "dead": 72
+      "dead": 73
     },
     "agent": {
       "total": 92,
@@ -88,6 +88,15 @@
       "calls": 1,
       "last_used": "2026-05-19",
       "grade": "active",
+      "referenced_by": []
+    },
+    {
+      "id": "autopilot",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
       "referenced_by": []
     },
     {
@@ -951,8 +960,8 @@
       "id": "compound-engineering:ce-code-review",
       "type": "skill",
       "source": "plugin:compound-engineering",
-      "calls": 1,
-      "last_used": "2026-05-23",
+      "calls": 21,
+      "last_used": "2026-05-28",
       "grade": "active",
       "referenced_by": []
     },
@@ -2256,5 +2265,35 @@
       "grade": "active",
       "referenced_by": []
     }
-  ]
+  ],
+  "timeline": {
+    "weekly": {
+      "2026-W20": 866,
+      "2026-W21": 834,
+      "2026-W19": 228,
+      "2026-W18": 278,
+      "2026-W22": 383,
+      "2026-W17": 58,
+      "2026-W16": 41,
+      "2026-W14": 1,
+      "2026-W08": 230,
+      "2026-W09": 1096,
+      "2026-W05": 480,
+      "2026-W07": 260,
+      "2026-W06": 244,
+      "2026-W12": 124,
+      "2026-W04": 54,
+      "2026-W11": 82,
+      "2026-W13": 43,
+      "2026-W10": 152,
+      "2026-W03": 18
+    },
+    "monthly": {
+      "2026-05": 2364,
+      "2026-04": 325,
+      "2026-02": 1740,
+      "2026-01": 528,
+      "2026-03": 515
+    }
+  }
 }

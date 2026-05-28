@@ -86,3 +86,35 @@ def test_render_markdown_chart_top_n_limit():           # [Boundary] Top N 절�
     assert "s0" in skills_section
     # N개 이후는 차트에서 잘림 — s(N), s(N+1) 등은 안 보임
     assert f"s{CHART_TOP_N + 4}" not in skills_section
+
+
+def test_build_snapshot_with_timeline():                # [Happy] timeline 저장
+    tl = {"weekly": {"2026-W22": 10, "2026-W23": 15},
+          "monthly": {"2026-05": 25, "2026-06": 30}}
+    snap = build_snapshot([], since="a", until="b", days=1, timeline=tl)
+    assert snap["timeline"] == tl
+
+
+def test_build_snapshot_without_timeline():             # [Boundary] timeline 없으면 키 없음
+    snap = build_snapshot([], since="a", until="b", days=1)
+    assert "timeline" not in snap
+
+
+def test_render_markdown_timeline_charts():             # [Happy] 시간 추이 섹션 + 두 차트
+    tl = {"weekly": {"2026-W20": 5, "2026-W21": 8, "2026-W22": 12},
+          "monthly": {"2026-04": 20, "2026-05": 25}}
+    snap = build_snapshot([_g("x", "skill", "active", 1)],
+                          since="a", until="b", days=1, timeline=tl)
+    md = render_markdown(snap)
+    assert "시간 추이" in md
+    assert "월별 (chronological)" in md
+    assert "주별 — 최근 20주" in md
+    # 시간 키가 chronological로 차트에 등장
+    assert "2026-04" in md and "2026-05" in md
+    assert "2026-W20" in md and "2026-W22" in md
+
+
+def test_render_markdown_timeline_omitted_when_absent():  # [Boundary] timeline 없으면 섹션 미출력
+    snap = build_snapshot([_g("x", "skill", "active", 1)], since="a", until="b", days=1)
+    md = render_markdown(snap)
+    assert "## 시간 추이" not in md

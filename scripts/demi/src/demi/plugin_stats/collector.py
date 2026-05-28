@@ -379,3 +379,93 @@ def collect_calls(projects_root: Path, since_days: int = 183) -> dict[str, CallS
         except OSError:
             continue
     return {k: CallStat(asset_id=k, count=v, last_used=last.get(k)) for k, v in counts.items()}
+
+
+def collect_timeline(projects_root: Path, since_days: int = 183) -> dict[str, dict[str, int]]:
+    """주별/월별 *전체* 호출 분포 (자산 무관). tool_use + slash wrapper 합산.
+
+    같은 데이터를 collect_calls가 자산별로 집계하는 동안, 이 함수는 시간 bucket으로 집계한다.
+    v2에서 collect_all로 단일 패스 리팩토링 예정.
+
+    Returns:
+      {"weekly":  {"2026-W22": int, ...},   # ISO 주 (월요일 시작)
+       "monthly": {"2026-05": int, ...}}    # 캘린더 월
+    """
+    since = datetime.now(timezone.utc) - timedelta(days=since_days)
+    weekly: dict[str, int] = {}
+    monthly: dict[str, int] = {}
+    seen_tool: set[str] = set()
+    seen_user: set[tuple] = set()
+    if not projects_root.is_dir():
+        return {"weekly": {}, "monthly": {}}
+
+    for fp in projects_root.rglob("*.jsonl"):
+        try:
+            with fp.open(encoding="utf-8", errors="replace") as f:
+                for line in f:
+                    if '"tool_use"' not in line and '<command-name>' not in line:
+                        continue
+                    try:
+                        d = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    ts = d.get("timestamp")
+                    if not ts:
+                        continue
+                    try:
+                        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
+                    except ValueError:
+                        continue
+                    if dt.tzinfo is None:
+                        dt = dt.replace(tzinfo=timezone.utc)
+                    if dt < since:
+                        continue
+
+                    msg = d.get("message") or {}
+                    n = 0
+
+                    content = msg.get("content")
+                    if isinstance(content, list):
+                        for it in content:
+                            if not isinstance(it, dict) or it.get("type") != "tool_use":
+                                continue
+                            tid = it.get("id")
+                            if tid in seen_tool:
+                                continue
+                            seen_tool.add(tid)
+                            nm = it.get("name")
+                            if nm == "Skill" or nm in ("Task", "Agent") or (
+                                isinstance(nm, str) and nm.startswith("mcp__")
+                            ):
+                                n += 1
+
+                    if msg.get("role") == "user":
+                        texts: list[str] = []
+                        if isinstance(content, str):
+                            texts.append(content)
+                        elif isinstance(content, list):
+                            for it in content:
+                                if isinstance(it, dict) and it.get("type") == "text":
+                                    texts.append(it.get("text", "") or "")
+                                elif isinstance(it, str):
+                                    texts.append(it)
+                        uuid = d.get("uuid")
+                        for txt in texts:
+                            for m in _USER_CMD_RE.finditer(txt):
+                                cmd = m.group(1)
+                                dedup_key = (uuid, cmd)
+                                if dedup_key in seen_user:
+                                    continue
+                                seen_user.add(dedup_key)
+                                n += 1
+
+                    if n:
+                        iso_y, iso_w, _ = dt.isocalendar()
+                        wk = f"{iso_y:04d}-W{iso_w:02d}"
+                        mn = f"{dt.year:04d}-{dt.month:02d}"
+                        weekly[wk] = weekly.get(wk, 0) + n
+                        monthly[mn] = monthly.get(mn, 0) + n
+        except OSError:
+            continue
+
+    return {"weekly": weekly, "monthly": monthly}

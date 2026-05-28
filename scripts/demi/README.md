@@ -50,9 +50,12 @@ uv run demi plugin-stats diff A.json B.json # 두 스냅샷 추세 비교
    - **skills** 단독
    - **agents** 단독
    - **commands** 단독
-3. **활성 자산 (active)** — 호출된 자산 목록
-4. **정리 후보 (dead)** — 제거 후보
-5. **추세** — 이전 스냅샷 대비 신규 dead
+3. **시간 추이 (호출량)** — 한 스냅샷의 윈도우 내 시간 분포 (`collect_timeline`)
+   - **월별** (chronological) — 최대 24개월
+   - **주별** — 최근 20주 (ISO week, 월요일 시작)
+4. **활성 자산 (active)** — 호출된 자산 목록
+5. **정리 후보 (dead)** — 제거 후보
+6. **추세** — 이전 스냅샷 대비 신규 dead
 
 ## 추적 대상 (5종)
 

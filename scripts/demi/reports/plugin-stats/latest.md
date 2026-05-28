@@ -1,6 +1,6 @@
 # demi plugin-stats 리포트
 
-- 생성: 2026-05-28T09:07:04.322764+00:00
+- 생성: 2026-05-28T09:25:15.285113+00:00
 - 윈도우: 2025-11-26 ~ 2026-05-28 (183일)
 
 ## 요약 (유형별 등급)
@@ -10,7 +10,7 @@
 | command | 1 | 1 | 0 | 0 |
 | mcp_server | 4 | 4 | 0 | 0 |
 | plugin | 10 | 2 | 0 | 8 |
-| skill | 133 | 44 | 17 | 72 |
+| skill | 134 | 44 | 17 | 73 |
 
 ## 사용 빈도 그래프 (Top 15)
 
@@ -40,6 +40,7 @@
   deep-research                            ████████████████████░░░░░░░░░░  43
   organize                                 ███████████████░░░░░░░░░░░░░░░  33
   superpowers:brainstorming                ███████████████░░░░░░░░░░░░░░░  32
+  compound-engineering:ce-code-review      ██████████░░░░░░░░░░░░░░░░░░░░  21
   superpowers:subagent-driven-development  █████████░░░░░░░░░░░░░░░░░░░░░  20
   superpowers:writing-plans                █████████░░░░░░░░░░░░░░░░░░░░░  20
   qa                                       ████████░░░░░░░░░░░░░░░░░░░░░░  17
@@ -49,7 +50,6 @@
   superpowers:writing-skills               ████░░░░░░░░░░░░░░░░░░░░░░░░░░  8
   debug                                    ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  7
   retrospective                            ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  7
-  review-pr                                ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  6
 ```
 
 ### agents
@@ -74,6 +74,40 @@
 ### commands
 ```
   save_obsi  ██████████████████████████████  18
+```
+
+## 시간 추이 (호출량)
+
+### 월별 (chronological)
+```
+  2026-01  ███████░░░░░░░░░░░░░░░░░░░░░░░  528
+  2026-02  ██████████████████████░░░░░░░░  1740
+  2026-03  ███████░░░░░░░░░░░░░░░░░░░░░░░  515
+  2026-04  ████░░░░░░░░░░░░░░░░░░░░░░░░░░  325
+  2026-05  ██████████████████████████████  2364
+```
+
+### 주별 — 최근 20주
+```
+  2026-W03  █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  18
+  2026-W04  █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  54
+  2026-W05  █████████████░░░░░░░░░░░░░░░░░  480
+  2026-W06  ███████░░░░░░░░░░░░░░░░░░░░░░░  244
+  2026-W07  ███████░░░░░░░░░░░░░░░░░░░░░░░  260
+  2026-W08  ██████░░░░░░░░░░░░░░░░░░░░░░░░  230
+  2026-W09  ██████████████████████████████  1096
+  2026-W10  ████░░░░░░░░░░░░░░░░░░░░░░░░░░  152
+  2026-W11  ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  82
+  2026-W12  ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  124
+  2026-W13  █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  43
+  2026-W14  █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  1
+  2026-W16  █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  41
+  2026-W17  ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  58
+  2026-W18  ████████░░░░░░░░░░░░░░░░░░░░░░  278
+  2026-W19  ██████░░░░░░░░░░░░░░░░░░░░░░░░  228
+  2026-W20  ████████████████████████░░░░░░  866
+  2026-W21  ███████████████████████░░░░░░░  834
+  2026-W22  ██████████░░░░░░░░░░░░░░░░░░░░  383
 ```
 
 ## 활성 자산 (active)
@@ -124,7 +158,7 @@
 - 🟢 `codex:gpt-5-4-prompting` (skill, plugin:codex, calls=1)
 - 🟢 `commit` (skill, global, calls=52)
 - 🟢 `compound-engineering:ce-brainstorm` (skill, plugin:compound-engineering, calls=1)
-- 🟢 `compound-engineering:ce-code-review` (skill, plugin:compound-engineering, calls=1)
+- 🟢 `compound-engineering:ce-code-review` (skill, plugin:compound-engineering, calls=21)
 - 🟢 `compound-engineering:ce-debug` (skill, plugin:compound-engineering, calls=4)
 - 🟢 `compound-engineering:ce-doc-review` (skill, plugin:compound-engineering, calls=15)
 - 🟢 `compound-engineering:ce-frontend-design` (skill, plugin:compound-engineering, calls=1)
@@ -235,6 +269,7 @@
 - 🔴 `Notion:research-documentation` (skill, plugin:Notion)
 - 🔴 `Notion:spec-to-implementation` (skill, plugin:Notion)
 - 🔴 `api-design` (skill, global)
+- 🔴 `autopilot` (skill, global)
 - 🔴 `codex:codex-result-handling` (skill, plugin:codex)
 - 🔴 `compound-engineering:ce-agent-native-architecture` (skill, plugin:compound-engineering)
 - 🔴 `compound-engineering:ce-agent-native-audit` (skill, plugin:compound-engineering)

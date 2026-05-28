@@ -7,7 +7,8 @@ from .models import GradedAsset
 
 
 def build_snapshot(graded: list[GradedAsset], since: str, until: str, days: int,
-                   generated_at: str | None = None) -> dict:
+                   generated_at: str | None = None,
+                   timeline: dict[str, dict[str, int]] | None = None) -> dict:
     totals: dict[str, dict[str, int]] = defaultdict(
         lambda: {"total": 0, "active": 0, "live": 0, "dead": 0})
     assets = []
@@ -18,10 +19,13 @@ def build_snapshot(graded: list[GradedAsset], since: str, until: str, days: int,
         assets.append({"id": g.asset.id, "type": g.asset.type, "source": g.asset.source,
                        "calls": g.calls, "last_used": g.last_used, "grade": g.grade,
                        "referenced_by": g.referenced_by})
-    return {"generated_at": generated_at or datetime.now(timezone.utc).isoformat(),
+    snap = {"generated_at": generated_at or datetime.now(timezone.utc).isoformat(),
             "window": {"since": since, "until": until, "days": days},
             "totals": {k: dict(v) for k, v in totals.items()},
             "assets": assets}
+    if timeline is not None:
+        snap["timeline"] = timeline
+    return snap
 
 
 def write_snapshot(snapshot: dict, path: Path) -> None:
@@ -91,6 +95,20 @@ def render_markdown(snapshot: dict, prev: dict | None = None) -> str:
             key=lambda x: -x[1],
         )
         lines += _render_bar_chart(only, f"{typ}s")
+
+    # ── 시간 추이 (월별 / 주별) ──
+    timeline = snapshot.get("timeline") or {}
+    monthly = timeline.get("monthly", {})
+    weekly = timeline.get("weekly", {})
+    if monthly or weekly:
+        lines += ["", "## 시간 추이 (호출량)"]
+        if monthly:
+            items = sorted(monthly.items())  # ISO key — lexicographic = chronological
+            lines += _render_bar_chart(items, "월별 (chronological)", top_n=24)
+        if weekly:
+            # 너무 길어지지 않게 최근 20주만
+            items = sorted(weekly.items())[-20:]
+            lines += _render_bar_chart(items, "주별 — 최근 20주", top_n=20)
 
     lines += ["", "## 활성 자산 (active)"]
     active = [a for a in assets if a["grade"] == "active"]
