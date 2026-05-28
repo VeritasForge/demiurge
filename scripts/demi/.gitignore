@@ -1,0 +1,20 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# uv / virtualenv
+.venv/
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Test / coverage caches
+.pytest_cache/
+.coverage
+htmlcov/
+
+# NOTE: reports/ is intentionally tracked (plan §4 — snapshots + latest.md are git-tracked artifacts).

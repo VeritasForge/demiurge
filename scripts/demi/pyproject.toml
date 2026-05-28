@@ -1,0 +1,19 @@
+[project]
+name = "demi"
+version = "0.1.0"
+description = "Claude Code 개발환경 사용 통계 CLI"
+requires-python = ">=3.14"
+dependencies = ["typer>=0.12"]
+
+[project.scripts]
+demi = "demi.cli:app"
+
+[build-system]
+requires = ["uv_build>=0.10"]
+build-backend = "uv_build"
+
+[dependency-groups]
+dev = ["pytest>=8"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
