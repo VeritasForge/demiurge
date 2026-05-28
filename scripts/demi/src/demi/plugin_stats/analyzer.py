@@ -28,8 +28,11 @@ def grade_assets(assets: list[Asset], calls: dict[str, CallStat]) -> list[Graded
         cs = _calls_for(a, calls)
         count = cs.count if cs else 0
         last = cs.last_used if cs else None
+        weekly = dict(cs.weekly) if cs else {}
+        monthly = dict(cs.monthly) if cs else {}
         refby = sorted(set(referenced_by[a.id]))
         grade = "active" if count > 0 else ("live" if refby else "dead")
         out.append(GradedAsset(asset=a, calls=count, last_used=last,
-                               grade=grade, referenced_by=refby))
+                               grade=grade, referenced_by=refby,
+                               weekly=weekly, monthly=monthly))
     return out

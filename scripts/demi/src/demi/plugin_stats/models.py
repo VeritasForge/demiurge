@@ -20,6 +20,8 @@ class CallStat:
     asset_id: str
     count: int
     last_used: str | None
+    weekly: dict[str, int] = field(default_factory=dict)
+    monthly: dict[str, int] = field(default_factory=dict)
 
 
 @dataclass
@@ -29,3 +31,5 @@ class GradedAsset:
     last_used: str | None
     grade: Grade
     referenced_by: list[str]
+    weekly: dict[str, int] = field(default_factory=dict)
+    monthly: dict[str, int] = field(default_factory=dict)

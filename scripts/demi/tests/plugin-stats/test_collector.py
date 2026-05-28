@@ -297,3 +297,22 @@ def test_collect_timeline_window_excludes_old(tmp_path):  # [Boundary]
 def test_collect_timeline_no_dir(tmp_path):             # [Error]
     tl = collect_timeline(tmp_path / "nope", since_days=183)
     assert tl == {"weekly": {}, "monthly": {}}
+
+
+def test_collect_calls_sets_asset_timeline(tmp_path):   # [Happy] 자산별 weekly/monthly bucket
+    log = tmp_path / "a.jsonl"
+    now = datetime.now(timezone.utc)
+    iso = now.isoformat()
+    log.write_text("\n".join([
+        _line(iso, "Skill", {"skill": "foo"}, "t1"),
+        _line(iso, "Skill", {"skill": "foo"}, "t2"),
+        _line(iso, "Skill", {"skill": "bar"}, "t3"),
+    ]))
+    stats = collect_calls(tmp_path, since_days=183)
+    iso_y, iso_w, _ = now.isocalendar()
+    wk = f"{iso_y:04d}-W{iso_w:02d}"
+    mn = f"{now.year:04d}-{now.month:02d}"
+    assert stats["foo"].weekly[wk] == 2
+    assert stats["foo"].monthly[mn] == 2
+    assert stats["bar"].weekly[wk] == 1
+    assert stats["bar"].monthly[mn] == 1

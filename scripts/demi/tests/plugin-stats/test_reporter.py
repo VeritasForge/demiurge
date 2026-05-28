@@ -118,3 +118,63 @@ def test_render_markdown_timeline_omitted_when_absent():  # [Boundary] timeline 
     snap = build_snapshot([_g("x", "skill", "active", 1)], since="a", until="b", days=1)
     md = render_markdown(snap)
     assert "## 시간 추이" not in md
+
+
+# ──────────────── 자산별 sparkline ────────────────
+
+def _g_tl(id, type, calls, weekly, monthly):
+    """timeline 포함 GradedAsset 생성."""
+    a = Asset(id=id, type=type, source="global", aliases=frozenset({id}))
+    return GradedAsset(asset=a, calls=calls, last_used=None, grade="active",
+                       referenced_by=[], weekly=weekly, monthly=monthly)
+
+
+def test_sparkline_basic():                             # [Happy] 정상 입력
+    from demi.plugin_stats.reporter import _sparkline
+    spark = _sparkline([1, 2, 4, 8])
+    # 4 글자, 마지막은 가장 큰 단계
+    assert len(spark) == 4
+    assert spark[-1] == "█"   # max value
+    assert spark[0] in "▁▂"   # 최소 단계
+
+
+def test_sparkline_empty_and_zero():                    # [Boundary]
+    from demi.plugin_stats.reporter import _sparkline
+    assert _sparkline([]) == ""
+    assert _sparkline([0, 0, 0]) == "▁▁▁"   # max=0이면 최소 문자
+
+
+def test_render_asset_timeline_sparkline():             # [Happy] 카테고리별 sparkline 차트 6개
+    items = [
+        _g_tl("alpha", "skill", 30,
+              weekly={"2026-W20": 5, "2026-W21": 10, "2026-W22": 15},
+              monthly={"2026-04": 8, "2026-05": 22}),
+        _g_tl("beta", "agent", 20,
+              weekly={"2026-W20": 3, "2026-W21": 7, "2026-W22": 10},
+              monthly={"2026-04": 5, "2026-05": 15}),
+        _g_tl("gamma", "command", 5,
+              weekly={"2026-W22": 5},
+              monthly={"2026-05": 5}),
+    ]
+    snap = build_snapshot(items, since="a", until="b", days=1)
+    md = render_markdown(snap)
+    # 자산별 sparkline 섹션
+    assert "자산별 시간 추이" in md
+    assert "### skills — 월별" in md
+    assert "### skills — 주별" in md
+    assert "### agents — 월별" in md
+    assert "### commands — 월별" in md
+    # sparkline 문자 포함
+    assert any(c in md for c in "▁▂▃▄▅▆▇█")
+    # 자산 id 포함
+    assert "alpha" in md and "beta" in md and "gamma" in md
+
+
+def test_render_asset_timeline_skips_zero_call_categories():  # [Boundary] 호출 0 카테고리 skip
+    a = Asset(id="dead-asset", type="skill", source="global", aliases=frozenset({"dead-asset"}))
+    items = [GradedAsset(asset=a, calls=0, last_used=None, grade="dead",
+                          referenced_by=[], weekly={}, monthly={})]
+    snap = build_snapshot(items, since="a", until="b", days=1)
+    md = render_markdown(snap)
+    # call=0이라 timeline 데이터 없음 → 자산별 sparkline 섹션 생략
+    assert "자산별 시간 추이" not in md

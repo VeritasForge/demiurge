@@ -1,6 +1,6 @@
 # demi plugin-stats 리포트
 
-- 생성: 2026-05-28T09:25:15.285113+00:00
+- 생성: 2026-05-28T09:33:24.730501+00:00
 - 윈도우: 2025-11-26 ~ 2026-05-28 (183일)
 
 ## 요약 (유형별 등급)
@@ -18,24 +18,24 @@
 ```
   general-purpose                                        ██████████████████████████████  411
   Explore                                                █████░░░░░░░░░░░░░░░░░░░░░░░░░  69
-  compound-engineering:ce-adversarial-document-reviewer  █████░░░░░░░░░░░░░░░░░░░░░░░░░  68
-  rl-verify                                              █████░░░░░░░░░░░░░░░░░░░░░░░░░  65
+  compound-engineering:ce-adversarial-document-reviewer  █████░░░░░░░░░░░░░░░░░░░░░░░░░  69
+  rl-verify                                              █████░░░░░░░░░░░░░░░░░░░░░░░░░  66
   commit                                                 ████░░░░░░░░░░░░░░░░░░░░░░░░░░  52
   deep-research                                          ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  43
   claude-code-guide                                      ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  43
+  compound-engineering:ce-web-researcher                 ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  41
   compound-engineering:ce-correctness-reviewer           ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  40
-  compound-engineering:ce-web-researcher                 ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  40
   organize                                               ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  33
   compound-engineering:ce-best-practices-researcher      ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  32
   superpowers:brainstorming                              ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  32
   compound-engineering:ce-testing-reviewer               ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  29
   compound-engineering:ce-architecture-strategist        ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  27
-  compound-engineering:ce-feasibility-reviewer           ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  25
+  compound-engineering:ce-feasibility-reviewer           ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  26
 ```
 
 ### skills
 ```
-  rl-verify                                ██████████████████████████████  65
+  rl-verify                                ██████████████████████████████  66
   commit                                   ████████████████████████░░░░░░  52
   deep-research                            ████████████████████░░░░░░░░░░  43
   organize                                 ███████████████░░░░░░░░░░░░░░░  33
@@ -56,14 +56,14 @@
 ```
   general-purpose                                        ██████████████████████████████  411
   Explore                                                █████░░░░░░░░░░░░░░░░░░░░░░░░░  69
-  compound-engineering:ce-adversarial-document-reviewer  █████░░░░░░░░░░░░░░░░░░░░░░░░░  68
+  compound-engineering:ce-adversarial-document-reviewer  █████░░░░░░░░░░░░░░░░░░░░░░░░░  69
   claude-code-guide                                      ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  43
+  compound-engineering:ce-web-researcher                 ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  41
   compound-engineering:ce-correctness-reviewer           ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  40
-  compound-engineering:ce-web-researcher                 ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  40
   compound-engineering:ce-best-practices-researcher      ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  32
   compound-engineering:ce-testing-reviewer               ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  29
   compound-engineering:ce-architecture-strategist        ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  27
-  compound-engineering:ce-feasibility-reviewer           ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  25
+  compound-engineering:ce-feasibility-reviewer           ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  26
   compound-engineering:ce-maintainability-reviewer       ██░░░░░░░░░░░░░░░░░░░░░░░░░░░░  21
   compound-engineering:ce-coherence-reviewer             █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  18
   compound-engineering:ce-project-standards-reviewer     █░░░░░░░░░░░░░░░░░░░░░░░░░░░░░  18
@@ -84,7 +84,7 @@
   2026-02  ██████████████████████░░░░░░░░  1740
   2026-03  ███████░░░░░░░░░░░░░░░░░░░░░░░  515
   2026-04  ████░░░░░░░░░░░░░░░░░░░░░░░░░░  325
-  2026-05  ██████████████████████████████  2364
+  2026-05  ██████████████████████████████  2369
 ```
 
 ### 주별 — 최근 20주
@@ -107,7 +107,81 @@
   2026-W19  ██████░░░░░░░░░░░░░░░░░░░░░░░░  228
   2026-W20  ████████████████████████░░░░░░  866
   2026-W21  ███████████████████████░░░░░░░  834
-  2026-W22  ██████████░░░░░░░░░░░░░░░░░░░░  383
+  2026-W22  ███████████░░░░░░░░░░░░░░░░░░░  388
+```
+
+## 자산별 시간 추이 (카테고리별 Top 10, sparkline)
+
+### skills — 월별
+```
+                                           2026-02 → 2026-05  (span=4)
+  rl-verify                                ▁▂▃█  total=66 last=46
+  commit                                   ▁▁▂█  total=52 last=46
+  deep-research                            ▁▁▂█  total=43 last=35
+  organize                                 ▁▂▄█  total=33 last=22
+  superpowers:brainstorming                ▁▁▁█  total=32 last=29
+  compound-engineering:ce-code-review      ▁▁▂█  total=21 last=19
+  superpowers:subagent-driven-development  ▁▁▂█  total=20 last=16
+  superpowers:writing-plans                ▁▁▂█  total=20 last=17
+  qa                                       ▁▁▄█  total=17 last=12
+  ouroboros:qa                             ▁▁▄█  total=17 last=12
+```
+
+### skills — 주별 (최근 20주)
+```
+                                           2026-W08 → 2026-W22  (span=13)
+  rl-verify                                ▁▁▁▁▃▁▁▂▅▃▅█▃  total=66 last=7
+  commit                                   ▁▁▁▁▁▁▁▁▄▆▅█▄  total=52 last=7
+  deep-research                            ▂▂▁▁▁▁▂▂▃▂█▆▆  total=43 last=10
+  organize                                 ▁▁▁▁▃▁▄▃▅▆██▄  total=33 last=3
+  superpowers:brainstorming                ▁▁▁▁▁▁▁▁▂▂▂▅█  total=32 last=16
+  compound-engineering:ce-code-review      ▁▁▁▁▁▁▁▁▁▁▁█▂  total=21 last=3
+  superpowers:subagent-driven-development  ▁▁▁▁▁▂▁▂▃▁▃█▅  total=20 last=5
+  superpowers:writing-plans                ▁▁▁▁▁▂▁▁▃▁▂██  total=20 last=8
+  qa                                       ▁▁▁▁▁▁▄▁██▅▂▂  total=17 last=1
+  ouroboros:qa                             ▁▁▁▁▁▁▄▁██▅▂▂  total=17 last=1
+```
+
+### agents — 월별
+```
+                                                         2026-02 → 2026-05  (span=4)
+  general-purpose                                        ▁▁▃█  total=411 last=334
+  Explore                                                ▁▄▄█  total=69 last=39
+  compound-engineering:ce-adversarial-document-reviewer  ▁▁▁█  total=69 last=65
+  claude-code-guide                                      ▁▁▂█  total=43 last=39
+  compound-engineering:ce-web-researcher                 ▁▁▂█  total=41 last=37
+  compound-engineering:ce-correctness-reviewer           ▁▁▁█  total=40 last=38
+  compound-engineering:ce-best-practices-researcher      ▁▁▂█  total=32 last=28
+  compound-engineering:ce-testing-reviewer               ▁▁▁█  total=29 last=28
+  compound-engineering:ce-architecture-strategist        ▁▁▂█  total=27 last=23
+  compound-engineering:ce-feasibility-reviewer           ▁▁▂█  total=26 last=23
+```
+
+### agents — 주별 (최근 20주)
+```
+                                                         2026-W08 → 2026-W22  (span=13)
+  general-purpose                                        ▁▁▁▁▁▁▁▂▄▁▆█▅  total=411 last=87
+  Explore                                                ▁▁▁▁▃▅▄▃▂▂█▆▃  total=69 last=5
+  compound-engineering:ce-adversarial-document-reviewer  ▁▁▁▁▁▁▁▁▂▃▅█▄  total=69 last=12
+  claude-code-guide                                      ▁▁▁▁▁▁▁▁▂▁█▅▃  total=43 last=6
+  compound-engineering:ce-web-researcher                 ▁▁▁▁▁▁▁▁▃▂▆█▅  total=41 last=9
+  compound-engineering:ce-correctness-reviewer           ▁▁▁▁▁▁▁▁▂▁▃█▂  total=40 last=4
+  compound-engineering:ce-best-practices-researcher      ▁▁▁▁▁▁▁▁▃▃▇█▂  total=32 last=1
+  compound-engineering:ce-testing-reviewer               ▁▁▁▁▁▁▁▁▁▁▂█▂  total=29 last=3
+  compound-engineering:ce-architecture-strategist        ▁▁▁▁▁▁▁▂▄█▇▆▃  total=27 last=2
+  compound-engineering:ce-feasibility-reviewer           ▁▁▁▁▁▁▁▁▃▂▃█▆  total=26 last=8
+```
+
+### commands — 월별
+```
+             2026-02 → 2026-05  (span=4)
+  save_obsi  ▁▁▂█  total=18 last=16
+```
+
+### commands — 주별 (최근 20주)
+```
+             2026-W08 → 2026-W22  (span=13)
+  save_obsi  ▁▁▁▁▁▁▄▁▁▅▇█▇  total=18 last=4
 ```
 
 ## 활성 자산 (active)
@@ -115,7 +189,7 @@
 - 🟢 `Plan` (agent, builtin, calls=5)
 - 🟢 `claude-code-guide` (agent, builtin, calls=43)
 - 🟢 `codex:codex-rescue` (agent, plugin:codex, calls=1)
-- 🟢 `compound-engineering:ce-adversarial-document-reviewer` (agent, plugin:compound-engineering, calls=68)
+- 🟢 `compound-engineering:ce-adversarial-document-reviewer` (agent, plugin:compound-engineering, calls=69)
 - 🟢 `compound-engineering:ce-adversarial-reviewer` (agent, plugin:compound-engineering, calls=9)
 - 🟢 `compound-engineering:ce-agent-native-reviewer` (agent, plugin:compound-engineering, calls=9)
 - 🟢 `compound-engineering:ce-api-contract-reviewer` (agent, plugin:compound-engineering, calls=3)
@@ -126,7 +200,7 @@
 - 🟢 `compound-engineering:ce-correctness-reviewer` (agent, plugin:compound-engineering, calls=40)
 - 🟢 `compound-engineering:ce-data-integrity-guardian` (agent, plugin:compound-engineering, calls=3)
 - 🟢 `compound-engineering:ce-design-lens-reviewer` (agent, plugin:compound-engineering, calls=4)
-- 🟢 `compound-engineering:ce-feasibility-reviewer` (agent, plugin:compound-engineering, calls=25)
+- 🟢 `compound-engineering:ce-feasibility-reviewer` (agent, plugin:compound-engineering, calls=26)
 - 🟢 `compound-engineering:ce-framework-docs-researcher` (agent, plugin:compound-engineering, calls=5)
 - 🟢 `compound-engineering:ce-julik-frontend-races-reviewer` (agent, plugin:compound-engineering, calls=6)
 - 🟢 `compound-engineering:ce-learnings-researcher` (agent, plugin:compound-engineering, calls=11)
@@ -139,9 +213,9 @@
 - 🟢 `compound-engineering:ce-scope-guardian-reviewer` (agent, plugin:compound-engineering, calls=14)
 - 🟢 `compound-engineering:ce-security-lens-reviewer` (agent, plugin:compound-engineering, calls=8)
 - 🟢 `compound-engineering:ce-security-reviewer` (agent, plugin:compound-engineering, calls=9)
-- 🟢 `compound-engineering:ce-security-sentinel` (agent, plugin:compound-engineering, calls=7)
+- 🟢 `compound-engineering:ce-security-sentinel` (agent, plugin:compound-engineering, calls=8)
 - 🟢 `compound-engineering:ce-testing-reviewer` (agent, plugin:compound-engineering, calls=29)
-- 🟢 `compound-engineering:ce-web-researcher` (agent, plugin:compound-engineering, calls=40)
+- 🟢 `compound-engineering:ce-web-researcher` (agent, plugin:compound-engineering, calls=41)
 - 🟢 `convergence-evaluator` (agent, global, calls=3)
 - 🟢 `data-architect` (agent, global, calls=1)
 - 🟢 `general-purpose` (agent, builtin, calls=411)
@@ -184,7 +258,7 @@
 - 🟢 `retrospective` (skill, global, calls=7)
 - 🟢 `review-pr` (skill, global, calls=6)
 - 🟢 `rl` (skill, global, calls=2)
-- 🟢 `rl-verify` (skill, global, calls=65)
+- 🟢 `rl-verify` (skill, global, calls=66)
 - 🟢 `superpowers:brainstorming` (skill, plugin:superpowers, calls=32)
 - 🟢 `superpowers:executing-plans` (skill, plugin:superpowers, calls=3)
 - 🟢 `superpowers:finishing-a-development-branch` (skill, plugin:superpowers, calls=4)

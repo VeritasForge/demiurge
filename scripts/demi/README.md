@@ -50,12 +50,19 @@ uv run demi plugin-stats diff A.json B.json # 두 스냅샷 추세 비교
    - **skills** 단독
    - **agents** 단독
    - **commands** 단독
-3. **시간 추이 (호출량)** — 한 스냅샷의 윈도우 내 시간 분포 (`collect_timeline`)
-   - **월별** (chronological) — 최대 24개월
-   - **주별** — 최근 20주 (ISO week, 월요일 시작)
-4. **활성 자산 (active)** — 호출된 자산 목록
-5. **정리 후보 (dead)** — 제거 후보
-6. **추세** — 이전 스냅샷 대비 신규 dead
+3. **시간 추이 (호출량)** — 전체 호출량의 시간 분포 (`collect_timeline`)
+   - **월별** (chronological) — 최대 24개월 bar chart
+   - **주별** — 최근 20주 bar chart (ISO week, 월요일 시작)
+4. **자산별 시간 추이** — 카테고리별 Top 10 자산의 **sparkline** (`▁▂▃▄▅▆▇█` 8단계)
+   - **skills** — 월별 / 주별 (각 10개)
+   - **agents** — 월별 / 주별
+   - **commands** — 월별 / 주별
+   - 각 줄: `<asset>  <spark>  total=N last=M`
+5. **활성 자산 (active)** — 호출된 자산 목록
+6. **정리 후보 (dead)** — 제거 후보
+7. **추세** — 이전 스냅샷 대비 신규 dead
+
+> 💡 sparkline은 자산이 *언제* 활발했는지 즉시 보여준다. 예: `▁▁▁▂▄█` = 최근 폭증, `█▆▄▂▁▁` = 사용 감소.
 
 ## 추적 대상 (5종)
 

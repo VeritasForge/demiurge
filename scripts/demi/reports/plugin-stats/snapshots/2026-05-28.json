@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-28T09:25:15.285113+00:00",
+  "generated_at": "2026-05-28T09:33:24.730501+00:00",
   "window": {
     "since": "2025-11-26",
     "until": "2026-05-28",
@@ -47,7 +47,9 @@
       "grade": "live",
       "referenced_by": [
         "rag-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ai-safety",
@@ -59,7 +61,9 @@
       "referenced_by": [
         "ai-safety-architect",
         "security-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "api-design",
@@ -68,7 +72,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "application-architecture",
@@ -79,7 +85,9 @@
       "grade": "live",
       "referenced_by": [
         "application-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "architect-orchestration",
@@ -88,7 +96,13 @@
       "calls": 1,
       "last_used": "2026-05-19",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "autopilot",
@@ -97,7 +111,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "cloud-native",
@@ -108,7 +124,9 @@
       "grade": "live",
       "referenced_by": [
         "cloud-native-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "commit",
@@ -117,7 +135,19 @@
       "calls": 52,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 9,
+        "2026-W19": 11,
+        "2026-W22": 7,
+        "2026-W21": 17,
+        "2026-W18": 7,
+        "2026-W17": 1
+      },
+      "monthly": {
+        "2026-05": 46,
+        "2026-04": 6
+      }
     },
     {
       "id": "concept-explainer",
@@ -126,7 +156,20 @@
       "calls": 14,
       "last_used": "2026-05-22",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 3,
+        "2026-W18": 1,
+        "2026-W19": 3,
+        "2026-W16": 1,
+        "2026-W21": 2,
+        "2026-W12": 4
+      },
+      "monthly": {
+        "2026-05": 9,
+        "2026-04": 1,
+        "2026-03": 4
+      }
     },
     {
       "id": "concurrency-patterns",
@@ -137,7 +180,9 @@
       "grade": "live",
       "referenced_by": [
         "concurrency-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "data-architecture",
@@ -148,7 +193,9 @@
       "grade": "live",
       "referenced_by": [
         "data-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "debug",
@@ -157,7 +204,14 @@
       "calls": 7,
       "last_used": "2026-05-21",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 6,
+        "2026-W20": 1
+      },
+      "monthly": {
+        "2026-05": 7
+      }
     },
     {
       "id": "deep-research",
@@ -182,7 +236,23 @@
         "security-architect",
         "solution-architect",
         "sre-architect"
-      ]
+      ],
+      "weekly": {
+        "2026-W20": 13,
+        "2026-W17": 1,
+        "2026-W21": 10,
+        "2026-W22": 10,
+        "2026-W18": 4,
+        "2026-W19": 1,
+        "2026-W16": 2,
+        "2026-W09": 1,
+        "2026-W08": 1
+      },
+      "monthly": {
+        "2026-05": 35,
+        "2026-04": 6,
+        "2026-02": 2
+      }
     },
     {
       "id": "domain-driven-design",
@@ -193,7 +263,9 @@
       "grade": "live",
       "referenced_by": [
         "domain-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "eda",
@@ -204,7 +276,9 @@
       "grade": "live",
       "referenced_by": [
         "eda-specialist"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "group-job-analysis",
@@ -213,7 +287,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "healthcare-informatics",
@@ -224,7 +300,9 @@
       "grade": "live",
       "referenced_by": [
         "healthcare-informatics-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "humanize-writing",
@@ -233,7 +311,13 @@
       "calls": 2,
       "last_used": "2026-05-01",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W18": 2
+      },
+      "monthly": {
+        "2026-05": 2
+      }
     },
     {
       "id": "humanize-writing-portable",
@@ -242,7 +326,13 @@
       "calls": 2,
       "last_used": "2026-05-01",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W18": 2
+      },
+      "monthly": {
+        "2026-05": 2
+      }
     },
     {
       "id": "integration",
@@ -253,7 +343,9 @@
       "grade": "live",
       "referenced_by": [
         "integration-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "interview-prep",
@@ -262,7 +354,14 @@
       "calls": 2,
       "last_used": "2026-05-13",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W19": 1
+      },
+      "monthly": {
+        "2026-05": 2
+      }
     },
     {
       "id": "investigation-orchestration",
@@ -271,7 +370,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "job-analysis",
@@ -280,7 +381,14 @@
       "calls": 3,
       "last_used": "2026-05-16",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W19": 1
+      },
+      "monthly": {
+        "2026-05": 3
+      }
     },
     {
       "id": "llm-gateway",
@@ -293,7 +401,9 @@
         "llm-architect",
         "ml-platform-architect",
         "sre-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "md-to-html",
@@ -302,7 +412,13 @@
       "calls": 4,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 4
+      },
+      "monthly": {
+        "2026-05": 4
+      }
     },
     {
       "id": "ml-platform",
@@ -313,7 +429,9 @@
       "grade": "live",
       "referenced_by": [
         "ml-platform-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "organize",
@@ -322,7 +440,22 @@
       "calls": 33,
       "last_used": "2026-05-26",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 7,
+        "2026-W19": 5,
+        "2026-W22": 3,
+        "2026-W18": 4,
+        "2026-W21": 7,
+        "2026-W16": 3,
+        "2026-W17": 2,
+        "2026-W12": 2
+      },
+      "monthly": {
+        "2026-05": 22,
+        "2026-04": 9,
+        "2026-03": 2
+      }
     },
     {
       "id": "prompt-engineering",
@@ -333,7 +466,9 @@
       "grade": "live",
       "referenced_by": [
         "llm-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "qa",
@@ -342,7 +477,19 @@
       "calls": 17,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W19": 5,
+        "2026-W20": 3,
+        "2026-W18": 5,
+        "2026-W21": 1,
+        "2026-W22": 1,
+        "2026-W16": 2
+      },
+      "monthly": {
+        "2026-05": 12,
+        "2026-04": 5
+      }
     },
     {
       "id": "rag-architecture",
@@ -353,7 +500,9 @@
       "grade": "live",
       "referenced_by": [
         "rag-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ralph-loop-guide",
@@ -362,7 +511,13 @@
       "calls": 1,
       "last_used": "2026-05-16",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "readme-writer",
@@ -371,7 +526,13 @@
       "calls": 1,
       "last_used": "2026-05-21",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "release-handoff",
@@ -380,7 +541,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "resume-optimizer",
@@ -389,7 +552,13 @@
       "calls": 2,
       "last_used": "2026-05-01",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W18": 2
+      },
+      "monthly": {
+        "2026-05": 2
+      }
     },
     {
       "id": "retrospective",
@@ -398,7 +567,17 @@
       "calls": 7,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W19": 1,
+        "2026-W16": 2,
+        "2026-W21": 3,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 5,
+        "2026-04": 2
+      }
     },
     {
       "id": "review-pr",
@@ -407,7 +586,16 @@
       "calls": 6,
       "last_used": "2026-05-26",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 4,
+        "2026-W17": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 5,
+        "2026-04": 1
+      }
     },
     {
       "id": "rl",
@@ -416,7 +604,13 @@
       "calls": 2,
       "last_used": "2026-04-14",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W16": 2
+      },
+      "monthly": {
+        "2026-04": 2
+      }
     },
     {
       "id": "rl-fresh",
@@ -425,16 +619,34 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "rl-verify",
       "type": "skill",
       "source": "global",
-      "calls": 65,
+      "calls": 66,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 12,
+        "2026-W18": 12,
+        "2026-W21": 20,
+        "2026-W19": 5,
+        "2026-W22": 7,
+        "2026-W17": 3,
+        "2026-W16": 1,
+        "2026-W12": 5,
+        "2026-W13": 1
+      },
+      "monthly": {
+        "2026-05": 46,
+        "2026-04": 14,
+        "2026-03": 6
+      }
     },
     {
       "id": "save-confluence",
@@ -443,7 +655,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "security",
@@ -455,7 +669,9 @@
       "referenced_by": [
         "ai-safety-architect",
         "security-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "skill-routing-learner",
@@ -464,7 +680,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "solution-architecture",
@@ -475,7 +693,9 @@
       "grade": "live",
       "referenced_by": [
         "solution-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "sre",
@@ -486,7 +706,9 @@
       "grade": "live",
       "referenced_by": [
         "sre-architect"
-      ]
+      ],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "tdd-lfg",
@@ -495,7 +717,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "testing-architecture",
@@ -504,7 +728,13 @@
       "calls": 3,
       "last_used": "2026-05-23",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 3
+      },
+      "monthly": {
+        "2026-05": 3
+      }
     },
     {
       "id": "vercel-composition-patterns",
@@ -513,7 +743,14 @@
       "calls": 4,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 3,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 4
+      }
     },
     {
       "id": "vercel-react-best-practices",
@@ -522,7 +759,14 @@
       "calls": 6,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 3,
+        "2026-W22": 3
+      },
+      "monthly": {
+        "2026-05": 6
+      }
     },
     {
       "id": "vercel-react-native-skills",
@@ -531,7 +775,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "web-design-guidelines",
@@ -540,7 +786,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ai-safety-architect",
@@ -549,7 +797,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "application-architect",
@@ -558,7 +808,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "cloud-native-architect",
@@ -567,7 +819,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "code-investigator",
@@ -576,7 +830,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "concurrency-architect",
@@ -585,7 +841,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "convergence-evaluator",
@@ -594,7 +852,14 @@
       "calls": 3,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 2,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 3
+      }
     },
     {
       "id": "counter-reviewer",
@@ -603,7 +868,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "data-architect",
@@ -612,7 +879,13 @@
       "calls": 1,
       "last_used": "2026-05-14",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "domain-architect",
@@ -621,7 +894,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "eda-specialist",
@@ -630,7 +905,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "healthcare-informatics-architect",
@@ -639,7 +916,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "history-investigator",
@@ -648,7 +927,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "integration-architect",
@@ -657,7 +938,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "llm-architect",
@@ -666,7 +949,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "log-investigator",
@@ -675,7 +960,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ml-platform-architect",
@@ -684,7 +971,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "rag-architect",
@@ -693,7 +982,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "release-investigator",
@@ -702,7 +993,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "security-architect",
@@ -711,7 +1004,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "solution-architect",
@@ -720,7 +1015,13 @@
       "calls": 1,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "sre-architect",
@@ -729,7 +1030,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "save_obsi",
@@ -738,7 +1041,18 @@
       "calls": 18,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W19": 3,
+        "2026-W20": 4,
+        "2026-W22": 4,
+        "2026-W21": 5,
+        "2026-W16": 2
+      },
+      "monthly": {
+        "2026-05": 16,
+        "2026-04": 2
+      }
     },
     {
       "id": "general-purpose",
@@ -747,7 +1061,22 @@
       "calls": 411,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W19": 4,
+        "2026-W20": 103,
+        "2026-W17": 25,
+        "2026-W18": 51,
+        "2026-W21": 139,
+        "2026-W22": 87,
+        "2026-W16": 1,
+        "2026-W13": 1
+      },
+      "monthly": {
+        "2026-05": 334,
+        "2026-04": 76,
+        "2026-03": 1
+      }
     },
     {
       "id": "Explore",
@@ -756,7 +1085,23 @@
       "calls": 69,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 13,
+        "2026-W20": 18,
+        "2026-W18": 3,
+        "2026-W19": 3,
+        "2026-W16": 7,
+        "2026-W22": 5,
+        "2026-W17": 5,
+        "2026-W12": 4,
+        "2026-W13": 11
+      },
+      "monthly": {
+        "2026-05": 39,
+        "2026-04": 15,
+        "2026-03": 15
+      }
     },
     {
       "id": "Plan",
@@ -765,7 +1110,15 @@
       "calls": 5,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 3,
+        "2026-W22": 1,
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 5
+      }
     },
     {
       "id": "claude",
@@ -774,7 +1127,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "claude-code-guide",
@@ -783,7 +1138,17 @@
       "calls": 43,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 21,
+        "2026-W21": 12,
+        "2026-W22": 6,
+        "2026-W18": 4
+      },
+      "monthly": {
+        "2026-05": 39,
+        "2026-04": 4
+      }
     },
     {
       "id": "statusline-setup",
@@ -792,7 +1157,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ralph-loop",
@@ -801,7 +1168,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "Notion",
@@ -810,7 +1179,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering",
@@ -819,7 +1190,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "superpowers",
@@ -828,7 +1201,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros",
@@ -837,7 +1212,13 @@
       "calls": 14,
       "last_used": "2026-03-22",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W12": 14
+      },
+      "monthly": {
+        "2026-03": 14
+      }
     },
     {
       "id": "context7",
@@ -846,7 +1227,25 @@
       "calls": 114,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 10,
+        "2026-W20": 5,
+        "2026-W16": 5,
+        "2026-W18": 3,
+        "2026-W22": 8,
+        "2026-W09": 49,
+        "2026-W13": 5,
+        "2026-W11": 15,
+        "2026-W10": 9,
+        "2026-W12": 5
+      },
+      "monthly": {
+        "2026-05": 23,
+        "2026-04": 8,
+        "2026-02": 34,
+        "2026-03": 49
+      }
     },
     {
       "id": "codex",
@@ -855,7 +1254,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "typescript-lsp",
@@ -864,7 +1265,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "frontend-design",
@@ -873,7 +1276,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "notion-workspace-plugin",
@@ -882,7 +1287,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "Notion:knowledge-capture",
@@ -891,7 +1298,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "Notion:meeting-intelligence",
@@ -900,7 +1309,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "Notion:research-documentation",
@@ -909,7 +1320,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "Notion:spec-to-implementation",
@@ -918,7 +1331,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-agent-native-architecture",
@@ -927,7 +1342,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-agent-native-audit",
@@ -936,7 +1353,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-brainstorm",
@@ -945,7 +1364,13 @@
       "calls": 1,
       "last_used": "2026-05-20",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "compound-engineering:ce-clean-gone-branches",
@@ -954,7 +1379,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-code-review",
@@ -963,7 +1390,18 @@
       "calls": 21,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W17": 1,
+        "2026-W21": 15,
+        "2026-W22": 3,
+        "2026-W18": 1
+      },
+      "monthly": {
+        "2026-05": 19,
+        "2026-04": 2
+      }
     },
     {
       "id": "compound-engineering:ce-commit",
@@ -972,7 +1410,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-commit-push-pr",
@@ -981,7 +1421,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-compound",
@@ -990,7 +1432,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-compound-refresh",
@@ -999,7 +1443,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-debug",
@@ -1008,7 +1454,13 @@
       "calls": 4,
       "last_used": "2026-05-21",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 4
+      },
+      "monthly": {
+        "2026-05": 4
+      }
     },
     {
       "id": "compound-engineering:ce-demo-reel",
@@ -1017,7 +1469,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-dhh-rails-style",
@@ -1026,7 +1480,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-doc-review",
@@ -1035,7 +1491,18 @@
       "calls": 15,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 5,
+        "2026-W21": 7,
+        "2026-W18": 1,
+        "2026-W19": 1,
+        "2026-W20": 1
+      },
+      "monthly": {
+        "2026-05": 14,
+        "2026-04": 1
+      }
     },
     {
       "id": "compound-engineering:ce-dogfood-beta",
@@ -1044,7 +1511,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-frontend-design",
@@ -1053,7 +1522,13 @@
       "calls": 1,
       "last_used": "2026-05-25",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "compound-engineering:ce-gemini-imagegen",
@@ -1062,7 +1537,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-ideate",
@@ -1071,7 +1548,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-optimize",
@@ -1080,7 +1559,13 @@
       "calls": 1,
       "last_used": "2026-05-26",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "compound-engineering:ce-plan",
@@ -1089,7 +1574,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-polish-beta",
@@ -1098,7 +1585,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-product-pulse",
@@ -1107,7 +1596,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-proof",
@@ -1116,7 +1607,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-release-notes",
@@ -1125,7 +1618,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-report-bug",
@@ -1134,7 +1629,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-resolve-pr-feedback",
@@ -1143,7 +1640,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-riffrec-feedback-analysis",
@@ -1152,7 +1651,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-sessions",
@@ -1161,7 +1662,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-setup",
@@ -1170,7 +1673,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-simplify-code",
@@ -1179,7 +1684,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-slack-research",
@@ -1188,7 +1695,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-strategy",
@@ -1197,7 +1706,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-test-browser",
@@ -1206,7 +1717,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-test-xcode",
@@ -1215,7 +1728,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-update",
@@ -1224,7 +1739,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-work",
@@ -1233,7 +1750,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-work-beta",
@@ -1242,7 +1761,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-worktree",
@@ -1251,7 +1772,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:lfg",
@@ -1260,16 +1783,29 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-adversarial-document-reviewer",
       "type": "agent",
       "source": "plugin:compound-engineering",
-      "calls": 68,
+      "calls": 69,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 16,
+        "2026-W18": 4,
+        "2026-W21": 29,
+        "2026-W22": 12,
+        "2026-W19": 8
+      },
+      "monthly": {
+        "2026-05": 65,
+        "2026-04": 4
+      }
     },
     {
       "id": "compound-engineering:ce-adversarial-reviewer",
@@ -1278,7 +1814,17 @@
       "calls": 9,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W21": 6,
+        "2026-W22": 1,
+        "2026-W18": 1
+      },
+      "monthly": {
+        "2026-05": 8,
+        "2026-04": 1
+      }
     },
     {
       "id": "compound-engineering:ce-agent-native-reviewer",
@@ -1287,7 +1833,14 @@
       "calls": 9,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 7,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 9
+      }
     },
     {
       "id": "compound-engineering:ce-ankane-readme-writer",
@@ -1296,7 +1849,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-api-contract-reviewer",
@@ -1305,7 +1860,15 @@
       "calls": 3,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W21": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 3
+      }
     },
     {
       "id": "compound-engineering:ce-architecture-strategist",
@@ -1314,7 +1877,19 @@
       "calls": 27,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 7,
+        "2026-W19": 8,
+        "2026-W18": 3,
+        "2026-W21": 6,
+        "2026-W17": 1,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 23,
+        "2026-04": 4
+      }
     },
     {
       "id": "compound-engineering:ce-best-practices-researcher",
@@ -1323,7 +1898,18 @@
       "calls": 32,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 11,
+        "2026-W21": 12,
+        "2026-W19": 4,
+        "2026-W18": 4,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 28,
+        "2026-04": 4
+      }
     },
     {
       "id": "compound-engineering:ce-code-simplicity-reviewer",
@@ -1332,7 +1918,16 @@
       "calls": 12,
       "last_used": "2026-05-23",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W18": 2,
+        "2026-W21": 8
+      },
+      "monthly": {
+        "2026-05": 10,
+        "2026-04": 2
+      }
     },
     {
       "id": "compound-engineering:ce-coherence-reviewer",
@@ -1341,7 +1936,18 @@
       "calls": 18,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 5,
+        "2026-W20": 3,
+        "2026-W21": 8,
+        "2026-W18": 1,
+        "2026-W19": 1
+      },
+      "monthly": {
+        "2026-05": 17,
+        "2026-04": 1
+      }
     },
     {
       "id": "compound-engineering:ce-correctness-reviewer",
@@ -1350,7 +1956,17 @@
       "calls": 40,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 7,
+        "2026-W18": 2,
+        "2026-W21": 27,
+        "2026-W22": 4
+      },
+      "monthly": {
+        "2026-05": 38,
+        "2026-04": 2
+      }
     },
     {
       "id": "compound-engineering:ce-data-integrity-guardian",
@@ -1359,7 +1975,15 @@
       "calls": 3,
       "last_used": "2026-05-09",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W18": 1,
+        "2026-W19": 2
+      },
+      "monthly": {
+        "2026-04": 1,
+        "2026-05": 2
+      }
     },
     {
       "id": "compound-engineering:ce-data-migration-reviewer",
@@ -1368,7 +1992,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-deployment-verification-agent",
@@ -1377,7 +2003,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-design-implementation-reviewer",
@@ -1386,7 +2014,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-design-iterator",
@@ -1395,7 +2025,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-design-lens-reviewer",
@@ -1404,16 +2036,36 @@
       "calls": 4,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W19": 1,
+        "2026-W20": 1,
+        "2026-W21": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 4
+      }
     },
     {
       "id": "compound-engineering:ce-feasibility-reviewer",
       "type": "agent",
       "source": "plugin:compound-engineering",
-      "calls": 25,
+      "calls": 26,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W18": 3,
+        "2026-W20": 3,
+        "2026-W22": 8,
+        "2026-W21": 11,
+        "2026-W19": 1
+      },
+      "monthly": {
+        "2026-04": 3,
+        "2026-05": 23
+      }
     },
     {
       "id": "compound-engineering:ce-figma-design-sync",
@@ -1422,7 +2074,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-framework-docs-researcher",
@@ -1431,7 +2085,15 @@
       "calls": 5,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W21": 2,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 5
+      }
     },
     {
       "id": "compound-engineering:ce-git-history-analyzer",
@@ -1440,7 +2102,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-issue-intelligence-analyst",
@@ -1449,7 +2113,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-julik-frontend-races-reviewer",
@@ -1458,7 +2124,14 @@
       "calls": 6,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 3,
+        "2026-W22": 3
+      },
+      "monthly": {
+        "2026-05": 6
+      }
     },
     {
       "id": "compound-engineering:ce-learnings-researcher",
@@ -1467,7 +2140,14 @@
       "calls": 11,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 9,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 11
+      }
     },
     {
       "id": "compound-engineering:ce-maintainability-reviewer",
@@ -1476,7 +2156,17 @@
       "calls": 21,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W21": 16,
+        "2026-W22": 3,
+        "2026-W18": 1
+      },
+      "monthly": {
+        "2026-05": 20,
+        "2026-04": 1
+      }
     },
     {
       "id": "compound-engineering:ce-pattern-recognition-specialist",
@@ -1485,7 +2175,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-performance-oracle",
@@ -1494,7 +2186,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-performance-reviewer",
@@ -1503,7 +2197,15 @@
       "calls": 6,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W21": 3,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 6
+      }
     },
     {
       "id": "compound-engineering:ce-pr-comment-resolver",
@@ -1512,7 +2214,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-previous-comments-reviewer",
@@ -1521,7 +2225,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-product-lens-reviewer",
@@ -1530,7 +2236,16 @@
       "calls": 6,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W21": 2,
+        "2026-W19": 1,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 6
+      }
     },
     {
       "id": "compound-engineering:ce-project-standards-reviewer",
@@ -1539,7 +2254,16 @@
       "calls": 18,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 14,
+        "2026-W22": 3,
+        "2026-W18": 1
+      },
+      "monthly": {
+        "2026-05": 17,
+        "2026-04": 1
+      }
     },
     {
       "id": "compound-engineering:ce-reliability-reviewer",
@@ -1548,7 +2272,15 @@
       "calls": 8,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W21": 5,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 8
+      }
     },
     {
       "id": "compound-engineering:ce-repo-research-analyst",
@@ -1557,7 +2289,18 @@
       "calls": 11,
       "last_used": "2026-05-21",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 2,
+        "2026-W19": 5,
+        "2026-W20": 1,
+        "2026-W18": 2,
+        "2026-W17": 1
+      },
+      "monthly": {
+        "2026-05": 8,
+        "2026-04": 3
+      }
     },
     {
       "id": "compound-engineering:ce-scope-guardian-reviewer",
@@ -1566,7 +2309,17 @@
       "calls": 14,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 5,
+        "2026-W21": 6,
+        "2026-W18": 1,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 13,
+        "2026-04": 1
+      }
     },
     {
       "id": "compound-engineering:ce-security-lens-reviewer",
@@ -1575,7 +2328,17 @@
       "calls": 8,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W21": 4,
+        "2026-W18": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 7,
+        "2026-04": 1
+      }
     },
     {
       "id": "compound-engineering:ce-security-reviewer",
@@ -1584,16 +2347,37 @@
       "calls": 9,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W21": 4,
+        "2026-W22": 2,
+        "2026-W18": 1
+      },
+      "monthly": {
+        "2026-05": 8,
+        "2026-04": 1
+      }
     },
     {
       "id": "compound-engineering:ce-security-sentinel",
       "type": "agent",
       "source": "plugin:compound-engineering",
-      "calls": 7,
-      "last_used": "2026-05-27",
+      "calls": 8,
+      "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W22": 2,
+        "2026-W18": 2,
+        "2026-W17": 1,
+        "2026-W21": 2
+      },
+      "monthly": {
+        "2026-05": 5,
+        "2026-04": 3
+      }
     },
     {
       "id": "compound-engineering:ce-session-historian",
@@ -1602,7 +2386,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-slack-researcher",
@@ -1611,7 +2397,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-spec-flow-analyzer",
@@ -1620,7 +2408,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-swift-ios-reviewer",
@@ -1629,7 +2419,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "compound-engineering:ce-testing-reviewer",
@@ -1638,16 +2430,37 @@
       "calls": 29,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W21": 23,
+        "2026-W22": 3,
+        "2026-W18": 1
+      },
+      "monthly": {
+        "2026-05": 28,
+        "2026-04": 1
+      }
     },
     {
       "id": "compound-engineering:ce-web-researcher",
       "type": "agent",
       "source": "plugin:compound-engineering",
-      "calls": 40,
-      "last_used": "2026-05-27",
+      "calls": 41,
+      "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W18": 4,
+        "2026-W20": 10,
+        "2026-W22": 9,
+        "2026-W19": 3,
+        "2026-W21": 15
+      },
+      "monthly": {
+        "2026-04": 4,
+        "2026-05": 37
+      }
     },
     {
       "id": "superpowers:brainstorming",
@@ -1656,7 +2469,20 @@
       "calls": 32,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 8,
+        "2026-W22": 16,
+        "2026-W20": 3,
+        "2026-W18": 2,
+        "2026-W19": 2,
+        "2026-W13": 1
+      },
+      "monthly": {
+        "2026-05": 29,
+        "2026-04": 2,
+        "2026-03": 1
+      }
     },
     {
       "id": "superpowers:dispatching-parallel-agents",
@@ -1665,7 +2491,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "superpowers:executing-plans",
@@ -1674,7 +2502,14 @@
       "calls": 3,
       "last_used": "2026-05-22",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W21": 2
+      },
+      "monthly": {
+        "2026-05": 3
+      }
     },
     {
       "id": "superpowers:finishing-a-development-branch",
@@ -1683,7 +2518,17 @@
       "calls": 4,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W17": 1,
+        "2026-W22": 1,
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 3,
+        "2026-04": 1
+      }
     },
     {
       "id": "superpowers:receiving-code-review",
@@ -1692,7 +2537,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "superpowers:requesting-code-review",
@@ -1701,7 +2548,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "superpowers:subagent-driven-development",
@@ -1710,7 +2559,20 @@
       "calls": 20,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W22": 5,
+        "2026-W18": 2,
+        "2026-W21": 9,
+        "2026-W17": 1,
+        "2026-W13": 1
+      },
+      "monthly": {
+        "2026-05": 16,
+        "2026-04": 3,
+        "2026-03": 1
+      }
     },
     {
       "id": "superpowers:systematic-debugging",
@@ -1719,7 +2581,14 @@
       "calls": 3,
       "last_used": "2026-05-21",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 3
+      }
     },
     {
       "id": "superpowers:test-driven-development",
@@ -1728,7 +2597,13 @@
       "calls": 1,
       "last_used": "2026-05-21",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "superpowers:using-git-worktrees",
@@ -1737,7 +2612,14 @@
       "calls": 2,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1,
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 2
+      }
     },
     {
       "id": "superpowers:using-superpowers",
@@ -1746,7 +2628,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "superpowers:verification-before-completion",
@@ -1755,7 +2639,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "superpowers:writing-plans",
@@ -1764,7 +2650,19 @@
       "calls": 20,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 8,
+        "2026-W18": 2,
+        "2026-W20": 1,
+        "2026-W21": 8,
+        "2026-W13": 1
+      },
+      "monthly": {
+        "2026-05": 17,
+        "2026-04": 2,
+        "2026-03": 1
+      }
     },
     {
       "id": "superpowers:writing-skills",
@@ -1773,7 +2671,16 @@
       "calls": 8,
       "last_used": "2026-05-26",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 3,
+        "2026-W19": 1,
+        "2026-W21": 3,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 8
+      }
     },
     {
       "id": "ouroboros:auto",
@@ -1782,7 +2689,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:brownfield",
@@ -1791,7 +2700,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:cancel",
@@ -1800,7 +2711,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:evaluate",
@@ -1809,7 +2722,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:evolve",
@@ -1818,7 +2733,13 @@
       "calls": 2,
       "last_used": "2026-03-20",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W12": 2
+      },
+      "monthly": {
+        "2026-03": 2
+      }
     },
     {
       "id": "ouroboros:help",
@@ -1827,7 +2748,13 @@
       "calls": 1,
       "last_used": "2026-03-20",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W12": 1
+      },
+      "monthly": {
+        "2026-03": 1
+      }
     },
     {
       "id": "ouroboros:interview",
@@ -1836,7 +2763,13 @@
       "calls": 2,
       "last_used": "2026-03-20",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W12": 2
+      },
+      "monthly": {
+        "2026-03": 2
+      }
     },
     {
       "id": "ouroboros:pm",
@@ -1845,7 +2778,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:publish",
@@ -1854,7 +2789,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:qa",
@@ -1863,7 +2800,19 @@
       "calls": 17,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W19": 5,
+        "2026-W20": 3,
+        "2026-W18": 5,
+        "2026-W21": 1,
+        "2026-W22": 1,
+        "2026-W16": 2
+      },
+      "monthly": {
+        "2026-05": 12,
+        "2026-04": 5
+      }
     },
     {
       "id": "ouroboros:ralph",
@@ -1872,7 +2821,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:resume-session",
@@ -1881,7 +2832,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:run",
@@ -1890,7 +2843,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:seed",
@@ -1899,7 +2854,13 @@
       "calls": 1,
       "last_used": "2026-03-20",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W12": 1
+      },
+      "monthly": {
+        "2026-03": 1
+      }
     },
     {
       "id": "ouroboros:setup",
@@ -1908,7 +2869,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:status",
@@ -1917,7 +2880,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:tutorial",
@@ -1926,7 +2891,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:unstuck",
@@ -1935,7 +2902,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:update",
@@ -1944,7 +2913,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:welcome",
@@ -1953,7 +2924,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:advocate",
@@ -1962,7 +2935,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:analysis-agent",
@@ -1971,7 +2946,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:architect",
@@ -1980,7 +2957,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:breadth-keeper",
@@ -1989,7 +2968,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:code-executor",
@@ -1998,7 +2979,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:codebase-explorer",
@@ -2007,7 +2990,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:consensus-reviewer",
@@ -2016,7 +3001,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:contrarian",
@@ -2025,7 +3012,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:evaluator",
@@ -2034,7 +3023,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:hacker",
@@ -2043,7 +3034,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:judge",
@@ -2052,7 +3045,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:ontologist",
@@ -2061,7 +3056,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:ontology-analyst",
@@ -2070,7 +3067,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:qa-judge",
@@ -2079,7 +3078,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:research-agent",
@@ -2088,7 +3089,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:researcher",
@@ -2097,7 +3100,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:seed-architect",
@@ -2106,7 +3111,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:seed-closer",
@@ -2115,7 +3122,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:semantic-evaluator",
@@ -2124,7 +3133,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:simplifier",
@@ -2133,7 +3144,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "ouroboros:socratic-interviewer",
@@ -2142,7 +3155,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "codex:codex-cli-runtime",
@@ -2153,7 +3168,13 @@
       "grade": "active",
       "referenced_by": [
         "codex:codex-rescue"
-      ]
+      ],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "codex:codex-result-handling",
@@ -2162,7 +3183,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "codex:gpt-5-4-prompting",
@@ -2173,7 +3196,13 @@
       "grade": "active",
       "referenced_by": [
         "codex:codex-rescue"
-      ]
+      ],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "codex:codex-rescue",
@@ -2182,7 +3211,13 @@
       "calls": 1,
       "last_used": "2026-05-27",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
     },
     {
       "id": "frontend-design:frontend-design",
@@ -2191,7 +3226,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "notion-workspace-plugin:knowledge-capture",
@@ -2200,7 +3237,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "notion-workspace-plugin:meeting-intelligence",
@@ -2209,7 +3248,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "notion-workspace-plugin:research-documentation",
@@ -2218,7 +3259,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "notion-workspace-plugin:spec-to-implementation",
@@ -2227,7 +3270,9 @@
       "calls": 0,
       "last_used": null,
       "grade": "dead",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
     },
     {
       "id": "mcp-atlassian",
@@ -2236,7 +3281,23 @@
       "calls": 590,
       "last_used": "2026-05-28",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 336,
+        "2026-W21": 49,
+        "2026-W18": 9,
+        "2026-W22": 27,
+        "2026-W19": 44,
+        "2026-W17": 1,
+        "2026-W12": 1,
+        "2026-W09": 123
+      },
+      "monthly": {
+        "2026-05": 456,
+        "2026-04": 10,
+        "2026-03": 1,
+        "2026-02": 123
+      }
     },
     {
       "id": "notion",
@@ -2245,7 +3306,13 @@
       "calls": 3,
       "last_used": "2026-05-01",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W18": 3
+      },
+      "monthly": {
+        "2026-05": 3
+      }
     },
     {
       "id": "ouroboros",
@@ -2254,7 +3321,13 @@
       "calls": 14,
       "last_used": "2026-03-22",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W12": 14
+      },
+      "monthly": {
+        "2026-03": 14
+      }
     },
     {
       "id": "playwright",
@@ -2263,7 +3336,15 @@
       "calls": 7,
       "last_used": "2026-05-01",
       "grade": "active",
-      "referenced_by": []
+      "referenced_by": [],
+      "weekly": {
+        "2026-W18": 6,
+        "2026-W09": 1
+      },
+      "monthly": {
+        "2026-05": 6,
+        "2026-02": 1
+      }
     }
   ],
   "timeline": {
@@ -2272,7 +3353,7 @@
       "2026-W21": 834,
       "2026-W19": 228,
       "2026-W18": 278,
-      "2026-W22": 383,
+      "2026-W22": 388,
       "2026-W17": 58,
       "2026-W16": 41,
       "2026-W14": 1,
@@ -2289,7 +3370,7 @@
       "2026-W03": 18
     },
     "monthly": {
-      "2026-05": 2364,
+      "2026-05": 2369,
       "2026-04": 325,
       "2026-02": 1740,
       "2026-01": 528,

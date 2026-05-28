@@ -301,6 +301,8 @@ def collect_calls(projects_root: Path, since_days: int = 183) -> dict[str, CallS
     since = datetime.now(timezone.utc) - timedelta(days=since_days)
     counts: dict[str, int] = {}
     last: dict[str, str] = {}
+    weekly_by_asset: dict[str, dict[str, int]] = {}
+    monthly_by_asset: dict[str, dict[str, int]] = {}
     seen_tool: set[str] = set()
     seen_user: set[tuple] = set()
     if not projects_root.is_dir():
@@ -329,6 +331,9 @@ def collect_calls(projects_root: Path, since_days: int = 183) -> dict[str, CallS
                         continue
                     msg = d.get("message") or {}
                     iso = dt.date().isoformat()
+                    iso_y, iso_w, _ = dt.isocalendar()
+                    wk = f"{iso_y:04d}-W{iso_w:02d}"
+                    mn = f"{dt.year:04d}-{dt.month:02d}"
 
                     def _bump(key: str) -> None:
                         if not key:
@@ -336,6 +341,10 @@ def collect_calls(projects_root: Path, since_days: int = 183) -> dict[str, CallS
                         counts[key] = counts.get(key, 0) + 1
                         if key not in last or iso > last[key]:
                             last[key] = iso
+                        wb = weekly_by_asset.setdefault(key, {})
+                        wb[wk] = wb.get(wk, 0) + 1
+                        mb = monthly_by_asset.setdefault(key, {})
+                        mb[mn] = mb.get(mn, 0) + 1
 
                     # (A) tool_use 분기 (기존)
                     content = msg.get("content")
@@ -378,7 +387,16 @@ def collect_calls(projects_root: Path, since_days: int = 183) -> dict[str, CallS
                                 _bump(cmd)
         except OSError:
             continue
-    return {k: CallStat(asset_id=k, count=v, last_used=last.get(k)) for k, v in counts.items()}
+    return {
+        k: CallStat(
+            asset_id=k,
+            count=v,
+            last_used=last.get(k),
+            weekly=weekly_by_asset.get(k, {}),
+            monthly=monthly_by_asset.get(k, {}),
+        )
+        for k, v in counts.items()
+    }
 
 
 def collect_timeline(projects_root: Path, since_days: int = 183) -> dict[str, dict[str, int]]:
