@@ -128,9 +128,9 @@ def report(): ...
 ## 알려진 제약 (v1)
 
 - **MCP 도구 단위 전체 목록 대비 미사용** 판정은 v2 (서버 연결 필요). 현재는 호출된 도구만 서버 단위로 집계.
-- **타 레포 commands** 미수집 — 현재는 demiurge `product/.claude` + 전역 `~/.claude/commands/`만.
+- **타 레포 commands** 미수집 — 현재는 demiurge `product/.claude` + 전역 `~/.claude/commands/`만. 다른 레포(`vc-monorepo/.claude/skills/security-patch` 등)에서 호출된 명령은 ghost로 표기됨.
 - **전이적 dead 전파** (dead가 참조하는 자산도 dead로) 미구현 (v2).
-- 세션 로그 부재 ID(`security-patch` 등)는 `ghost`로 표기 — 출처 조사 별도.
+- **빌트인 슬래시 명령** (`/clear`, `/exit` 등 Claude Code 내장)은 SKILL.md 파일이 없어 인벤토리에 안 잡힘 → ghost로 표기되지만 호출 카운트는 정확히 집계됨. 정상 동작.
 
 ## 라이선스
 

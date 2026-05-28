@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-28T09:00:15.697577+00:00",
+  "generated_at": "2026-05-28T09:07:04.322764+00:00",
   "window": {
     "since": "2025-11-26",
     "until": "2026-05-28",
@@ -7,10 +7,10 @@
   },
   "totals": {
     "skill": {
-      "total": 154,
-      "active": 49,
+      "total": 133,
+      "active": 44,
       "live": 17,
-      "dead": 88
+      "dead": 72
     },
     "agent": {
       "total": 92,
@@ -951,8 +951,8 @@
       "id": "compound-engineering:ce-code-review",
       "type": "skill",
       "source": "plugin:compound-engineering",
-      "calls": 21,
-      "last_used": "2026-05-28",
+      "calls": 1,
+      "last_used": "2026-05-23",
       "grade": "active",
       "referenced_by": []
     },
@@ -1939,195 +1939,6 @@
     },
     {
       "id": "ouroboros:welcome",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:auto",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:brownfield",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:cancel",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:evaluate",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:evolve",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 2,
-      "last_used": "2026-03-20",
-      "grade": "active",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:help",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 1,
-      "last_used": "2026-03-20",
-      "grade": "active",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:interview",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 2,
-      "last_used": "2026-03-20",
-      "grade": "active",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:pm",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:publish",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:qa",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 17,
-      "last_used": "2026-05-27",
-      "grade": "active",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:ralph",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:resume-session",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:run",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:seed",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 1,
-      "last_used": "2026-03-20",
-      "grade": "active",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:setup",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:status",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:tutorial",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:unstuck",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:update",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:welcome",
-      "type": "skill",
-      "source": "plugin:ouroboros",
-      "calls": 0,
-      "last_used": null,
-      "grade": "dead",
-      "referenced_by": []
-    },
-    {
-      "id": "ouroboros:run",
       "type": "skill",
       "source": "plugin:ouroboros",
       "calls": 0,

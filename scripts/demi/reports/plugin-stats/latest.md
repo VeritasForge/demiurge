@@ -1,6 +1,6 @@
 # demi plugin-stats 리포트
 
-- 생성: 2026-05-28T09:00:15.697577+00:00
+- 생성: 2026-05-28T09:07:04.322764+00:00
 - 윈도우: 2025-11-26 ~ 2026-05-28 (183일)
 
 ## 요약 (유형별 등급)
@@ -10,7 +10,7 @@
 | command | 1 | 1 | 0 | 0 |
 | mcp_server | 4 | 4 | 0 | 0 |
 | plugin | 10 | 2 | 0 | 8 |
-| skill | 154 | 49 | 17 | 88 |
+| skill | 133 | 44 | 17 | 72 |
 
 ## 사용 빈도 그래프 (Top 15)
 
@@ -40,16 +40,16 @@
   deep-research                            ████████████████████░░░░░░░░░░  43
   organize                                 ███████████████░░░░░░░░░░░░░░░  33
   superpowers:brainstorming                ███████████████░░░░░░░░░░░░░░░  32
-  compound-engineering:ce-code-review      ██████████░░░░░░░░░░░░░░░░░░░░  21
   superpowers:subagent-driven-development  █████████░░░░░░░░░░░░░░░░░░░░░  20
   superpowers:writing-plans                █████████░░░░░░░░░░░░░░░░░░░░░  20
   qa                                       ████████░░░░░░░░░░░░░░░░░░░░░░  17
-  ouroboros:qa                             ████████░░░░░░░░░░░░░░░░░░░░░░  17
   ouroboros:qa                             ████████░░░░░░░░░░░░░░░░░░░░░░  17
   compound-engineering:ce-doc-review       ███████░░░░░░░░░░░░░░░░░░░░░░░  15
   concept-explainer                        ██████░░░░░░░░░░░░░░░░░░░░░░░░  14
   superpowers:writing-skills               ████░░░░░░░░░░░░░░░░░░░░░░░░░░  8
   debug                                    ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  7
+  retrospective                            ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  7
+  review-pr                                ███░░░░░░░░░░░░░░░░░░░░░░░░░░░  6
 ```
 
 ### agents
@@ -124,7 +124,7 @@
 - 🟢 `codex:gpt-5-4-prompting` (skill, plugin:codex, calls=1)
 - 🟢 `commit` (skill, global, calls=52)
 - 🟢 `compound-engineering:ce-brainstorm` (skill, plugin:compound-engineering, calls=1)
-- 🟢 `compound-engineering:ce-code-review` (skill, plugin:compound-engineering, calls=21)
+- 🟢 `compound-engineering:ce-code-review` (skill, plugin:compound-engineering, calls=1)
 - 🟢 `compound-engineering:ce-debug` (skill, plugin:compound-engineering, calls=4)
 - 🟢 `compound-engineering:ce-doc-review` (skill, plugin:compound-engineering, calls=15)
 - 🟢 `compound-engineering:ce-frontend-design` (skill, plugin:compound-engineering, calls=1)
@@ -139,14 +139,9 @@
 - 🟢 `md-to-html` (skill, global, calls=4)
 - 🟢 `organize` (skill, global, calls=33)
 - 🟢 `ouroboros:evolve` (skill, plugin:ouroboros, calls=2)
-- 🟢 `ouroboros:evolve` (skill, plugin:ouroboros, calls=2)
-- 🟢 `ouroboros:help` (skill, plugin:ouroboros, calls=1)
 - 🟢 `ouroboros:help` (skill, plugin:ouroboros, calls=1)
 - 🟢 `ouroboros:interview` (skill, plugin:ouroboros, calls=2)
-- 🟢 `ouroboros:interview` (skill, plugin:ouroboros, calls=2)
 - 🟢 `ouroboros:qa` (skill, plugin:ouroboros, calls=17)
-- 🟢 `ouroboros:qa` (skill, plugin:ouroboros, calls=17)
-- 🟢 `ouroboros:seed` (skill, plugin:ouroboros, calls=1)
 - 🟢 `ouroboros:seed` (skill, plugin:ouroboros, calls=1)
 - 🟢 `qa` (skill, global, calls=17)
 - 🟢 `ralph-loop-guide` (skill, global, calls=1)
@@ -281,35 +276,19 @@
 - 🔴 `notion-workspace-plugin:research-documentation` (skill, plugin:notion-workspace-plugin)
 - 🔴 `notion-workspace-plugin:spec-to-implementation` (skill, plugin:notion-workspace-plugin)
 - 🔴 `ouroboros:auto` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:auto` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:brownfield` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:brownfield` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:cancel` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:cancel` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:evaluate` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:evaluate` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:pm` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:pm` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:publish` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:publish` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:ralph` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:ralph` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:resume-session` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:resume-session` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:run` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:run` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:run` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:setup` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:setup` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:status` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:status` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:tutorial` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:tutorial` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:unstuck` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:unstuck` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:update` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:update` (skill, plugin:ouroboros)
-- 🔴 `ouroboros:welcome` (skill, plugin:ouroboros)
 - 🔴 `ouroboros:welcome` (skill, plugin:ouroboros)
 - 🔴 `release-handoff` (skill, global)
 - 🔴 `rl-fresh` (skill, global)

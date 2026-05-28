@@ -105,6 +105,20 @@ def test_scan_plugin_skills_agents(tmp_path):           # [Happy]
     assert any("writing-plans" in a.aliases for a in out)
 
 
+def test_scan_plugin_skills_agents_dedup_same_name(tmp_path):  # [Boundary] 같은 plugin 내 중복 경로
+    """ouroboros처럼 한 installPath 안에 동일 dname의 SKILL.md가 여러 경로(.claude-plugin/skills/qa, skills/qa)에 있을 때 1개만 등록."""
+    pr = tmp_path / "ouro" / "0.39.2"
+    (pr / "skills" / "qa").mkdir(parents=True)
+    (pr / "skills" / "qa" / "SKILL.md").write_text("---\nname: qa\n---\n")
+    (pr / ".claude-plugin" / "skills" / "qa").mkdir(parents=True)
+    (pr / ".claude-plugin" / "skills" / "qa" / "SKILL.md").write_text("---\nname: qa\n---\n")
+    pj = tmp_path / "installed_plugins.json"
+    pj.write_text(json.dumps({"plugins": {"ouroboros@ouroboros": [{"installPath": str(pr)}]}}))
+    out = scan_plugin_skills_agents(pj)
+    qa_entries = [a for a in out if a.id == "ouroboros:qa"]
+    assert len(qa_entries) == 1, f"expected 1, got {len(qa_entries)}: {qa_entries}"
+
+
 def test_scan_mcp_servers_top_and_projects(tmp_path):   # [Happy] top + projects
     cj = tmp_path / ".claude.json"
     cj.write_text(json.dumps({

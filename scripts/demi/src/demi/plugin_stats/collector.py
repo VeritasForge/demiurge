@@ -154,12 +154,17 @@ def scan_plugins(installed_plugins_json: Path) -> list[Asset]:
 
 def scan_plugin_skills_agents(installed_plugins_json: Path) -> list[Asset]:
     """각 플러그인 installPath 아래 skills/SKILL.md와 agents/*.md 수집.
-    id='<plugin>:<dname_or_name>', aliases에 bare 이름도 포함."""
+    id='<plugin>:<dname_or_name>', aliases에 bare 이름도 포함.
+
+    같은 플러그인 안에 동일 이름의 skill/agent가 여러 위치에 있을 때
+    (예: ouroboros가 `skills/qa/` 와 `.claude-plugin/skills/qa/` 둘 다 가짐)
+    첫 발견을 우선하여 중복 등록을 방지한다."""
     try:
         data = json.loads(installed_plugins_json.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError):
         return []
     out: list[Asset] = []
+    seen_ids: set[str] = set()
     for key, entries in (data.get("plugins") or {}).items():
         pname = key.split("@")[0]
         for entry in entries:
@@ -171,9 +176,12 @@ def scan_plugin_skills_agents(installed_plugins_json: Path) -> list[Asset]:
                 continue
             for sk in sorted(root.rglob("SKILL.md")):
                 dname = sk.parent.name
+                full = f"{pname}:{dname}"
+                if full in seen_ids:
+                    continue
+                seen_ids.add(full)
                 fm = parse_frontmatter(sk)
                 nm = fm.get("name", dname)
-                full = f"{pname}:{dname}"
                 out.append(
                     Asset(
                         id=full,
@@ -191,6 +199,9 @@ def scan_plugin_skills_agents(installed_plugins_json: Path) -> list[Asset]:
                 fm = parse_frontmatter(ag)
                 nm = fm.get("name", base)
                 full = f"{pname}:{nm}"
+                if full in seen_ids:
+                    continue
+                seen_ids.add(full)
                 out.append(
                     Asset(
                         id=full,
