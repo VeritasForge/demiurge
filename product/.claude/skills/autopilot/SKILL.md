@@ -100,11 +100,29 @@ argument-hint: "<plan-path or plain-task-description>"
 
 4. **합의·검증 후 결정 명시**: 결정 직전 1줄 이상으로 *어떤 1차 출처/다관점 의견에 근거했는지* 명시. 단순 단정 금지.
 
-5. 구현: TDD 3 카테고리(`[Happy]/[Boundary]/[Error]` 각 ≥1, 글로벌 룰).
+5. **결정 로깅** (사용자 학습 사이클의 핵심 — 빠뜨리지 말 것). 판단 지점 발동 시마다 `docs/autopilot/<slug>/run.log`에 다음 블록 append:
+   ```
+   [judgment #N] @ <task-id>
+     context: <결정이 필요한 상황 1줄>
+     importance: 낮음 | 중간 | 높음
+     tools-used: <호출한 조사·검증 도구>
+     sources:
+       - <도구1 결과 요약 + 출처/링크>
+       - <도구2 결과 요약>
+     multi-agent-opinions:   # 중요도 높음일 때만
+       - <persona1>: <의견 1줄>
+       - <persona2>: <의견 1줄>
+     rl-verify: <수렴 카운터·합의>   # 호출 시
+     decision: <최종 결정 1줄>
+     rationale: <근거 1-2줄, 어느 출처/의견에 가중치>
+   ```
+   sensitive 정보(API 키, 비밀번호, 개인정보)는 `[REDACTED]`로 마스킹. 결정 번호 N은 1부터 단조 증가.
 
-6. `/code-review`(P0/P1 0건까지 반복 — 발견된 P0/P1 수정 후 재실행). React 코드면 호출 프롬프트에 "Vercel best-practices 기준" 명시.
+6. 구현: TDD 3 카테고리(`[Happy]/[Boundary]/[Error]` 각 ≥1, 글로벌 룰).
 
-7. 커밋:
+7. `/code-review`(P0/P1 0건까지 반복 — 발견된 P0/P1 수정 후 재실행). React 코드면 호출 프롬프트에 "Vercel best-practices 기준" 명시.
+
+8. 커밋:
    ```
    git add <files>
    git commit -m "<conventional message>
@@ -112,7 +130,7 @@ argument-hint: "<plan-path or plain-task-description>"
    Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>"
    ```
 
-8. `TaskUpdate` → `completed`.
+9. `TaskUpdate` → `completed`.
 
 `/goal` 미설정 상태(semi-auto degraded)에서는 1 turn 한도 내 최대 진행 후 출력:
 ```
@@ -132,10 +150,18 @@ argument-hint: "<plan-path or plain-task-description>"
 
 1. 이번 실행의 핵심 교훈을 **4 카테고리**(실패·발견·반복실수·좋은패턴)로 식별. 적용 가능한 모든 카테고리 시도, 최소 1개 누적.
 2. `Skill` 도구로 `compound-engineering:ce-compound` 호출(`mode:headless`), 식별된 교훈 전달. `docs/solutions/<topic>.md` 작성/갱신.
-3. **Telemetry** 기록(run.log):
+3. **Telemetry 요약** 기록(run.log 마지막에):
    - `learning-impact:` 1줄 — "이번 실행이 N-1 실행 대비 무엇을 우회/단축했는가" 자가 보고.
-   - `judgment-points:` N — 이번 실행에서 발동된 판단 지점 수.
+   - `judgment-points:` N (이번 실행에서 발동된 판단 지점 수 — 위 [judgment #1..N] 블록 개수와 일치).
+   - `decision-summary:` 핵심 결정 1~3개를 한 줄씩 요약 (사용자가 run.log 첫 부분만 봐도 무슨 결정이 있었는지 파악 가능하도록).
    - 누적 실행 횟수 카운터(`run.log`의 총 `-- run` 헤더 수).
+4. **사용자 학습 사이클 안내** 출력(skill 종료 직전):
+   ```
+   📒 결정 로그: docs/autopilot/<slug>/run.log
+      → 잘못된 결정 발견 시: 코드 수정 + CLAUDE.md/rules/<해당 skill> 업데이트
+      → 좋은 패턴 발견 시: ce-compound 추가 호출 (docs/solutions/)
+      → 반복 실수 발견 시: /retrospective
+   ```
 4. 누적 10회 도달 또는 마지막 refresh 30일 경과 시 출력:
    ```
    💡 ce-compound-refresh 권고 — stale 학습 정리 시점

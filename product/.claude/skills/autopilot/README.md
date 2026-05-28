@@ -44,6 +44,46 @@
 
 ---
 
+## 🔄 자율 완주 후 학습 사이클 (HITL 보존의 핵심)
+
+autopilot은 평소 HITL 학습 기회를 보존하기 위해 *명시 호출 시만 발동*한다. 그러나 한번 발동해 자율 완주하고 나면, **사용자가 깨어나 결정 로그를 검토하고 하니스를 학습시키는 사이클**이 가장 중요한 가치다.
+
+### 단계
+
+1. **로그 읽기**:
+   ```bash
+   cat <project>/docs/autopilot/<slug>/run.log
+   ```
+   각 `[judgment #N]` 블록에서 context / sources / multi-agent-opinions / decision / rationale 확인.
+
+2. **잘못된 결정 발견 시** (가장 흔한 케이스):
+   - 해당 코드 직접 수정 + 커밋
+   - **패턴화** — 같은 실수가 반복될 만한 결정이면 하니스 업데이트:
+     - 글로벌 룰: `~/.claude/CLAUDE.md` 또는 `~/.claude/rules/*.md` 추가/수정
+     - 도메인 룰: 해당 프로젝트 `.claude/rules/` 또는 `CLAUDE.md`
+     - 라우팅 룰: autopilot SKILL.md의 routing 매트릭스 수정 (이 파일에 직접 Edit)
+     - 새 패턴: 새 skill 작성 (`/superpowers:writing-skills` 사용)
+
+3. **좋은 패턴 발견 시**:
+   - 이미 Phase 5가 `ce-compound`로 `docs/solutions/` 누적 — 추가 작업 보통 불요
+   - 더 일반화할 가치 있으면 직접 `docs/solutions/<topic>.md` 다듬기
+
+4. **반복 실수 발견 시**:
+   - `/retrospective` 호출 → 하니스 전체 점검 + Skills/CLAUDE.md/Memory/Hooks 업데이트
+   - autopilot의 판단 지점 trigger를 조정해야 할 수도 — SKILL.md Phase 3의 trigger 3종에 케이스 추가
+
+5. **`blocked-*.md` 발견 시**:
+   - autopilot이 자율로 못 푼 막힘 — 사용자가 결정 → autopilot 재호출 가능
+   - blocked 패턴이 반복되면 라우팅/trigger 보강 후보
+
+### 학습 사이클의 가치
+
+> 자율주행은 **빠른 완주**를 주고, **결정 로그**는 **느린 학습**을 준다. 두 속도가 함께 가야 매 실행이 다음 실행을 더 똑똑하게 만든다 (compound engineering).
+>
+> HITL을 *모든 결정마다* 강요하면 빠른 완주를 잃고, *전혀 안 보면* 느린 학습을 잃는다. autopilot은 **완주 시점에 한 번** HITL 사이클을 모아두는 절충안이다.
+
+---
+
 ## N=5 실사용 검증 트래커
 
 | # | 날짜 | plan/task | 진입 방식 | `/goal` pair | 판단 지점 발동 N | 결과 | 평가 |
