@@ -1,0 +1,3366 @@
+{
+  "generated_at": "2026-06-08T01:00:21.596820+00:00",
+  "window": {
+    "since": "2025-12-07",
+    "until": "2026-06-08",
+    "days": 183
+  },
+  "totals": {
+    "skill": {
+      "total": 136,
+      "active": 45,
+      "live": 16,
+      "dead": 75
+    },
+    "agent": {
+      "total": 92,
+      "active": 39,
+      "live": 0,
+      "dead": 53
+    },
+    "command": {
+      "total": 1,
+      "active": 1,
+      "live": 0,
+      "dead": 0
+    },
+    "plugin": {
+      "total": 10,
+      "active": 1,
+      "live": 0,
+      "dead": 9
+    },
+    "mcp_server": {
+      "total": 4,
+      "active": 1,
+      "live": 0,
+      "dead": 3
+    }
+  },
+  "assets": [
+    {
+      "id": "ai-agent",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "rag-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ai-safety",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "ai-safety-architect",
+        "security-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "api-design",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "application-architecture",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "application-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "architect-orchestration",
+      "type": "skill",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-19",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "autopilot",
+      "type": "skill",
+      "source": "global",
+      "calls": 2,
+      "last_used": "2026-05-29",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 2
+      }
+    },
+    {
+      "id": "cloud-native",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "cloud-native-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "commit",
+      "type": "skill",
+      "source": "global",
+      "calls": 53,
+      "last_used": "2026-06-08",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 8,
+        "2026-W20": 9,
+        "2026-W19": 7,
+        "2026-W22": 11,
+        "2026-W21": 17,
+        "2026-W24": 1
+      },
+      "monthly": {
+        "2026-06": 9,
+        "2026-05": 44
+      }
+    },
+    {
+      "id": "concept-explainer",
+      "type": "skill",
+      "source": "global",
+      "calls": 9,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 3,
+        "2026-W22": 2,
+        "2026-W19": 1,
+        "2026-W23": 1,
+        "2026-W21": 2
+      },
+      "monthly": {
+        "2026-05": 8,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "concurrency-patterns",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "concurrency-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "data-architecture",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "data-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "debug",
+      "type": "skill",
+      "source": "global",
+      "calls": 9,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 6,
+        "2026-W23": 1,
+        "2026-W20": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 8,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "deep-research",
+      "type": "skill",
+      "source": "global",
+      "calls": 43,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [
+        "ai-safety-architect",
+        "application-architect",
+        "cloud-native-architect",
+        "concurrency-architect",
+        "data-architect",
+        "domain-architect",
+        "eda-specialist",
+        "healthcare-informatics-architect",
+        "integration-architect",
+        "llm-architect",
+        "ml-platform-architect",
+        "rag-architect",
+        "security-architect",
+        "solution-architect",
+        "sre-architect"
+      ],
+      "weekly": {
+        "2026-W20": 13,
+        "2026-W23": 8,
+        "2026-W21": 10,
+        "2026-W22": 11,
+        "2026-W19": 1
+      },
+      "monthly": {
+        "2026-05": 35,
+        "2026-06": 8
+      }
+    },
+    {
+      "id": "domain-driven-design",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "domain-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "eda",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "eda-specialist"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "group-job-analysis",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "healthcare-informatics",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "healthcare-informatics-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "humanize-writing",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "humanize-writing-portable",
+      "type": "skill",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-21",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "integration",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "integration-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "interview-prep",
+      "type": "skill",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-13",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "investigation-orchestration",
+      "type": "skill",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "job-analysis",
+      "type": "skill",
+      "source": "global",
+      "calls": 2,
+      "last_used": "2026-05-16",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2
+      },
+      "monthly": {
+        "2026-05": 2
+      }
+    },
+    {
+      "id": "llm-gateway",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "llm-architect",
+        "ml-platform-architect",
+        "sre-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "md-to-html",
+      "type": "skill",
+      "source": "global",
+      "calls": 6,
+      "last_used": "2026-06-02",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 4,
+        "2026-W23": 2
+      },
+      "monthly": {
+        "2026-05": 4,
+        "2026-06": 2
+      }
+    },
+    {
+      "id": "ml-platform",
+      "type": "skill",
+      "source": "global",
+      "calls": 2,
+      "last_used": "2026-06-02",
+      "grade": "active",
+      "referenced_by": [
+        "ml-platform-architect"
+      ],
+      "weekly": {
+        "2026-W23": 2
+      },
+      "monthly": {
+        "2026-06": 2
+      }
+    },
+    {
+      "id": "organize",
+      "type": "skill",
+      "source": "global",
+      "calls": 25,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 7,
+        "2026-W22": 5,
+        "2026-W23": 4,
+        "2026-W21": 7,
+        "2026-W19": 2
+      },
+      "monthly": {
+        "2026-05": 21,
+        "2026-06": 4
+      }
+    },
+    {
+      "id": "prompt-engineering",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "llm-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "qa",
+      "type": "skill",
+      "source": "global",
+      "calls": 7,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 2,
+        "2026-W20": 3,
+        "2026-W21": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-06": 2,
+        "2026-05": 5
+      }
+    },
+    {
+      "id": "rag-architecture",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "rag-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ralph-loop-guide",
+      "type": "skill",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-16",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "readme-writer",
+      "type": "skill",
+      "source": "global",
+      "calls": 2,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 2
+      }
+    },
+    {
+      "id": "release-handoff",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "resume-optimizer",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "retrospective",
+      "type": "skill",
+      "source": "global",
+      "calls": 5,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W19": 1,
+        "2026-W21": 3,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 5
+      }
+    },
+    {
+      "id": "review-pr",
+      "type": "skill",
+      "source": "global",
+      "calls": 5,
+      "last_used": "2026-05-26",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 4,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 5
+      }
+    },
+    {
+      "id": "rl",
+      "type": "skill",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-30",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "rl-fresh",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "rl-verify",
+      "type": "skill",
+      "source": "global",
+      "calls": 56,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 12,
+        "2026-W23": 8,
+        "2026-W21": 20,
+        "2026-W22": 14,
+        "2026-W19": 1,
+        "2026-W17": 1
+      },
+      "monthly": {
+        "2026-05": 47,
+        "2026-06": 8,
+        "2026-04": 1
+      }
+    },
+    {
+      "id": "save-confluence",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "security",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "ai-safety-architect",
+        "security-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "session-handoff",
+      "type": "skill",
+      "source": "global",
+      "calls": 3,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 2,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-06": 2,
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "skill-routing-learner",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "solution-architecture",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "solution-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "sre",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "live",
+      "referenced_by": [
+        "sre-architect"
+      ],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "tdd-lfg",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "testing-architecture",
+      "type": "skill",
+      "source": "global",
+      "calls": 3,
+      "last_used": "2026-05-23",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 3
+      },
+      "monthly": {
+        "2026-05": 3
+      }
+    },
+    {
+      "id": "vercel-composition-patterns",
+      "type": "skill",
+      "source": "global",
+      "calls": 8,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 3,
+        "2026-W22": 4,
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-05": 7,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "vercel-react-best-practices",
+      "type": "skill",
+      "source": "global",
+      "calls": 12,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 3,
+        "2026-W22": 8,
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-05": 11,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "vercel-react-native-skills",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "web-design-guidelines",
+      "type": "skill",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ai-safety-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "application-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "cloud-native-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "code-investigator",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "concurrency-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "convergence-evaluator",
+      "type": "agent",
+      "source": "global",
+      "calls": 4,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 2,
+        "2026-W23": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 3,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "counter-reviewer",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "data-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-14",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "domain-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "eda-specialist",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "healthcare-informatics-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "history-investigator",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "integration-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "llm-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "log-investigator",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ml-platform-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "rag-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "release-investigator",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "security-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "solution-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 1,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "sre-architect",
+      "type": "agent",
+      "source": "global",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "save_obsi",
+      "type": "command",
+      "source": "global",
+      "calls": 18,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 4,
+        "2026-W22": 6,
+        "2026-W19": 1,
+        "2026-W23": 2,
+        "2026-W21": 5
+      },
+      "monthly": {
+        "2026-05": 16,
+        "2026-06": 2
+      }
+    },
+    {
+      "id": "general-purpose",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 469,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 103,
+        "2026-W23": 81,
+        "2026-W21": 139,
+        "2026-W22": 142,
+        "2026-W17": 4
+      },
+      "monthly": {
+        "2026-05": 384,
+        "2026-06": 81,
+        "2026-04": 4
+      }
+    },
+    {
+      "id": "Explore",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 49,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 9,
+        "2026-W21": 13,
+        "2026-W20": 18,
+        "2026-W19": 1,
+        "2026-W22": 6,
+        "2026-W17": 2
+      },
+      "monthly": {
+        "2026-06": 9,
+        "2026-05": 38,
+        "2026-04": 2
+      }
+    },
+    {
+      "id": "Plan",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 5,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 3,
+        "2026-W22": 1,
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 5
+      }
+    },
+    {
+      "id": "claude",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "claude-code-guide",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 46,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 21,
+        "2026-W21": 12,
+        "2026-W22": 10,
+        "2026-W23": 3
+      },
+      "monthly": {
+        "2026-05": 43,
+        "2026-06": 3
+      }
+    },
+    {
+      "id": "statusline-setup",
+      "type": "agent",
+      "source": "builtin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ralph-loop",
+      "type": "plugin",
+      "source": "plugin:ralph-loop",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "Notion",
+      "type": "plugin",
+      "source": "plugin:Notion",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering",
+      "type": "plugin",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "superpowers",
+      "type": "plugin",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros",
+      "type": "plugin",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "context7",
+      "type": "plugin",
+      "source": "plugin:context7",
+      "calls": 42,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 16,
+        "2026-W21": 10,
+        "2026-W20": 5,
+        "2026-W22": 11
+      },
+      "monthly": {
+        "2026-06": 16,
+        "2026-05": 26
+      }
+    },
+    {
+      "id": "codex",
+      "type": "plugin",
+      "source": "plugin:codex",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "typescript-lsp",
+      "type": "plugin",
+      "source": "plugin:typescript-lsp",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "frontend-design",
+      "type": "plugin",
+      "source": "plugin:frontend-design",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "notion-workspace-plugin",
+      "type": "plugin",
+      "source": "plugin:notion-workspace-plugin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "Notion:knowledge-capture",
+      "type": "skill",
+      "source": "plugin:Notion",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "Notion:meeting-intelligence",
+      "type": "skill",
+      "source": "plugin:Notion",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "Notion:research-documentation",
+      "type": "skill",
+      "source": "plugin:Notion",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "Notion:spec-to-implementation",
+      "type": "skill",
+      "source": "plugin:Notion",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-agent-native-architecture",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-agent-native-audit",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-brainstorm",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 1,
+      "last_used": "2026-05-20",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-clean-gone-branches",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-code-review",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 1,
+      "last_used": "2026-05-23",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-commit",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-commit-push-pr",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-compound",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-compound-refresh",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-debug",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 6,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 4,
+        "2026-W23": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 5,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-demo-reel",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-dhh-rails-style",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-doc-review",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 24,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 13,
+        "2026-W21": 7,
+        "2026-W19": 1,
+        "2026-W20": 1,
+        "2026-W23": 2
+      },
+      "monthly": {
+        "2026-05": 22,
+        "2026-06": 2
+      }
+    },
+    {
+      "id": "compound-engineering:ce-dogfood-beta",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-frontend-design",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 2,
+      "last_used": "2026-05-30",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 2
+      }
+    },
+    {
+      "id": "compound-engineering:ce-gemini-imagegen",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-ideate",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-optimize",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 1,
+      "last_used": "2026-05-26",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-plan",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-polish",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-product-pulse",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-promote",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-proof",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-release-notes",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-report-bug",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-resolve-pr-feedback",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-riffrec-feedback-analysis",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-sessions",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 1,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-setup",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-simplify-code",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-slack-research",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-strategy",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-test-browser",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-test-xcode",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-update",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-work",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-work-beta",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-worktree",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:lfg",
+      "type": "skill",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-adversarial-document-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 85,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 16,
+        "2026-W21": 29,
+        "2026-W22": 30,
+        "2026-W23": 7,
+        "2026-W19": 3
+      },
+      "monthly": {
+        "2026-05": 78,
+        "2026-06": 7
+      }
+    },
+    {
+      "id": "compound-engineering:ce-adversarial-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 13,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W23": 4,
+        "2026-W21": 6,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 9,
+        "2026-06": 4
+      }
+    },
+    {
+      "id": "compound-engineering:ce-agent-native-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 10,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 1,
+        "2026-W21": 7,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-06": 1,
+        "2026-05": 9
+      }
+    },
+    {
+      "id": "compound-engineering:ce-ankane-readme-writer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-api-contract-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 5,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W23": 1,
+        "2026-W21": 1,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 4,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-architecture-strategist",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 20,
+      "last_used": "2026-05-30",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 7,
+        "2026-W19": 2,
+        "2026-W22": 4,
+        "2026-W21": 6,
+        "2026-W17": 1
+      },
+      "monthly": {
+        "2026-05": 19,
+        "2026-04": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-best-practices-researcher",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 31,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 11,
+        "2026-W21": 12,
+        "2026-W23": 2,
+        "2026-W22": 6
+      },
+      "monthly": {
+        "2026-05": 29,
+        "2026-06": 2
+      }
+    },
+    {
+      "id": "compound-engineering:ce-code-simplicity-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 13,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W21": 8,
+        "2026-W22": 2,
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-05": 12,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-coherence-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 30,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 16,
+        "2026-W20": 3,
+        "2026-W21": 8,
+        "2026-W19": 1,
+        "2026-W23": 2
+      },
+      "monthly": {
+        "2026-05": 28,
+        "2026-06": 2
+      }
+    },
+    {
+      "id": "compound-engineering:ce-correctness-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 43,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 7,
+        "2026-W23": 4,
+        "2026-W21": 27,
+        "2026-W22": 5
+      },
+      "monthly": {
+        "2026-05": 39,
+        "2026-06": 4
+      }
+    },
+    {
+      "id": "compound-engineering:ce-data-integrity-guardian",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 6,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W19": 2,
+        "2026-W22": 4
+      },
+      "monthly": {
+        "2026-05": 6
+      }
+    },
+    {
+      "id": "compound-engineering:ce-data-migration-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 7,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 6,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-06": 6,
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-deployment-verification-agent",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 1,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-design-implementation-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-design-iterator",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-design-lens-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 10,
+      "last_used": "2026-05-31",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W19": 1,
+        "2026-W20": 1,
+        "2026-W21": 1,
+        "2026-W22": 7
+      },
+      "monthly": {
+        "2026-05": 10
+      }
+    },
+    {
+      "id": "compound-engineering:ce-feasibility-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 37,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 3,
+        "2026-W22": 19,
+        "2026-W21": 11,
+        "2026-W23": 3,
+        "2026-W19": 1
+      },
+      "monthly": {
+        "2026-05": 34,
+        "2026-06": 3
+      }
+    },
+    {
+      "id": "compound-engineering:ce-figma-design-sync",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-framework-docs-researcher",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 7,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W21": 2,
+        "2026-W22": 4
+      },
+      "monthly": {
+        "2026-05": 7
+      }
+    },
+    {
+      "id": "compound-engineering:ce-git-history-analyzer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-issue-intelligence-analyst",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-julik-frontend-races-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 6,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 3,
+        "2026-W22": 3
+      },
+      "monthly": {
+        "2026-05": 6
+      }
+    },
+    {
+      "id": "compound-engineering:ce-learnings-researcher",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 14,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 1,
+        "2026-W21": 9,
+        "2026-W22": 4
+      },
+      "monthly": {
+        "2026-06": 1,
+        "2026-05": 13
+      }
+    },
+    {
+      "id": "compound-engineering:ce-maintainability-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 22,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W23": 2,
+        "2026-W21": 16,
+        "2026-W22": 3
+      },
+      "monthly": {
+        "2026-05": 20,
+        "2026-06": 2
+      }
+    },
+    {
+      "id": "compound-engineering:ce-pattern-recognition-specialist",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-performance-oracle",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 1,
+      "last_used": "2026-05-30",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-performance-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 7,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W23": 1,
+        "2026-W21": 3,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 6,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-pr-comment-resolver",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-previous-comments-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-product-lens-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 12,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W21": 2,
+        "2026-W19": 1,
+        "2026-W22": 7,
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-05": 11,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-project-standards-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 18,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 1,
+        "2026-W21": 14,
+        "2026-W22": 3
+      },
+      "monthly": {
+        "2026-06": 1,
+        "2026-05": 17
+      }
+    },
+    {
+      "id": "compound-engineering:ce-reliability-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 12,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W23": 4,
+        "2026-W21": 5,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 8,
+        "2026-06": 4
+      }
+    },
+    {
+      "id": "compound-engineering:ce-repo-research-analyst",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 8,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 2,
+        "2026-W19": 2,
+        "2026-W20": 1,
+        "2026-W23": 1,
+        "2026-W17": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 6,
+        "2026-06": 1,
+        "2026-04": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-scope-guardian-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 24,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 5,
+        "2026-W21": 6,
+        "2026-W22": 11,
+        "2026-W23": 2
+      },
+      "monthly": {
+        "2026-05": 22,
+        "2026-06": 2
+      }
+    },
+    {
+      "id": "compound-engineering:ce-security-lens-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 19,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W22": 12,
+        "2026-W21": 4,
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-05": 18,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-security-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 17,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W23": 6,
+        "2026-W21": 4,
+        "2026-W22": 5
+      },
+      "monthly": {
+        "2026-05": 11,
+        "2026-06": 6
+      }
+    },
+    {
+      "id": "compound-engineering:ce-security-sentinel",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 9,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 2,
+        "2026-W22": 3,
+        "2026-W20": 1,
+        "2026-W17": 1,
+        "2026-W21": 2
+      },
+      "monthly": {
+        "2026-06": 2,
+        "2026-05": 6,
+        "2026-04": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-session-historian",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 1,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "compound-engineering:ce-slack-researcher",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-spec-flow-analyzer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-swift-ios-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "compound-engineering:ce-testing-reviewer",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 32,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W23": 3,
+        "2026-W21": 23,
+        "2026-W22": 4
+      },
+      "monthly": {
+        "2026-05": 29,
+        "2026-06": 3
+      }
+    },
+    {
+      "id": "compound-engineering:ce-web-researcher",
+      "type": "agent",
+      "source": "plugin:compound-engineering",
+      "calls": 44,
+      "last_used": "2026-06-02",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 10,
+        "2026-W22": 11,
+        "2026-W23": 8,
+        "2026-W21": 15
+      },
+      "monthly": {
+        "2026-05": 36,
+        "2026-06": 8
+      }
+    },
+    {
+      "id": "superpowers:brainstorming",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 1,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "superpowers:dispatching-parallel-agents",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "superpowers:executing-plans",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 3,
+      "last_used": "2026-05-22",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W21": 2
+      },
+      "monthly": {
+        "2026-05": 3
+      }
+    },
+    {
+      "id": "superpowers:finishing-a-development-branch",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 3,
+      "last_used": "2026-05-27",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 1,
+        "2026-W22": 1,
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 3
+      }
+    },
+    {
+      "id": "superpowers:receiving-code-review",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "superpowers:requesting-code-review",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "superpowers:subagent-driven-development",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 22,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W22": 9,
+        "2026-W21": 9,
+        "2026-W23": 2
+      },
+      "monthly": {
+        "2026-05": 20,
+        "2026-06": 2
+      }
+    },
+    {
+      "id": "superpowers:systematic-debugging",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 3,
+      "last_used": "2026-05-21",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 2,
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 3
+      }
+    },
+    {
+      "id": "superpowers:test-driven-development",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 1,
+      "last_used": "2026-05-21",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "superpowers:using-git-worktrees",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 3,
+      "last_used": "2026-05-30",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 2,
+        "2026-W21": 1
+      },
+      "monthly": {
+        "2026-05": 3
+      }
+    },
+    {
+      "id": "superpowers:using-superpowers",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "superpowers:verification-before-completion",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "superpowers:writing-plans",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 24,
+      "last_used": "2026-06-02",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 2,
+        "2026-W22": 13,
+        "2026-W20": 1,
+        "2026-W21": 8
+      },
+      "monthly": {
+        "2026-06": 2,
+        "2026-05": 22
+      }
+    },
+    {
+      "id": "superpowers:writing-skills",
+      "type": "skill",
+      "source": "plugin:superpowers",
+      "calls": 9,
+      "last_used": "2026-05-30",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 3,
+        "2026-W19": 1,
+        "2026-W21": 3,
+        "2026-W22": 2
+      },
+      "monthly": {
+        "2026-05": 9
+      }
+    },
+    {
+      "id": "ouroboros:auto",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:brownfield",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:cancel",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:evaluate",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:evolve",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:help",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:interview",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 1,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "ouroboros:pm",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:publish",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:qa",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 7,
+      "last_used": "2026-06-04",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 2,
+        "2026-W20": 3,
+        "2026-W21": 1,
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-06": 2,
+        "2026-05": 5
+      }
+    },
+    {
+      "id": "ouroboros:ralph",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:resume-session",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:run",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 1,
+      "last_used": "2026-05-28",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W22": 1
+      },
+      "monthly": {
+        "2026-05": 1
+      }
+    },
+    {
+      "id": "ouroboros:seed",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:setup",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:status",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:tutorial",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:unstuck",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:update",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:welcome",
+      "type": "skill",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:advocate",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:analysis-agent",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:architect",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:breadth-keeper",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:code-executor",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:codebase-explorer",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:consensus-reviewer",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:contrarian",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:evaluator",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:hacker",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:judge",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:ontologist",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:ontology-analyst",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:qa-judge",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:research-agent",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:researcher",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:seed-architect",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:seed-closer",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:semantic-evaluator",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:simplifier",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros:socratic-interviewer",
+      "type": "agent",
+      "source": "plugin:ouroboros",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "codex:codex-cli-runtime",
+      "type": "skill",
+      "source": "plugin:codex",
+      "calls": 4,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [
+        "codex:codex-rescue"
+      ],
+      "weekly": {
+        "2026-W22": 3,
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-05": 3,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "codex:codex-result-handling",
+      "type": "skill",
+      "source": "plugin:codex",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "codex:gpt-5-4-prompting",
+      "type": "skill",
+      "source": "plugin:codex",
+      "calls": 4,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [
+        "codex:codex-rescue"
+      ],
+      "weekly": {
+        "2026-W22": 3,
+        "2026-W23": 1
+      },
+      "monthly": {
+        "2026-05": 3,
+        "2026-06": 1
+      }
+    },
+    {
+      "id": "codex:codex-rescue",
+      "type": "agent",
+      "source": "plugin:codex",
+      "calls": 4,
+      "last_used": "2026-06-01",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W23": 1,
+        "2026-W22": 3
+      },
+      "monthly": {
+        "2026-06": 1,
+        "2026-05": 3
+      }
+    },
+    {
+      "id": "frontend-design:frontend-design",
+      "type": "skill",
+      "source": "plugin:frontend-design",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "notion-workspace-plugin:knowledge-capture",
+      "type": "skill",
+      "source": "plugin:notion-workspace-plugin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "notion-workspace-plugin:meeting-intelligence",
+      "type": "skill",
+      "source": "plugin:notion-workspace-plugin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "notion-workspace-plugin:research-documentation",
+      "type": "skill",
+      "source": "plugin:notion-workspace-plugin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "notion-workspace-plugin:spec-to-implementation",
+      "type": "skill",
+      "source": "plugin:notion-workspace-plugin",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "mcp-atlassian",
+      "type": "mcp_server",
+      "source": "mcp",
+      "calls": 488,
+      "last_used": "2026-06-05",
+      "grade": "active",
+      "referenced_by": [],
+      "weekly": {
+        "2026-W20": 336,
+        "2026-W21": 49,
+        "2026-W23": 69,
+        "2026-W22": 33,
+        "2026-W17": 1
+      },
+      "monthly": {
+        "2026-05": 418,
+        "2026-06": 69,
+        "2026-04": 1
+      }
+    },
+    {
+      "id": "notion",
+      "type": "mcp_server",
+      "source": "mcp",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "ouroboros",
+      "type": "mcp_server",
+      "source": "mcp",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    },
+    {
+      "id": "playwright",
+      "type": "mcp_server",
+      "source": "mcp",
+      "calls": 0,
+      "last_used": null,
+      "grade": "dead",
+      "referenced_by": [],
+      "weekly": {},
+      "monthly": {}
+    }
+  ],
+  "timeline": {
+    "weekly": {
+      "2026-W20": 866,
+      "2026-W21": 834,
+      "2026-W23": 444,
+      "2026-W19": 48,
+      "2026-W22": 713,
+      "2026-W24": 4,
+      "2026-W17": 11
+    },
+    "monthly": {
+      "2026-05": 2461,
+      "2026-06": 448,
+      "2026-04": 11
+    }
+  }
+}
