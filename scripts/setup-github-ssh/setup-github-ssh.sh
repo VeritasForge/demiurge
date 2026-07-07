@@ -26,6 +26,7 @@ PERSONAL_KEY="$HOME/.ssh/veritas_id_ed25519"
 
 WORK_DIR="$HOME/workspace"                # 회사 프로젝트 폴더 (기본 계정)
 LAB_DIR="$HOME/lab"                       # 개인 프로젝트 폴더 (개인으로 자동 전환)
+NVIM_CONFIG_DIR="$HOME/.config/nvim"      # nvim 설정 repo (개인으로 자동 전환)
 # ===================================
 
 HOSTTAG="$(hostname -s 2>/dev/null || hostname 2>/dev/null || echo pc)"
@@ -76,7 +77,7 @@ Host github.com-personal
 EOF
 chmod 600 "$HOME/.ssh/config"
 
-echo "==> 3. ~/.gitconfig 작성 (회사 기본 + ~/lab 개인 자동전환)"
+echo "==> 3. ~/.gitconfig 작성 (회사 기본 + ~/lab, ~/.config/nvim 개인 자동전환)"
 backup "$HOME/.gitconfig"
 cat > "$HOME/.gitconfig" <<EOF
 [user]
@@ -84,6 +85,9 @@ cat > "$HOME/.gitconfig" <<EOF
 	email = $WORK_EMAIL
 
 [includeIf "gitdir:$LAB_DIR/"]
+	path = ~/.gitconfig-personal
+
+[includeIf "gitdir:$NVIM_CONFIG_DIR/"]
 	path = ~/.gitconfig-personal
 EOF
 
