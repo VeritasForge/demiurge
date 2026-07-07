@@ -102,7 +102,7 @@ Demiurge는 자체 구현보다 **검증된 외부 plugin을 wrapping**한다. `
 ```bash
 git clone <repo> ~/lab/demiurge
 cd ~/lab/demiurge
-./bootstrap.sh          # stow + just 설치, ~/.claude/ 및 ~/.local/bin/ 심링크 생성
+./bootstrap.sh          # stow/just/jq 설치, ~/.claude/ 및 ~/.local/bin/ 심링크 생성 + 상태줄(statusLine) 자동 설정
 ```
 
 > **전제 조건:** macOS + Homebrew. fish 사용자는 `bootstrap.sh`가 `fish_add_path -U`로 `~/.local/bin`을 자동 등록.
@@ -196,6 +196,21 @@ just unlink    # 심링크 해제
 
 > ⚠️ 파일 삭제·이동 시 순서: `just unlink → 소스 변경 → just link`. 역순으로 하면 `~/.claude/` 하위에 dangling symlink가 남는다. 자세한 근거는 `.claude/rules/stow-deployment.md` 참조.
 
+### 상태줄 (Status Line)
+
+`product/.claude/statusline.sh`가 Claude Code 하단 상태줄을 4줄로 렌더링한다:
+
+1. 모델명 / Claude Code 버전 / reasoning effort / extended thinking 여부 / 실행 중인 agent 이름
+2. 세션 누적 비용(USD) / 경과 시간
+3. context window 사용률 progress bar (200K/1M 확장 컨텍스트 모델 모두 대응) + 남은 비율
+4. Prompt Caching(KV Cache) 히트율
+
+`./bootstrap.sh` 실행 시 `~/.claude/settings.json`의 `statusLine` 키에 자동 등록된다. 이미 설정되어 있으면 덮어쓸지 확인(`[y/N]`)하고, 비대화형 실행에서는 자동으로 건너뛴다. 수동으로 다시 적용하려면:
+
+```bash
+just setup-statusline
+```
+
 ### CLI Tools
 
 `bin/.local/bin/`이 `~/.local/bin/`으로 stow 배포되어, PATH 등록 후 어디서나 호출 가능.
@@ -238,6 +253,7 @@ demiurge/
 │   ├── agents/      (21)
 │   ├── rules/       (2)          # 전역 룰: skills.md, agents.md (paths frontmatter)
 │   ├── commands/    (0)          # /rl·/rl-fresh·/commit·/tdd-lfg는 skills/로 마이그레이션됨
+│   ├── statusline.sh             # Claude Code 상태줄(statusLine) 스크립트
 │   └── CLAUDE.md                 # 응답 가이드라인 · TDD · 스킬 호출 규칙
 ├── bin/.local/bin/               # 전역 CLI 배포 (GNU Stow 경유 → ~/.local/bin/)
 │   └── git-cleanup-worktrees
@@ -248,8 +264,8 @@ demiurge/
 ├── .claude/                      # 프로젝트 로컬 (demiurge 한정, stow 미경유)
 │   ├── rules/stow-deployment.md
 │   └── commands/wrap.md
-├── justfile                      # Task runner: link/unlink/status/new-*/stats
-├── bootstrap.sh                  # 최초 설정 (stow + just 설치 + fish PATH)
+├── justfile                      # Task runner: link/unlink/status/setup-statusline/new-*/stats
+├── bootstrap.sh                  # 최초 설정 (stow/just/jq 설치 + fish PATH + statusLine 자동 설정)
 └── README.md                     # 이 문서
 ```
 

@@ -11,7 +11,7 @@ if ! command -v brew &>/dev/null; then
 fi
 
 # 의존성 설치
-for tool in stow just; do
+for tool in stow just jq; do
     if ! command -v $tool &>/dev/null; then
         echo "📦 Installing $tool..."
         brew install $tool
@@ -47,6 +47,22 @@ echo ""
 echo "🔗 Linking product → ~/.claude, bin → ~/.local/bin..."
 cd "$(dirname "$0")"
 just link
+
+echo ""
+echo "🩺 Configuring status line..."
+if jq -e '.statusLine' ~/.claude/settings.json >/dev/null 2>&1; then
+    if [ -t 0 ]; then
+        read -p "⚠️  statusLine 설정이 이미 존재합니다. 덮어쓸까요? [y/N] " answer
+        case "$answer" in
+            [Yy]*) just setup-statusline ;;
+            *) echo "⏭️  기존 statusLine 설정 유지" ;;
+        esac
+    else
+        echo "⏭️  statusLine 설정이 이미 있어 건너뜁니다 (비대화형 실행)"
+    fi
+else
+    just setup-statusline
+fi
 
 echo ""
 echo "🎉 Done! Run 'just' for available commands."

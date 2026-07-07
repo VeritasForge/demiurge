@@ -86,6 +86,17 @@ status:
         echo "  ❌ ~/.local/bin not found"
     fi
 
+# statusLine 설정을 settings.json에 비파괴적으로 병합 (statusLine 키만 갱신, 다른 키는 보존)
+setup-statusline:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    SETTINGS=~/.claude/settings.json
+    [ -f "$SETTINGS" ] || echo '{}' > "$SETTINGS"
+    TMP=$(mktemp)
+    jq '.statusLine = {"type": "command", "command": "~/.claude/statusline.sh"}' "$SETTINGS" > "$TMP"
+    mv "$TMP" "$SETTINGS"
+    echo "✅ statusLine → ~/.claude/statusline.sh registered in $SETTINGS"
+
 # 새 스킬 생성 + 심링크
 new-skill name:
     mkdir -p product/.claude/skills/{{name}}
