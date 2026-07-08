@@ -141,7 +141,7 @@ argument-hint: "<plan-path or plain-task-description>"
    | 학습 검색 | `Agent('compound-engineering:ce-learnings-researcher')` |
    | 학습 누적 | `Skill('compound-engineering:ce-compound', args='mode:headless ...')` |
    | 문서 다관점 리뷰 | `Skill('compound-engineering:ce-doc-review', args='mode:headless <path>')` |
-   | 적대적 문서 리뷰 | `Agent('compound-engineering:ce-adversarial-document-reviewer')` |
+   | 적대적 문서 리뷰 | `Skill('compound-engineering:ce-doc-review')` (adversarial persona가 문서 유형·위험 신호에 따라 자동 활성 — 별도 에이전트 아님) |
 
    *Skill vs Agent 구분*: skills/ 하위는 `Skill` 도구, agents/ 하위는 `Agent` 도구. 헷갈리면 `Bash: ls /Users/cjynim/.claude/plugins/cache/.../skills/<name>` 와 `.../agents/<name>` 둘 다 확인.
 
@@ -150,7 +150,7 @@ argument-hint: "<plan-path or plain-task-description>"
    |--------|------|
    | 낮음 | 1차 출처 확인만(Read/Grep) |
    | 중간 | + `/code-review` 또는 `/rl-verify` |
-   | 높음 | + 외부 조사(deep-research/context7) + 다관점 dispatch(ce-doc-review skill + ce-adversarial-document-reviewer agent 병행) + 합의 + `/rl-verify` 수렴 |
+   | 높음 | + 외부 조사(deep-research/context7) + 다관점 dispatch(ce-doc-review skill — adversarial persona 포함) + 합의 + `/rl-verify` 수렴 |
 
 4. **합의·검증 후 결정 명시**: 결정 직전 1줄 이상으로 *어떤 1차 출처/다관점 의견에 근거했는지* 명시. 단순 단정 금지.
 

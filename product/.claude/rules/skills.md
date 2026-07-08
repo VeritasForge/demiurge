@@ -6,7 +6,7 @@ paths:
 
 # Skill / Command 작성 규칙
 
-Claude Code skill 또는 command를 생성·수정할 때 적용. 공식 입장: "Custom commands have been merged into skills" — command와 skill은 동일한 frontmatter/동작을 공유. agent는 별개 컨셉이므로 [[agents]] rule을 참조.
+Claude Code skill 또는 command를 생성·수정할 때 적용. 공식 입장: "Custom commands have been merged into skills" — command와 skill은 동일한 frontmatter/동작을 공유. agent는 별개 컨셉이므로 agents 규칙(`rules/agents.md`)을 참조.
 
 공식 docs 근거: [custom-skills.md](https://code.claude.com/docs/en/custom-skills.md), [model-config.md](https://code.claude.com/docs/en/model-config.md).
 
@@ -46,7 +46,7 @@ Claude Code skill 또는 command를 생성·수정할 때 적용. 공식 입장:
 
 ## 3. Skill takes precedence over command
 
-공식 docs: skill과 command가 같은 이름이면 **skill takes precedence**. 마이그레이션·롤백·실험 중 둘이 공존해도 호출은 skill로 라우팅됨. 롤백 시 신규 skill 디렉토리만 삭제 + `just link` 재실행으로 기존 command로 복귀 가능.
+공식 docs: skill과 command가 같은 이름이면 **skill takes precedence**. 마이그레이션·롤백·실험 중 둘이 공존해도 호출은 skill로 라우팅됨. 롤백 시 신규 skill 디렉토리만 삭제하면 기존 command로 복귀 (배포·심링크 재적용 절차는 CLAUDE.md '스킬/에이전트 개발 규칙' 참조 — demiurge 레포에선 `stow-deployment` 규칙이 상세 주 출처).
 
 ## 4. Description 작성 객관 기준
 
