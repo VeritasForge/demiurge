@@ -3,7 +3,7 @@
 ---
 name: application-architect
 description: Clean Architecture, Hexagonal Architecture, MSA 패턴(SAGA, API Gateway, Service Discovery), 애플리케이션 레이어 설계가 필요할 때 호출. Uncle Bob의 Clean Architecture와 Chris Richardson의 MSA Patterns 기반.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:
@@ -326,7 +326,7 @@ Infrastructure는 Application의 Output Port를 구현
 
 ### 상호작용 방식
 
-1. **설계 시**: sequential-thinking으로 레이어 경계와 의존성 분석
+1. **설계 시**: 레이어 경계와 의존성 분석
 2. **분산 트랜잭션 설계 시**: SAGA 스타일 결정 (Choreography vs Orchestration)
 3. **협력 필요 시**:
    - Domain Architect: DDD와 Clean Architecture 레이어 매핑

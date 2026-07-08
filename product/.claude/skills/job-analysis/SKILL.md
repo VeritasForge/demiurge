@@ -47,7 +47,6 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 └───────────────────────────────────────────────────────────────────┘
 ```
 
-**⚠️ 필수 도구**: `mcp__sequential-thinking__sequentialthinking` — 모든 Phase에서 사용
 **📖 참조 스킬**: `deep-research` — Phase 1에서 3단계 프로토콜 적용
 
 ---
@@ -74,9 +73,9 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 
 ---
 
-## Sequential Thinking 사용 규칙
+## 단계별 판단 원칙
 
-모든 Phase에서 `mcp__sequential-thinking__sequentialthinking`을 **반드시** 사용합니다:
+모든 Phase에서 다음 원칙을 **반드시** 적용합니다:
 
 1. **Phase 시작**: 분석 계획 수립 (목표, 수집할 정보, 판단 기준)
 2. **핵심 판단**: 매칭률 산출, 등급 판정, 가중치 결정 시
@@ -89,7 +88,7 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 
 ### Phase 0: 📋 입력 수집 및 분석 ID 생성
 
-1. **sequentialthinking**으로 `$ARGUMENTS` 파싱 및 분석 전략 수립
+1. `$ARGUMENTS` 파싱 및 분석 전략 수립
 2. 분석 ID 생성: `{company-slug}-{role-slug}-{YYYY-MM-DD}`
    - slug 규칙: 영문소문자 + 하이픈, 한글 → 영문 표기
    - role-slug: 직무명을 영문소문자 + 하이픈으로 변환 (예: CTO → cto, Backend Lead → backend-lead)
@@ -105,7 +104,7 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 
 #### Step 1-1: 광역 탐색 (Broad Exploration)
 
-**sequentialthinking**으로 검색 쿼리 분해 후:
+검색 쿼리 분해 후:
 
 - **WebSearch 3-5회** (기업 기본정보, 뉴스, 업계 평판)
 - **WebSearch 1-2회** (SNS: `site:reddit.com`, `site:twitter.com` 등)
@@ -141,7 +140,7 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 
 #### Step 1-3: 지식 합성 (Knowledge Synthesis)
 
-**sequentialthinking**으로 전체 정보 통합:
+전체 정보 통합:
 
 - 신뢰도 태그 부여: `[✅ Confirmed]`, `[🔶 Likely]`, `[❓ Uncertain]`
 - 기업 프로필 카드 생성
@@ -152,7 +151,7 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 
 #### Step 2-1: JD 구조 분해
 
-**sequentialthinking**으로 JD 체계적 파싱:
+JD 체계적 파싱:
 
 - 핵심 책임 추출 (R1, R2, R3...) + 가중치:
   - 🔴 HIGH: 핵심 역할, 반드시 수행
@@ -183,7 +182,7 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 
 #### Step 3-1: 이력서 차원 분해
 
-**sequentialthinking**으로 이력서를 6개 차원으로 구조화:
+이력서를 6개 차원으로 구조화:
 
 | # | 차원 | 설명 |
 |---|------|------|
@@ -196,7 +195,7 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 
 #### Step 3-2: 차원별 매칭률 산출
 
-**sequentialthinking**으로 각 차원 점수 산출 + 근거 명시:
+각 차원 점수 산출 + 근거 명시:
 
 ```
 D1 기술 스택     ████████░░  78%  🟡
@@ -236,7 +235,7 @@ D6 교육/자격     ███████░░░  70%  🟡
 
 #### Step 4-1: 종합 판정
 
-**sequentialthinking**으로 Phase 1-3 통합 판단:
+Phase 1-3 통합 판단:
 
 - 종합 매칭률 (%) 산출
 - 판정 기준:
@@ -276,7 +275,7 @@ D6 교육/자격     ███████░░░  70%  🟡
 
 #### Step 4-4: 🎯 예상 과제 & 면접 질문
 
-**sequentialthinking**으로 JD + 기업 분석 결과 기반 예측:
+JD + 기업 분석 결과 기반 예측:
 
 **a) 📝 채용 전형별 예상 과제 유형**
 
@@ -533,7 +532,7 @@ D6 교육/자격     ███████░░░  70%  🟡
 
 분석 완료 전 반드시 확인:
 
-- [ ] 모든 Phase에서 sequentialthinking 사용 완료
+- [ ] 모든 Phase에서 단계별 분석 완료
 - [ ] Phase 1에서 deep-research 프로토콜 적용 (광역→심화→합성)
 - [ ] 출처 최소 3개 교차 검증
 - [ ] 모든 약점에 보완 전략 포함

@@ -3,7 +3,7 @@
 ---
 name: ai-safety-architect
 description: AI Guardrails, Prompt Injection 방어, 할루시네이션 감지, PII 보호, OWASP LLM Top 10, EU AI Act 대응이 필요할 때 호출.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:

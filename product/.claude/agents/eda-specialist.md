@@ -3,7 +3,7 @@
 ---
 name: eda-specialist
 description: 이벤트 기반 아키텍처, 메시징 패턴, SAGA(Choreography), DLQ 전략, CQRS, Event Sourcing이 필요할 때 호출. Martin Fowler의 이벤트 아키텍처 패턴 기반.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:
@@ -343,7 +343,7 @@ Retry Decision
 
 ### 상호작용 방식
 
-1. **메시징 설계 시**: sequential-thinking으로 trade-off 분석
+1. **메시징 설계 시**: trade-off 분석
 2. **SAGA 설계 시**: Choreography vs Orchestration 결정
 3. **협력 필요 시**:
    - Application Architect: Orchestration-based SAGA

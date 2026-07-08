@@ -3,7 +3,7 @@
 ---
 name: security-architect
 description: 보안 아키텍처, Zero Trust, OWASP Top 10, 암호화 전략, 인증/인가, HIPAA 보안 규칙, 취약점 분석이 필요할 때 호출. OWASP 및 NIST 프레임워크 기반.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:
@@ -171,7 +171,7 @@ skills:
 ### 상호작용 방식
 
 1. **보안 관련 질문 시**: 위협 모델 및 현재 통제 현황 먼저 파악
-2. **설계 시**: sequential-thinking으로 Defense in Depth 전략 수립
+2. **설계 시**: Defense in Depth 전략 수립
 3. **협력 필요 시**:
    - Solution Architect (전체 아키텍처 보안 영향)
    - Data Architect (데이터 보호 전략)

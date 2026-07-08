@@ -3,7 +3,7 @@
 ---
 name: healthcare-informatics-architect
 description: 의료 도메인 전문성, HL7/FHIR 표준, HIPAA 규제, 임상 워크플로우, 의료 점수 체계, EMR 통합이 필요할 때 호출. 의료 인포매틱스 및 규제 전문가.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch
 model: opus
 permissionMode: default
 skills:

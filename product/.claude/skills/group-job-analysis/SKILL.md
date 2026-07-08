@@ -1,7 +1,7 @@
 ---
 name: group-job-analysis
 description: 그룹사/계열사 다수 JD 일괄 분석 프로토콜. JD 수집 → 공유 기업조사 → 스크리닝 → 풀분석 → 비교분석 → 최종 추천.
-allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, Write, AskUserQuestion, mcp__sequential-thinking__sequentialthinking
+allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, Write, AskUserQuestion
 user-invocable: true
 argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 ---
@@ -59,7 +59,6 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 └───────────────────────────────────────────────────────────────────┘
 ```
 
-**⚠️ 필수 도구**: `mcp__sequential-thinking__sequentialthinking` — 모든 Phase에서 사용
 **📖 참조 프로토콜**: `job-analysis` Phase 2-4 — Phase 4에서 인라인 실행
 **📖 참조 프로토콜**: `deep-research` — Phase 2에서 3단계 프로토콜 적용
 
@@ -114,9 +113,9 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 ---
 
-## Sequential Thinking 사용 규칙
+## 단계별 분석 원칙
 
-모든 Phase에서 `mcp__sequential-thinking__sequentialthinking`을 **반드시** 사용:
+모든 Phase에서 다음 원칙을 **반드시** 적용:
 
 1. **Phase 시작**: 분석 계획 수립 (목표, 수집할 정보, 판단 기준)
 2. **스크리닝 점수 산출**: 각 포지션별 5차원 점수화
@@ -129,7 +128,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 ### Phase 0: 📋 입력 수집 + Group ID 생성
 
-1. **sequentialthinking**으로 `$ARGUMENTS` 파싱 및 전략 수립
+1. `$ARGUMENTS` 파싱 및 전략 수립
 2. Group ID 생성: `{group-slug}-{YYYY-MM-DD}`
    - slug 규칙: 영문소문자 + 하이픈 (예: toss-group, kakao-group)
 3. 이력서 자동 감지 (Glob)
@@ -144,7 +143,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 ### Phase 1: 📥 JD 일괄 수집 (Batch Fetch)
 
-1. **sequentialthinking**으로 수집 전략 (URL 그룹핑, 실패 대비)
+1. 수집 전략 수립 (URL 그룹핑, 실패 대비)
 2. 각 URL에 대해 `WebFetch`로 JD 수집
    - 실패 시 → Playwright MCP (`browser_navigate` + `browser_snapshot`)로 대체
 3. 수집된 JD를 구조화하여 파일 저장
@@ -188,7 +187,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 #### Part A: 그룹 공통 조사
 
-**sequentialthinking**으로 검색 쿼리 분해 후:
+검색 쿼리 분해 후:
 
 **Step 2-A1: 광역 탐색** (WebSearch 5-7회)
 - 그룹 기업 개요 (설립, 대표, 본사, 사업 구조)
@@ -226,7 +225,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 ### Phase 3: 🔍 Quick Screening
 
-**sequentialthinking**으로 이력서 핵심 역량 대비 각 포지션 점수화.
+이력서 핵심 역량 대비 각 포지션 점수화.
 
 #### Step 3-1: 스크리닝 차원 확정
 
@@ -316,7 +315,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 ### Phase 5: ⚖️ 비교 분석 (Comparative Analysis)
 
-**sequentialthinking**으로 법인 레벨 종합 판단.
+법인 레벨 종합 판단.
 
 #### Step 5-1: 법인별 대표 포지션 확정
 
@@ -482,7 +481,7 @@ D3 리더십        ████████░░  75%  🟡
 - [ ] Phase 3: 전 포지션 5차원 점수 산출 + Tier 분류
 - [ ] Phase 3: screening-matrix.md 저장
 - [ ] Phase 3: 법인별 최소 1개 Tier A 포지션 보장
-- [ ] Phase 4: 모든 Tier A 포지션에 sequentialthinking 사용
+- [ ] Phase 4: 모든 Tier A 포지션에 단계별 분석 적용
 - [ ] Phase 4: 각 분석에 6차원 매칭률 + Radar/Bar Chart 포함
 - [ ] Phase 4: 각 분석에 면접 질문 10개+ 포함
 - [ ] Phase 4: 개별 analysis.md 파일 저장

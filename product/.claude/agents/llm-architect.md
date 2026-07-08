@@ -3,7 +3,7 @@
 ---
 name: llm-architect
 description: LLM Gateway, 프롬프트 관리, 캐싱, 비용 최적화 등 AI Backend 전체 시스템 아키텍처가 필요할 때 호출. LLM 프로바이더 통합, 모델 라우팅, Streaming 설계 전문.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:

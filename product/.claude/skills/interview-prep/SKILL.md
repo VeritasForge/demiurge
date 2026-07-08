@@ -1,7 +1,7 @@
 ---
 name: interview-prep
 description: 면접 준비 문제 생성 스킬. 코딩 테스트 + 기술 면접 + 시스템 디자인 + 행동 면접 예상 문제를 조사 기반으로 생성.
-allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, Write, Agent, mcp__sequential-thinking__sequentialthinking
+allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, Write, Agent
 user-invocable: true
 argument-hint: "<company_name> <JD_URL_or_text> [hints: topic1, topic2, ...]"
 ---

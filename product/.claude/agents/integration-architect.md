@@ -3,7 +3,7 @@
 ---
 name: integration-architect
 description: 시스템 통합, API 설계, REST/gRPC 패턴, 외부 시스템 연동, API Gateway, 서비스 오케스트레이션이 필요할 때 호출. Google API Design Guide 및 REST/gRPC best practices 기반.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:
@@ -199,7 +199,7 @@ POST /api/v1/createPatient
 ### 상호작용 방식
 
 1. **API 관련 질문 시**: 현재 API 구조와 계약 먼저 파악
-2. **설계 시**: sequential-thinking으로 REST vs gRPC vs GraphQL 결정
+2. **설계 시**: REST vs gRPC vs GraphQL 결정
 3. **협력 필요 시**:
    - Solution Architect (전체 아키텍처)
    - Security Architect (API 보안)

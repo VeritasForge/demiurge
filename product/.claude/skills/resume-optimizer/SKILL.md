@@ -55,7 +55,6 @@ JD(Job Description)와 이력서를 비교 분석하여 **이력서를 실제로
 └───────────────────────────────────────────────────────────────┘
 ```
 
-**⚠️ 필수 도구**: `mcp__sequential-thinking__sequentialthinking` — 모든 Phase 전환 시 사용
 **📖 참조 스킬**: `humanize-writing` — Phase 4에서 Skill 도구로 직접 호출
 **📖 참조 스킬**: `job-analysis` — Phase 1 매칭 매트릭스 구조 참조
 
@@ -74,9 +73,9 @@ JD(Job Description)와 이력서를 비교 분석하여 **이력서를 실제로
 
 ---
 
-## Sequential Thinking 사용 규칙
+## 단계별 판단 원칙
 
-모든 Phase 전환 시 `mcp__sequential-thinking__sequentialthinking`을 사용합니다:
+모든 Phase 전환 시 다음 기준으로 판단합니다:
 
 | 시점 | 사고 내용 |
 |------|----------|
@@ -99,7 +98,7 @@ JD(Job Description)와 이력서를 비교 분석하여 **이력서를 실제로
 
 ## Phase 1: JD vs 이력서 갭 분석
 
-**mcp__sequential-thinking__sequentialthinking**을 사용하여 분석 계획을 수립한 후 실행.
+분석 계획을 수립한 후 실행.
 
 ### Step 1-1: JD 요구사항 분해
 
@@ -196,7 +195,7 @@ Phase 1에서 ❌ 또는 🟡로 판정된 갭을 기반으로 **AskUserQuestion
 
 ## Phase 3: 이력서 재작성
 
-**mcp__sequential-thinking__sequentialthinking**으로 재작성 전략을 수립한 후 실행.
+재작성 전략을 수립한 후 실행.
 
 ### 출력 규칙
 
@@ -502,5 +501,5 @@ pandoc {v{N}.md 파일 경로} -o {v{N}.pdf 파일 경로} --pdf-engine=weasypri
 - [ ] Phase 5에서 사용자가 최종 markdown을 확인하고 PDF 변환을 승인함
 - [ ] Phase 5에서 PDF 파일이 이력서와 같은 디렉토리에 생성됨
 - [ ] 모든 출력 파일이 이력서와 같은 디렉토리에 저장됨
-- [ ] mcp__sequential-thinking__sequentialthinking이 모든 Phase 전환에서 사용됨
+- [ ] 모든 Phase 전환 시 단계별 판단 기준이 적용됨
 ```

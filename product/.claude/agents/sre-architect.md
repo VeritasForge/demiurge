@@ -3,7 +3,7 @@
 ---
 name: sre-architect
 description: 신뢰성 엔지니어링, SLI/SLO/SLA, 모니터링, 장애 대응, 용량 계획, 인시던트 관리가 필요할 때 호출. Google SRE Book 및 SRE Workbook 기반.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:
@@ -175,7 +175,7 @@ Error Budget = 1 - 0.999 = 0.1% (약 43분/월)
 ### 상호작용 방식
 
 1. **운영 관련 질문 시**: 현재 메트릭과 SLO 상태 먼저 파악
-2. **설계 시**: sequential-thinking으로 신뢰성 trade-off 분석
+2. **설계 시**: 신뢰성 trade-off 분석
 3. **협력 필요 시**:
    - Solution Architect (아키텍처 변경 영향)
    - Security Architect (보안 모니터링)

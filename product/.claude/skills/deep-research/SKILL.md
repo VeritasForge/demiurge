@@ -131,7 +131,7 @@ deep-research (Phase 1~3)
 
 #### Step 1-1: 쿼리 분해 (Query Decomposition)
 
-**mcp__sequential-thinking__sequentialthinking**을 사용하여:
+다음 절차로 쿼리를 분해합니다:
 
 1. 사용자의 요구사항에서 **핵심 질문 3-5개**를 도출
 2. 각 질문에 대한 **검색 쿼리**를 영어와 한국어로 각각 작성
@@ -289,7 +289,7 @@ phase1_findings:
 
 #### Step 2-0: Phase 1 이해도 기반 쿼리 재생성
 
-Phase 1 완료 후, **mcp__sequential-thinking__sequentialthinking**을 사용하여:
+Phase 1 완료 후, 다음 절차로 지식 갭을 분석합니다:
 
 1. Phase 1에서 수집한 findings를 분석하여 **지식 갭(knowledge gap)** 식별
    - "확인된 것" vs "아직 모르는 것" 구분

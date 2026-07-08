@@ -3,7 +3,7 @@
 ---
 name: rag-architect
 description: RAG Pipeline, Chunking, Embedding, Vector DB, Hybrid Search, Re-ranking, Agentic RAG, AI Agent Orchestration 설계가 필요할 때 호출.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:

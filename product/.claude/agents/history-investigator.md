@@ -3,7 +3,7 @@
 ---
 name: history-investigator
 description: Git 이력 분석 전문 조사관. 최근 변경, blame, PR 컨텍스트, 회귀 분석 관점에서 변경 이력을 조사하여 증거를 수집.
-tools: Read, Grep, Glob, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Grep, Glob, Bash
 model: opus
 permissionMode: default
 ---
@@ -178,7 +178,7 @@ gh pr view <번호>
 ### 1. 조사 시작
 
 ```
-반드시 sequential-thinking으로 조사 계획 수립:
+반드시 다음 순서로 조사 계획을 수립하라:
 1. 주어진 perspective에 맞는 조사 전략 선택
 2. 핵심 질문 정리
 3. 탐색할 시간 범위/파일 범위 결정

@@ -59,14 +59,13 @@ AI와 협업한 세션을 회고하여 교훈(Lessons & Learned)을 체계적으
 - 단순 질문/답변 세션 (교훈이 없음)
 - 이미 /retrospective를 실행한 직후 (중복)
 
-**필수 도구**: `mcp__sequential-thinking__sequentialthinking` -- 모든 Phase 전환 시 사용
 **참조 스킬**: `update-config` -- Phase 4에서 Hooks 반영 시 활용
 
 ---
 
-## Sequential Thinking 사용 규칙
+## 단계별 판단 원칙
 
-모든 Phase 전환 시 `mcp__sequential-thinking__sequentialthinking`을 사용합니다:
+모든 Phase 전환 시 다음 기준으로 판단합니다:
 
 | 시점 | 사고 내용 |
 |------|----------|
@@ -90,7 +89,7 @@ AI와 협업한 세션을 회고하여 교훈(Lessons & Learned)을 체계적으
 
 ## Phase 1: 교훈 추출
 
-**mcp__sequential-thinking__sequentialthinking**을 사용하여 분석 계획을 수립한 후 실행.
+분석 계획을 수립한 후 실행.
 
 ### Step 1-1: 세션 컨텍스트 자동 분석
 
@@ -142,7 +141,7 @@ AskUserQuestion으로 3가지 질문:
 
 ## Phase 2: 교훈 분류
 
-**mcp__sequential-thinking__sequentialthinking**을 사용하여 분류 판단을 수행.
+분류 판단을 수행.
 
 ### 반영 대상
 
@@ -217,7 +216,7 @@ AskUserQuestion으로 3가지 질문:
 
 ## Phase 3: 사용자 승인
 
-**mcp__sequential-thinking__sequentialthinking**을 사용하여 승인 요청 내용을 정리.
+승인 요청 내용을 정리.
 
 ### 교훈 테이블 제시
 
@@ -243,7 +242,7 @@ AskUserQuestion으로 전체 교훈 목록을 테이블 형태로 제시:
 
 ## Phase 4: 반영
 
-**mcp__sequential-thinking__sequentialthinking**을 사용하여 반영 계획을 수립한 후 실행.
+반영 계획을 수립한 후 실행.
 
 ### 대상별 반영 순서
 

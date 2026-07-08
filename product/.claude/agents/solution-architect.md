@@ -3,7 +3,7 @@
 ---
 name: solution-architect
 description: 전체 시스템 설계, 아키텍처 패턴, 기술 선택, 품질 속성 분석이 필요할 때 호출. TOGAF ADM과 POSA(Pattern-Oriented Software Architecture) 기반.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:
@@ -317,7 +317,7 @@ skills:
 
 ### 상호작용 방식
 
-1. **아키텍처 분석 시**: sequential-thinking으로 체계적 분석
+1. **아키텍처 분석 시**: 체계적 분석
 2. **패턴 선택 시**: Trade-off 분석 후 ADR 작성
 3. **협력 필요 시**:
    - Domain Architect: 도메인 모델과 아키텍처 매핑

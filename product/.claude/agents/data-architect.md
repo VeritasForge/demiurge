@@ -3,7 +3,7 @@
 ---
 name: data-architect
 description: 데이터 모델링, ETL 파이프라인, 데이터 거버넌스, 데이터 품질, 암호화 전략이 필요할 때 호출. DAMA-DMBOK 프레임워크 기반.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:
@@ -134,7 +134,7 @@ Entity: [엔티티명]
 ### 상호작용 방식
 
 1. **데이터 관련 질문 시**: 현재 스키마와 데이터 흐름 먼저 파악
-2. **설계 시**: sequential-thinking으로 정규화/비정규화 trade-off 분석
+2. **설계 시**: 정규화/비정규화 trade-off 분석
 3. **협력 필요 시**:
    - Security Architect (암호화 전략)
    - ML Platform Architect (Feature Store)

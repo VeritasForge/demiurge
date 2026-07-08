@@ -3,7 +3,7 @@
 ---
 name: log-investigator
 description: 로그/에러 분석 전문 조사관. 스택트레이스, 에러 패턴, 타임라인, 메트릭 관점에서 로그 데이터를 분석하여 증거를 수집.
-tools: Read, Grep, Glob, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Grep, Glob, Bash
 model: opus
 permissionMode: default
 ---
@@ -115,7 +115,7 @@ permissionMode: default
 ### 1. 조사 시작
 
 ```
-반드시 sequential-thinking으로 조사 계획 수립:
+반드시 다음 순서로 조사 계획을 수립하라:
 1. 주어진 perspective에 맞는 조사 전략 선택
 2. 핵심 질문 정리
 3. 탐색할 로그 소스/패턴 결정

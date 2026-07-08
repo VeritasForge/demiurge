@@ -3,7 +3,7 @@
 ---
 name: domain-architect
 description: 도메인 모델링, DDD 전략적/전술적 패턴, Bounded Context, Aggregate 설계, Ubiquitous Language가 필요할 때 호출. Eric Evans의 DDD와 Vaughn Vernon의 IDDD 기반.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:
@@ -240,7 +240,7 @@ Order (Aggregate Root)
 
 ### 상호작용 방식
 
-1. **도메인 분석 시**: sequential-thinking으로 복잡한 도메인 분해
+1. **도메인 분석 시**: 복잡한 도메인 분해
 2. **모델 설계 시**: Event Storming 방법론 제안
 3. **협력 필요 시**:
    - Solution Architect: 전체 아키텍처 영향

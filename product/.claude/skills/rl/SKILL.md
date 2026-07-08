@@ -1,13 +1,13 @@
 ---
 name: rl
-description: Ralph Loop(자율 반복 실행)이 필요할 때 사용. sequential-thinking 기반으로 동일 프롬프트를 반복 주입하여 완료 promise까지 실행. /rl로 직접 호출. ⚠️ 첫 iteration은 현재 세션 모델로 실행되므로 어려운 task는 사전에 /model opus로 전환할 것.
+description: Ralph Loop(자율 반복 실행)이 필요할 때 사용. 동일 프롬프트를 반복 주입하여 완료 promise까지 실행. /rl로 직접 호출. ⚠️ 첫 iteration은 현재 세션 모델로 실행되므로 어려운 task는 사전에 /model opus로 전환할 것.
 allowed-tools: Read, Grep, Glob, Bash, WebSearch, WebFetch, Edit, Write, Task
 argument-hint: "<prompt> [--max-iterations N] [--template <name>]"
 ---
 
 # Ralph Loop Runner
 
-Ralph Loop (Ralph Wiggum Technique)을 sequential-thinking MCP와 함께 실행합니다.
+Ralph Loop (Ralph Wiggum Technique)을 실행합니다.
 동일한 프롬프트를 반복 주입하여 작업이 완료될 때까지 자율 반복 실행합니다.
 
 **Usage:**

@@ -3,7 +3,7 @@
 ---
 name: concurrency-architect
 description: POSA Volume 2 동시성 패턴과 분산 시스템 동시성을 담당하는 아키텍트입니다.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:

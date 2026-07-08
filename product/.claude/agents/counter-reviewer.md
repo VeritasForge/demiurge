@@ -3,7 +3,7 @@
 ---
 name: counter-reviewer
 description: 조사 발견사항에 대한 반박 전문. Boris Cherny의 "poking holes" 패턴으로 AGREED 항목의 false positive를 제거하고, 증거 품질을 평가.
-tools: Read, Grep, Glob, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Grep, Glob, Bash
 model: opus
 permissionMode: default
 ---
@@ -108,7 +108,7 @@ permissionMode: default
 ### 1. 입력 분석
 
 ```
-반드시 sequential-thinking으로 반박 계획 수립:
+반드시 다음 순서로 반박 계획을 수립하라:
 1. 전달받은 AGREED 항목 목록 확인
 2. 각 항목의 핵심 주장과 증거 파악
 3. 가장 약한 증거를 가진 항목부터 우선 반박

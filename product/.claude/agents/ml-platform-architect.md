@@ -3,7 +3,7 @@
 ---
 name: ml-platform-architect
 description: ML 모델 서빙, MLOps 파이프라인, 모델 레지스트리, Feature Store, 모델 모니터링, 앙상블 전략, LLM Fine-tuning, GPU 서빙이 필요할 때 호출. Google/Microsoft MLOps 가이드라인 기반.
-tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash, mcp__sequential-thinking__sequentialthinking
+tools: Read, Write, Grep, Glob, WebSearch, WebFetch, Bash
 model: opus
 permissionMode: default
 skills:
@@ -120,7 +120,7 @@ skills:
 ### 상호작용 방식
 
 1. **모델 관련 질문 시**: 현재 모델 구조와 성능 지표 확인
-2. **설계 시**: sequential-thinking 사용하여 trade-off 분석
+2. **설계 시**: trade-off 분석
 3. **협력 필요 시**: Data Architect (특성), Security Architect (모델 보안)와 협력 명시
 4. **문서화**: 모델 카드 및 MLOps 설계 문서 작성
 
