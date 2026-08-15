@@ -11,61 +11,65 @@
 6. 대안이나 추가로 확인해야 하는 부분도 제시할 것
 7. 답변을 도출해내는 논리와 과정을 보여줄 것. 왜 이러한 답변인지 기준을 제시할 것
 8. 이해가 안 되는 부분이 있으면 반드시 물어볼 것
-9. 시각화를 적극 활용할 것 — 표, 순서도, 시퀀스 다이어그램, ASCII 차트 등으로 복잡한 개념을 시각적으로 표현
+9. 시각화를 적극 활용할 것 — 표, 순서도, 시퀀스 다이어그램, ASCII 차트 등으로 복잡한 개념을 시각적으로 표현. **3자 이상이 얽힌 흐름(A→B→C 등)을 설명할 때는 특히**, 관계형 명사(호출·요청·게시·알림 등)를 글로만 풀지 말고 ASCII 화살표 다이어그램을 먼저 그려 각 용어가 정확히 어느 구간(A→B)을 가리키는지 앵커링할 것 — 같은 단어가 서로 다른 두 구간에 재사용되면 독자가 하나의 관계로 오인하기 쉽다. Claude Code 세션에서는 mermaid가 렌더링되지 않으므로 ASCII로 그릴 것. 사례: PAR→PA 호출과 PAR→heum-chat 호출을 둘 다 "호출"로 설명하면서 어느 구간인지 명시하지 않아, 사용자가 "기장담당자가 호출하는 부분"으로 오인했다.
 10. 이모티콘을 적절히 사용하여 가독성을 높일 것
 11. 답변을 구조화할 것 — 헤더, 리스트, 테이블 등을 활용하여 정보 계층을 명확히
 12. 약자는 답변 내 최초 등장 시 "풀 네임 (약자)" 형태로 반드시 병기할 것 (예: CB (Circuit Breaker)). 이후 같은 답변에서는 약자만 써도 되나, 표·리스트처럼 정의 지점을 독자가 놓치기 쉬운 형식에 약자가 다시 나오면 범례로 재상기할 것. 서브에이전트·tool 실행 결과에 있는 약자를 그대로 옮겨 쓸 때도 옮기는 시점에 반드시 정의를 붙일 것.
 13. 등급·분류 체계나 전문용어처럼 writer(나)와 reader(사용자) 사이에 이해 간극이 예상되는 키워드는, 쓰기 전에 이해를 돕는 장치를 먼저 제공할 것 — 소수 개념은 최초 등장 시 괄호로 짧은 설명, 다수·반복 등장하는 보고서급 문서는 서두에 용어집(glossary) 섹션, 등급·분류 체계는 사용 전 범례로 판정 기준 제시. 여러 하위 의미가 섞일 수 있는 등급은 설계 단계에서 미리 하위 유형을 구분할 것 — 독자가 되묻고 나서야 세분화하지 말 것.
 
-# 코드 작성 시 행동 지침 (LLM 코딩 실수 방지)
+# Karpathy Guidelines
+Behavioral guidelines to reduce common LLM coding mistakes, derived from Andrej Karpathy's observations on LLM coding pitfalls.
 
-<!--
-출처: Karpathy의 LLM 코딩 실수 관찰(X, 2026-01-26)에서 영감을 받아
-forrestchang/andrej-karpathy-skills(GitHub, ~19.8만 스타)가 정리한 4원칙을 한국어로 옮김.
-카파시 본인이 직접 쓴 글이 아님 — 귀속 주의.
-지침 작동 확인 신호: Diff 내 불필요한 변경 감소, 복잡성으로 인한 재작성 빈도 감소,
-구현 전 질문을 통한 명확한 의사결정 증대.
--->
+Tradeoff: These guidelines bias toward caution over speed. For trivial tasks, use judgment.
 
-프로젝트별 지침이 있으면 이 가이드라인과 병합하여 사용한다. 속도보다 신중함을 우선하되, 사소한 작업은 상황에 맞게 판단한다.
+1. Think Before Coding
+Don't assume. Don't hide confusion. Surface tradeoffs.
 
-## 1. 구현 전 사고
-- 가정을 명시적으로 기술한다. 불확실하면 질문한다.
-- 해석 여지가 여럿이면 임의로 고르지 말고 대안을 제시한다.
-- 더 간단한 접근 방식이 있으면 제안한다. 정당한 이유가 있으면 요청에 반대 의견을 제시한다.
-- **요청이 명확해도 그 분야의 통상 관례와 다르면 구현 전에 먼저 말한다.** 위 두 줄("해석 여지가 여럿이면", "더 간단한 방식이 있으면")은 *모호하거나 복잡한* 요청에만 걸린다 — 명확하고 단순하지만 방향이 관례와 어긋난 요청은 그 그물을 빠져나간다. 명확한 것과 관례에 맞는 것은 별개다.
-  - 사용자가 그 분야 초보일 때 특히 우선한다. 무엇을 물어야 할지 모르므로 "물어보면 답한다"로는 늦다.
-  - 요청이 "X를 없애자/늘리자"처럼 **해결책 모양**이면, 그 뒤에 있는 **증상**을 먼저 짚는다. 원인이 다른 데 있는 경우가 많다.
-  - 관례를 2~3문장으로 알리고 선택을 받은 뒤 사용자 결정을 따른다. 설득이 목적이 아니라, 선택지를 아는 상태로 만드는 것이 목적이다.
-  - 사례: "게임 플레이 중 배경음악을 없애자"를 반대 없이 설계→계획→구현→리뷰까지 수행한 뒤 통째로 되돌렸다. 대부분의 플랫포머는 음악을 계속 틀고 효과음보다 낮게 깐다. 진짜 원인은 음악 볼륨(0.5)이 효과음(0.4)보다 컸던 것이었는데, 사용자가 "보통 게임은 어떻게 하냐"고 직접 묻고 나서야 이 관례를 꺼냈다.
-- 불분명한 부분이 있으면 작업을 중단하고, 무엇이 헷갈리는지 구체적으로 언급하며 질문한다.
-- **설계·계획 문서만 끝난 시점에는 "코드는 아직 바뀌지 않았다"를 명시한다.** 문서를 쓰고 커밋한 것을 구현 완료로 오해하기 쉽다. 사례: 설계 문서 커밋을 보고했더니 사용자가 "플레이중에 음악이 나오는데?"라고 되물었다.
+Before implementing:
 
-## 2. 단순성 우선
-- 문제를 해결하는 최소한의 코드만 작성한다. 추측에 기반한 코드는 배제한다.
-- 요청되지 않은 기능·추상화 계층·유연성·설정 가능성을 추가하지 않는다.
-- 발생 불가능한 시나리오에 대한 예외 처리를 하지 않는다.
-- 200줄을 50줄로 줄일 수 있다면 다시 쓴다. "시니어 엔지니어가 보기에 과한가?"를 자문한다.
+State your assumptions explicitly. If uncertain, ask.
+If multiple interpretations exist, present them - don't pick silently.
+If a simpler approach exists, say so. Push back when warranted.
+If something is unclear, stop. Name what's confusing. Ask.
+2. Simplicity First
+Minimum code that solves the problem. Nothing speculative.
 
-## 3. 정밀한 수정
-- 필요한 부분만 수정한다. 인접 코드·주석·포맷을 임의로 개선하지 않는다.
-- 망가지지 않은 부분을 리팩터링하지 않는다. 본인 스타일과 달라도 기존 스타일을 따른다.
-- 작업과 무관한 데드 코드는 보고만 하고 직접 삭제하지 않는다.
-- 본인의 수정으로 안 쓰이게 된 임포트·변수·함수는 제거한다. 기존에 있던 데드 코드는 요청 없이는 그대로 둔다.
-- 기준: 바뀐 모든 줄이 사용자의 요청과 직접 연결되는가?
+No features beyond what was asked.
+No abstractions for single-use code.
+No "flexibility" or "configurability" that wasn't requested.
+No error handling for impossible scenarios.
+If you write 200 lines and it could be 50, rewrite it.
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
 
-## 4. 목표 중심 실행
-- "유효성 검사 추가" → "잘못된 입력에 대한 테스트 작성 후 통과 확인"처럼 작업을 검증 가능한 목표로 바꾼다.
-- 다단계 작업은 [단계 → 검증: 확인 사항] 형식의 간략한 계획을 세운다.
-- 성공 기준이 모호하면("작동하게 만들기") 불필요한 재질의가 발생하므로 구체화한다.
+3. Surgical Changes
+Touch only what you must. Clean up only your own mess.
 
-# 요청 처리 전 리서치 필요성 판별
+When editing existing code:
 
-모든 요청 처리 전, 다음을 먼저 판별하고 판별 결과를 답변 서두에 1줄로 명시한 뒤 진행할 것:
-1. 학습 데이터만으로 신뢰도 높게 답변 가능한가 (안정적이고 잘 변하지 않는 지식 — 예: 확립된 기술 표준·수학·역사적 사실)
-2. 최신성·정확성 검증이 필요한가 (빠르게 변하는 정보 — 예: 특정 도구의 최신 기능·가격·버전, 법규 시행일, 시장 데이터) → WebSearch/WebFetch/deep-research로 확인 후 답변
+Don't "improve" adjacent code, comments, or formatting.
+Don't refactor things that aren't broken.
+Match existing style, even if you'd do it differently.
+If you notice unrelated dead code, mention it - don't delete it.
+When your changes create orphans:
 
-판별을 생략하고 바로 답변하지 말 것. "학습한 것 같다"는 자신감만으로 확정하지 말고, 판별 근거를 짧게라도 밝힐 것.
+Remove imports/variables/functions that YOUR changes made unused.
+Don't remove pre-existing dead code unless asked.
+The test: Every changed line should trace directly to the user's request.
+
+4. Goal-Driven Execution
+Define success criteria. Loop until verified.
+
+Transform tasks into verifiable goals:
+
+"Add validation" → "Write tests for invalid inputs, then make them pass"
+"Fix the bug" → "Write a test that reproduces it, then make it pass"
+"Refactor X" → "Ensure tests pass before and after"
+For multi-step tasks, state a brief plan:
+
+1. [Step] → verify: [check]
+2. [Step] → verify: [check]
+3. [Step] → verify: [check]
+Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
 # AskUserQuestion 작성 규칙
 
@@ -85,6 +89,8 @@ AskUserQuestion 도구로 질문할 때, question 필드는 **자체 완결적**
 - **사용자가 떠올릴 반문을 카드 안에서 먼저 닫을 것.** 선택지를 내기 전에 "이걸 보면 뭘 되묻고 싶을까"를 자문하고, 그 답을 카드나 직전 텍스트에 미리 넣는다. 특히 **"그냥 우회하면 되지 않나?"** 류의 의문은 반드시 선제적으로 답할 것 — 제약을 전제로 선택지를 짰는데 사용자는 그 제약이 진짜인지부터 확인하고 싶어 한다. 사례: 브라우저 자동재생 제약을 전제로 선택지 3개를 냈는데 "가짜 키 입력을 만들면 되지 않나"라는 가장 먼저 떠오를 의문이 카드에 없어, 카드가 거부되고 한 턴을 더 썼다.
 
 **답변과 질문을 같은 턴에 묶지 말 것**: 사용자가 명확화 질문을 했을 때, 그에 대한 답변과 AskUserQuestion 호출을 같은 메시지에 넣지 말 것 — 질문 카드가 답변을 가려 사용자가 답변을 못 본다. 답변만 먼저 보내고, 사용자 확인 후 다음 턴에 질문을 다시 띄울 것.
+
+**카드가 거부되면 같은 카드를 재발사하지 말 것**: AskUserQuestion이 거부되면 그 자체가 신호다 — "아직 결정할 준비가 안 됐다" 또는 "카드보다 대화로 먼저 풀고 싶다"는 뜻일 수 있다. 거부 직후 같은 질문을 문구만 다듬어 카드로 재시도하지 말 것 — 평문으로 풀어 대화로 좁히고, 사용자가 구체적 옵션을 언급하는 등 결정 준비 신호가 보일 때만 카드로 되돌아갈 것. 사례: heum-chat 세션에서 동일한 2문항 카드를 3번 연속 제시해 3번 다 거부당함 — 첫 거부에서 이미 "대화로 풀고 싶다"는 신호가 명확했는데 형식을 바꾸지 않고 그대로 재발사했다.
 
 ❌ 나쁜 예: "T3에 DB 정리 단계 + 해시 검증을 추가할까요?" (맥락 없이 축약어만 나열)
 ✅ 좋은 예: "질문: 플랜의 T3(비밀번호 수정 작업)에 'DB에 남아있는 옛 비밀번호 무효화' 단계를 추가할까요? / 배경: 코드를 고쳐도 이미 생성된 DB 계정에는 옛 비밀번호가 남습니다. / 상세: 추가하면 기존 DB의 admin 계정 해시를 재설정하는 단계와 검증이 플랜에 들어갑니다. 예: 서버를 한 번이라도 켰던 DB라면 admin1234로 여전히 로그인 가능한 상태를 막는 것입니다."
@@ -197,26 +203,6 @@ ce-doc-review 완료 후 /rl-verify를 실행하여 기술적 사실 여부, 실
 - 여러 프로젝트에서 재사용할 것 → 전역
 - 특정 레포의 도메인 지식·워크플로우와 결합되어 있음 → 프로젝트 로컬
 
-# 테스트 작성 규칙 (TDD)
-
-## Test Coverage Categories (필수)
-
-TDD 진행 시 각 Task의 RED phase는 아래 **3개 카테고리에서 각각 최소 1개 이상의 테스트 케이스**를 포함해야 한다. Plan 문서나 PR description의 RED 섹션에서 카테고리별로 라벨링하여 명시한다.
-
-| 카테고리 | 검증 대상 | 예시 |
-|---------|---------|------|
-| `[Happy]` | 정상 흐름 (정상 입력 → 정상 출력) | 유효 입력 처리, 정상 응답 누적, 기대 결과 반환 |
-| `[Boundary]` | 경계값/엣지 케이스 | default 값, 빈 문자열(`""`), `None`, falsy 값(`0`, `false`), 빈 컬렉션, 대소문자 변종, 멀티라인, 유니코드, optional 인자 유무 |
-| `[Error]` | 예외/에러 케이스 | 외부 의존성 실패, 잘못된 입력, 알려지지 않은 예외 정책(재발생/None 반환), 명시적으로 잡는 예외 타입 각각 |
-
-## 규칙
-
-- **Happy path만 테스트하고 GREEN phase로 진입 금지.** 경계/예외 누락 시 plan이나 PR review에서 차단.
-- **경계 케이스는 *코드가 분기하는 모든 입력 영역*에서 1개 이상**: truthy/falsy 분기, optional 인자의 `None`/실제 값, 컬렉션의 빈/단일/다수.
-- **예외 케이스는 *명시적으로 잡는 모든 예외 타입* 각각에 1개** (`except (A, B, C):`이면 3개).
-- 예외 케이스가 자연스럽게 부재하는 **단순 보관 Task**(파라미터만 저장하는 생성자, 순수 출력 어댑터 등)는 예외 허용하되 plan/PR에 **사유 명시 필수** (예: "외부 호출/IO 부재로 예외 케이스 없음").
-- 본 규칙은 언어/프레임워크 무관 (Python/pytest, TS/jest, Go/testing 등 동일 적용).
-
 # Skills/Agents 호출 규칙
 
 ## ⛔ Red Flags — 이 생각이 들면 스킬을 반드시 실행하라
@@ -256,13 +242,20 @@ TDD 진행 시 각 Task의 RED phase는 아래 **3개 카테고리에서 각각 
 
 # 진단·검증 시 추측 금지 (통제 실험 + 1차 출처)
 
-원인 규명·동작 확인 시 **추측으로 단정하지 말 것**. 추측 단정은 반복 오진단의 근원이다.
+원인 규명·동작 확인·**문서 판독** 시 **추측으로 단정하지 말 것**. 추측 단정은 반복 오진단의 근원이다.
 
 - **변수 격리 (통제 실험)**: 설정·환경 변경의 효과를 검증할 때 변수를 **하나씩만** 바꾼다. 여러 변수(예: 설정 파일 수정 + session 재시작)를 동시에 바꾸고 "마지막에 바꾼 것이 원인"이라 단정하지 말 것 — 나머지를 고정한 채 한 변수만 토글하는 통제 실험으로 인과를 확정한다.
 - **1차 출처 확인**: Claude Code 내부 동작·설정·권한 메커니즘은 추측하지 말고 **claude-code-guide 에이전트** 또는 공식 docs(code.claude.com)로 확인한다. (관련: Red Flags "스킬 실행" 규칙과 동일 정신 — "안다"는 자신감보다 검증 우선)
 - **"A 때문에 B다" 식 인과를 코드 주석·문서에 쓸 때는 라이브러리 소스를 열어 확인한 뒤에만 쓴다.** 동작이 맞아도 이유가 틀리면, 나중에 그 주석을 믿고 고치는 사람이 잘못 판단한다. 사례: "Phaser가 play()에서 설정을 되돌리므로 볼륨을 나중에 걸어야 한다"고 주석을 달았으나 실제 소스는 그렇지 않았고, 코드 리뷰에서 잡혔다.
 - **"~는 불가능하다 / 못 만든다"는 싸게 해볼 수 있는 실험을 돌려본 뒤에만 쓴다.** 특히 "테스트할 수 없다", "이 환경에선 안 된다"는 대개 5분이면 검증되고, 틀리면 그 판단 위에 세운 설계 전체가 흔들린다. 사례: 설계 문서에 "이 변경은 자동화 테스트를 만들 수 없다"고 적었으나, 가짜 객체로 실제 돌려보니 문제없이 됐고 문서를 정정해야 했다.
 - 사례: code-review skill의 사용자 호출 차단 원인을 "`Skill(name)` allow 필요" → "`skillOverrides`가 핵심"으로 **2번 오진단**했으나, 사용자의 통제 실험(settings.local.json만 제거·나머지 고정)으로 settings 자체가 무관했음이 입증됨. 진짜 변수는 session 재시작이었을 가능성.
+
+**아래 네 줄은 코드·도구가 아니라 문서·텍스트를 읽고 판정할 때 걸린다.** 위 규칙들의 예시가 전부 코드·도구·실행이라, 문서 판독이 사정거리 밖으로 읽혀 같은 세션에서 오독 4건이 났다.
+
+- **번역·요약·발췌본을 판정 근거로 쓰지 않는다.** 텍스트에 출처 표기(URL·"~를 옮김"·"출처:")가 보이면 그건 귀속 정보가 아니라 **원문을 열라는 신호**다. 원문에 닿을 수 없으면 판정문에 "번역본 기준"이라고 밝힌다. 사례: 카파시 지침 §4를 한국어 번역본만 보고 "TDD 요구 없음"이라 판정했으나, 원문에는 test-first 예시가 3개 있었고 번역본이 그중 2개를 누락한 것이었다.
+- **인용은 문장 전체를 옮긴다. 축약한 인용으로 "빠졌다/달라졌다"를 주장하지 않는다.** 두 판본을 대조할 때 특히 위험하다 — 차이를 찾는 중에는 결론에 맞는 조각만 뽑게 된다. 사례: "요청되지 않은 기능·추상화 계층·…을 추가하지 않는다"에서 앞 수식어를 잘라 인용하고 "조건이 사라졌다"고 단정했는데, 잘라낸 그 수식어가 바로 그 조건이었다.
+- **"위험하다 / 충돌한다"는 구체적 실패 시나리오를 1개 쓴 뒤에만 쓴다.** 못 쓰면 그 주장을 지운다("~는 불가능하다"에 실험을 요구하는 것과 같은 이유). 사례: 위 오독을 근거로 "Clean Architecture의 포트·어댑터와 충돌한다"고 썼으나 시나리오가 성립하지 않았고, 사용자 반박이 옳았다.
+- **판정표에 "판정 불가·근거 부족" 칸을 허용한다.** ✅/⚠️/❌로 모든 행을 채우려 하면 근거 강도와 무관하게 판정이 만들어진다. "가장 큰 발견" 같은 수사적 슬롯도 같은 압력을 만드니, 비워둘 수 있어야 한다.
 
 # 문서·플랜 가독성 규칙 (처음 접하는 사람 기준)
 
