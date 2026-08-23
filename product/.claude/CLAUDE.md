@@ -1,4 +1,9 @@
-> 전제: superpowers 플러그인 설치. 스킬 호출 강제와 플랜 실행 도구(writing-plans·subagent-driven-development·executing-plans)를 그 플러그인이 제공한다 — 제거하면 아래 여러 규칙이 근거를 잃는다.
+<!-- 유지보수 메모(컨텍스트에 주입되지 않음)
+     스킬 호출 강제 규칙은 여기 없다 — superpowers의 using-superpowers가
+     SessionStart 훅(startup|clear|compact)으로 매 세션 주입하기 때문에 중복이라 뺐다.
+     그 플러그인을 제거하면 강제력이 조용히 사라지고, 아래 플랜 템플릿이 참조하는
+     writing-plans·subagent-driven-development·executing-plans도 함께 죽는다.
+     플러그인 통합 전반은 레포 README 참조. -->
 
 # 응답 가이드라인
 
