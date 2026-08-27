@@ -877,6 +877,6 @@ claude mcp list
 
 ## 관련 리소스
 
-- 각 아키텍트 에이전트의 도메인 지식 (`.claude/agents/*.md`)
-- 아키텍처 패턴 스킬 카드 (`.claude/skills/*/SKILL.md`)
-- 오케스트레이션 프로토콜 (`.claude/skills/architect-orchestration/SKILL.md`)
+- 각 아키텍트 에이전트의 도메인 지식 (`.claude/skills/demiurge/agents/*.md`)
+- 아키텍처 패턴 스킬 카드 (`.claude/skills/demiurge/skills/*/SKILL.md`)
+- 오케스트레이션 프로토콜 (`.claude/skills/demiurge/skills/architect-orchestration/SKILL.md`)

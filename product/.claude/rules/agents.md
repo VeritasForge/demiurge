@@ -57,7 +57,7 @@ agent는 fresh context에서 시작부터 끝까지 명시된 모델로 실행�
 플러그인이 제공하는 agent는 다음 필드가 **무시됨**:
 - `hooks`, `mcpServers`, `permissionMode`
 
-이 필드들을 활용해야 한다면 정의를 `product/.claude/agents/`로 복사하여 override.
+이 필드들을 활용해야 한다면 정의를 `product/.claude/skills/demiurge/agents/`로 복사하여 override.
 
 ## 4. 자동 호출 차단
 
@@ -76,7 +76,7 @@ agent에는 `disable-model-invocation` 같은 필드가 **없다**. agent를 명
 
 ## 5. demiurge 컨벤션
 
-현재 demiurge에는 21개 agent가 `product/.claude/agents/`에 정의 (정확한 인벤토리는 `ls product/.claude/agents/` 확인). 공통 계열:
+현재 demiurge에는 21개 agent가 `product/.claude/skills/demiurge/agents/`에 정의 (정확한 인벤토리는 `ls product/.claude/skills/demiurge/agents/` 확인, 배포 후 호출은 `demiurge:<agent-name>`). 공통 계열:
 - `architect` 계열 (14개): T2-T3 tier로 도메인별 아키텍처 자문
 - `investigation` 계열 (4개): 코드/로그/히스토리 조사 (Explore 패턴)
 - `meta-workflow` 계열 (3개): convergence-evaluator, counter-reviewer, eda-specialist 등 rl-verify·적대적 검토 지원

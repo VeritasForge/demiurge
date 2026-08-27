@@ -61,11 +61,11 @@ For multi-step tasks, state a brief plan — one line per step: `1. [Step] → v
 2. **스킬 검색**: 착수 전 `ls ~/.claude/skills/ ~/.claude/agents/`로 실제 목록을 확인하고(아래 호출 매핑 표에 없는 것이 훨씬 많다), 이 플랜에 쓸 스킬·에이전트를 각 Task에 명시한다.
 3. **경로 검증**: 참조하는 모든 파일·디렉토리 경로는 작성 전 `ls`/`grep`으로 실존을 확인한다 — 상상한 경로로 spec을 쓰면 구현 단계에서 막힌다. 사례: `src/domain/run/escape-counter.ts`를 가정했으나 그 디렉토리 자체가 없었다.
 4. **진행 추적**: subagent-driven-development는 자체 ledger 파일에 진행을 남긴다. 그 외(executing-plans·ce-work·순수 plan mode)는 **플랜 파일의 체크박스(`- [ ]`)를 갱신**해 추적한다 — `TaskCreate`·`TodoWrite`류 도구는 현재 모델에서 기본 비활성이라 쓸 수 없다.
-5. **Task별 검증**: 각 Task 완료 후 /rl로 해당 Task의 완료조건을 검증한다. 새 사실·오류 발견 시 Task를 수정해 재수행한다. /rl은 고정 상태 파일(`.claude/ralph-loop.local.md`)을 쓰므로 **두 개를 동시에 돌리지 않는다** — Task를 병렬 실행하는 도구에서도 /rl 검증은 순차로 돌린다.
+5. **Task별 검증**: 각 Task 완료 후 /demiurge:rl로 해당 Task의 완료조건을 검증한다. 새 사실·오류 발견 시 Task를 수정해 재수행한다. /demiurge:rl은 고정 상태 파일(`.claude/ralph-loop.local.md`)을 쓰므로 **두 개를 동시에 돌리지 않는다** — Task를 병렬 실행하는 도구에서도 /demiurge:rl 검증은 순차로 돌린다.
 6. **코드 리뷰**: 코드 작성 Task 완료 후, 실행 도구에 내장 리뷰(예: subagent-driven-development의 Task reviewer)가 있으면 그걸로 충분하다. 없으면(executing-plans, 순수 plan mode 등) `/code-review`를 최소 1회 실행한다. **어느 쪽 리뷰든** React/Next.js 코드는 Vercel best-practices 기준을 포함한다.
-7. **최종 검증**: 모든 Task 완료 후 /rl로 플랜 전체 완료조건을 검증한다. 미충족 항목은 원인을 분석해 보완 Task를 추가하고 재검증한다.
+7. **최종 검증**: 모든 Task 완료 후 /demiurge:rl로 플랜 전체 완료조건을 검증한다. 미충족 항목은 원인을 분석해 보완 Task를 추가하고 재검증한다.
 
-제약사항(버전 하한·의존성 제한 등)은 writing-plans가 플랜 필수 헤더로 이미 강제하므로 중복 기재하지 않는다. 금지사항·고려사항은 되돌리기 어려운 변경·보안 경계·여러 프로젝트에 영향을 주는 결정이 포함된 플랜에만 적는다. 플랜 문서 품질 검증(/compound-engineering:ce-doc-review)과 다관점 사실 검증(/rl-verify)도 **매 플랜 의무가 아니다** — 같은 고위험 플랜에만 선택적으로 쓴다.
+제약사항(버전 하한·의존성 제한 등)은 writing-plans가 플랜 필수 헤더로 이미 강제하므로 중복 기재하지 않는다. 금지사항·고려사항은 되돌리기 어려운 변경·보안 경계·여러 프로젝트에 영향을 주는 결정이 포함된 플랜에만 적는다. 플랜 문서 품질 검증(/compound-engineering:ce-doc-review)과 다관점 사실 검증(/demiurge:rl-verify)도 **매 플랜 의무가 아니다** — 같은 고위험 플랜에만 선택적으로 쓴다.
 
 # 스킬/에이전트 개발 규칙
 
@@ -76,14 +76,14 @@ For multi-step tasks, state a brief plan — one line per step: `1. [Step] → v
 | 상황 | 호출 |
 |---|---|
 | Claude Code 내부 동작·기능·설정·권한 메커니즘 확인 | 추측하지 말고 claude-code-guide 에이전트 또는 공식 docs(code.claude.com) |
-| 여러 출처를 교차 검증하는 조사 | /deep-research (WebSearch/WebFetch를 직접 반복 호출하지 말 것) |
-| 기술 개념·아키텍처 논의·학습 | 학습 데이터로 초벌 + /deep-research로 근거 보강 |
+| 여러 출처를 교차 검증하는 조사 | /demiurge:deep-research (WebSearch/WebFetch를 직접 반복 호출하지 말 것) |
+| 기술 개념·아키텍처 논의·학습 | 학습 데이터로 초벌 + /demiurge:deep-research로 근거 보강 |
 | 새 스킬·에이전트 생성 | /superpowers:writing-skills |
 | 구현 전 아이디어 정리·설계 | /superpowers:brainstorming (레이아웃·와이어프레임 질문은 Visual Companion으로 목업) |
 | 플랜·문서의 품질 검증 | /compound-engineering:ce-doc-review |
-| 기술적 사실·실현 가능성·반론 관점의 다관점 검증 | /rl-verify |
-| AI 협업 세션 회고·교훈 추출 | /retrospective |
-| 버그·에러·테스트 실패·예상치 못한 동작 | /debug |
+| 기술적 사실·실현 가능성·반론 관점의 다관점 검증 | /demiurge:rl-verify |
+| AI 협업 세션 회고·교훈 추출 | /demiurge:retrospective |
+| 버그·에러·테스트 실패·예상치 못한 동작 | /demiurge:debug |
 | Next.js/React 코드 작성·수정·리뷰 | /vercel-react-best-practices + /vercel-composition-patterns — 기능 추가·버그 수정·리팩터링 어디서든 |
 | 비주얼 디자인 품질(타이포·컬러·모션) | /frontend-design:frontend-design |
 | 구현 후 접근성·웹 표준 감사 | /web-design-guidelines |

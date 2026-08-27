@@ -109,5 +109,5 @@ user-invocable: false
 ## 관련 문서
 
 - `release-handoff-document-template.md` — 릴리즈 핸드오프 문서 원본 템플릿
-- `.claude/agents/release-investigator.md` — 릴리즈 분석 전문 조사관 에이전트
-- `.claude/skills/investigation-orchestration/SKILL.md` — Investigation Orchestration 스킬
+- `.claude/skills/demiurge/agents/release-investigator.md` — 릴리즈 분석 전문 조사관 에이전트
+- `.claude/skills/demiurge/skills/investigation-orchestration/SKILL.md` — Investigation Orchestration 스킬

@@ -70,4 +70,4 @@ NOT: 라이브 웹앱/React 컴포넌트 제작(→ frontend-design), 원본 md 
 
 ## 배포 (전역 스킬)
 
-이 스킬은 `product/.claude/skills/md-to-html/`에 위치. 변경 후 `cd <product-repo> && just link`로 stow 재배포.
+이 스킬은 `product/.claude/skills/demiurge/skills/md-to-html/`에 위치. 변경 후 `cd <product-repo> && just link`로 stow 재배포.

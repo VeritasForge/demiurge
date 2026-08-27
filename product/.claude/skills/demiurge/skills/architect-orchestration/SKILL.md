@@ -209,9 +209,9 @@ context_hygiene_check:
 다음 3개 파일을 **Read tool**로 읽어 오케스트레이션에 필요한 상세 정보를 확보합니다:
 
 ```
-.claude/skills/architect-orchestration/architect-registry.md   → 12개 아키텍트 상세 정보
-.claude/skills/architect-orchestration/routing-strategy.md      → 키워드 → 아키텍트 매핑 규칙
-.claude/skills/architect-orchestration/consensus-protocol.md    → 합의 프로토콜 상세
+.claude/skills/demiurge/skills/architect-orchestration/architect-registry.md   → 12개 아키텍트 상세 정보
+.claude/skills/demiurge/skills/architect-orchestration/routing-strategy.md      → 키워드 → 아키텍트 매핑 규칙
+.claude/skills/demiurge/skills/architect-orchestration/consensus-protocol.md    → 합의 프로토콜 상세
 ```
 
 ---

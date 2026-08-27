@@ -117,8 +117,8 @@ Step 5: 실행 검증 ───────────────────�
 실행 내용:
 
 0-1. 참조 문서 로드
-  - Read: .claude/skills/investigation-orchestration/investigator-registry.md
-  - Read: .claude/skills/investigation-orchestration/classification-protocol.md
+  - Read: .claude/skills/demiurge/skills/investigation-orchestration/investigator-registry.md
+  - Read: .claude/skills/demiurge/skills/investigation-orchestration/classification-protocol.md
 
 0-2. 쿼리 분석 (sequential-thinking)
   - 사용자 질문/문제 분석
