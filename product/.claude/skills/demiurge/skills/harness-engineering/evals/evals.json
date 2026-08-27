@@ -1,0 +1,29 @@
+{
+  "skill_name": "harness-engineering",
+  "evals": [
+    {
+      "id": 0,
+      "prompt": "claude가 자꾸 npm install을 쓰는데 우리 팀은 pnpm만 써. 이번이 두 번째야. 이거 CLAUDE.md에 어떻게 반영해야 할까? 아니면 다른 데 넣어야 하나?",
+      "expected_output": "'같은 실수 두 번째' 신호를 근거로 들어 루트 CLAUDE.md에 짧은 한 줄 추가를 제안. Skill·Hook 등 과한 장치는 제안하지 않음.",
+      "files": []
+    },
+    {
+      "id": 1,
+      "prompt": "우리 CLAUDE.md가 너무 길어졌어. 다이어트 좀 해줘. 파일은 project/CLAUDE.md에 있어.",
+      "expected_output": "UNIVERSAL/TASK-SPECIFIC/DEEP-DIVE/OBSOLETE로 섹션을 분류해 유지/Skill 이관/reference 이관/삭제를 근거와 함께 제안. 이관 후 원본은 삭제.",
+      "files": ["evals/files/bloated-CLAUDE.md"]
+    },
+    {
+      "id": 2,
+      "prompt": "결제 코드(src/payments/**) 리뷰할 때마다 '금액은 정수(cent)로만 쓰고, Stripe 호출은 반드시 lib/stripe.ts 래퍼를 통해서만 하라'고 매번 말해줘야 해. 이거 스킬로 만들까?",
+      "expected_output": "경로 스코프(src/payments/**)라는 점을 근거로 Skill보다 rules(paths: 글롭)를 우선 제안하거나 최소한 유효한 대안으로 논의.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "우리 팀 npm 대신 pnpm만 쓰기로 했어. claude가 방금 npm install을 쓴 게 이번이 두 번째야. project/CLAUDE.md에 반영해줘.",
+      "expected_output": "액션 요청이지만 파일을 즉시 수정하지 않고, 위치·근거·제안 문구를 갖춘 제안을 먼저 제시하고 멈춘다(합의 전 반영 금지 원칙 준수).",
+      "files": ["evals/files/small-CLAUDE.md"]
+    }
+  ]
+}

@@ -6,6 +6,8 @@ description: Claude Code 하니스 요소(CLAUDE.md, rules, skills, subagents, h
 
 # Harness Engineering Reference
 
+최종 검증일: 2026-08-27 (아래 각 references/*.md 끝의 "출처" 목록 URL 기준)
+
 ## 이 스킬의 역할
 
 스킬·에이전트를 "만드는 절차"는 skill-creator·writing-skills 같은 절차 스킬이 담당한다.
@@ -121,6 +123,14 @@ references 파일 끝에 있다. 절차 스킬과 함께 쓰일 때는 절차는
 - **측정**: 스킬 사용은 OpenTelemetry로 추적한다 — `OTEL_LOG_TOOL_DETAILS=1`을 켜면
   `tool_result` 이벤트의 `skill_name`과 비용 카운터의 `skill.name` 속성이 기록된다.
   안 쓰이는 스킬은 통합·폐기한다.
+- **이 스킬 자체의 재검증**: 위 최종 검증일 이후 오래됐거나(주요 모델 릴리스 후 등)
+  버전 번호·우선순위 표·환경변수명처럼 Claude Code 특정 메커니즘에 의존하는 판단이라
+  못 미더우면, claude-code-guide 에이전트에게 그냥 "확인해줘"라고 시키지 말고 해당
+  references/*.md 끝의 "출처" URL을 직접 짚어서 재확인시킨다. 근거: URL 없이 일반
+  검색을 시키면 에이전트가 다른 페이지를 열어 "확인 불가"라는 거짓 불확실 신호를 낼 수
+  있다(실측: 같은 사실을 URL 없이 물었을 때 4개 항목이 "확인 불가"로 나왔으나, 정확한
+  URL을 짚어 다시 물으니 전부 원문 그대로 확인됨). 일반 소프트웨어 공학 원칙(ADR,
+  docs-as-code 등)은 잘 안 바뀌므로 재검증 대상에서 제외한다.
 
 ## 상세 참조 (해당 작업을 할 때만 읽는다)
 
