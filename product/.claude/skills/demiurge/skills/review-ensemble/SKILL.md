@@ -1,7 +1,6 @@
 ---
 name: review-ensemble
 description: Use when reviewing a GitHub PR (posts inline comments) or self-reviewing local/uncommitted work before opening one. Runs multiple review engines in parallel and merges results. /review-ensemble 으로 실행.
-disable-model-invocation: true
 argument-hint: [PR번호 또는 URL — 생략하면 현재 브랜치를 로컬 검증] [quick|standard|deep] [-f] [--no-worktree]
 ---
 
