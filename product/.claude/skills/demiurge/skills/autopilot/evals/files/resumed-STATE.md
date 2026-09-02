@@ -1,7 +1,7 @@
 # 상태 — notification-settings
 - 모드: 만들기
 - 목표: 알림 설정을 저장하고 다시 열었을 때 복원되게 한다
-- 완료조건: 모든 작업 완료 + pnpm typecheck && pnpm test 종료코드 0 — 또는 BLOCKED.md 생성 후 대화 보고
+- 완료조건: 모든 작업 완료 + pnpm typecheck && pnpm test 종료코드 0 출력이 대화에 남아 있음 — 또는 막힌 사유가 대화 본문에 보고되었음
 - 턴: 3
 
 ## 확정된 것
