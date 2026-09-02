@@ -14,10 +14,11 @@
         "condition_has_escape: 제시한 완료조건에 '또는 ... BLOCKED.md ... 대화에 보고' 형태의 막힘 탈출 절이 있다",
         "condition_under_500: 완료조건 문장이 500자 이내다",
         "condition_verifiable_in_chat: 완료조건이 명령 실행이나 파일 읽기 없이 대화만으로 판정 가능한 형태다",
+        "condition_no_file_clause: 완료조건에 '파일이 생성되었음' 형태의 절이 없다. 판정자가 파일을 열 수 없으므로 그 절은 영영 확인되지 않는다",
         "goal_line_offered: 사용자가 그대로 붙여넣을 /goal 한 줄을 제시한다",
         "no_code_change: 코드 파일을 수정하지 않고 커밋하지 않는다",
         "three_axes: 공식 문서·실사용·권위자 세 축을 각각 조사 대상으로 잡는다",
-        "adversary_assigned: 관점이 갈릴 결론에 대해 반대 결론을 맡는 담당을 세운다"
+        "adversary_planned: 진입 단계이므로 반대 담당을 실제로 띄우지는 않되, 어떤 결정에 세울지를 STATE.md 주의 항목에 적어둔다"
       ]
     },
     {
