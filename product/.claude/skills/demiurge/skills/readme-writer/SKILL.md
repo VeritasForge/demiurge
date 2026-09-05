@@ -1,6 +1,6 @@
 ---
 name: readme-writer
-description: README.md 파일을 생성하거나 업데이트하는 스킬. 프로젝트 유형(Package/Application/AI Asset/Curated/Metadata-bound)을 자동 탐지하고, 한국어 기본으로 README를 작성한다. 기존 README가 있으면 README.v2.md로 비파괴 출력. 생성 후 humanize-writing + rl-verify를 자동 호출한다. /readme-writer로 사용자 호출, 또는 신규/기존 OSS 저장소에서 README 작성·갱신 요청 시 사용.
+description: README.md 파일을 생성하거나 업데이트하는 스킬. 프로젝트 유형(Package/Application/AI Asset/Curated/Metadata-bound)을 자동 탐지하고, 한국어 기본으로 README를 작성한다. 기존 README가 있으면 README.v2.md로 비파괴 출력. 생성 후 rl-verify를 자동 호출해 사실 정확성을 검증한다. /readme-writer로 사용자 호출, 또는 신규/기존 OSS 저장소에서 README 작성·갱신 요청 시 사용.
 allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion, Skill
 argument-hint: "[--lang ko|en|both] [--standard <name>] [--badges minimal|standard|extensive] [--force]"
 ---
@@ -201,9 +201,9 @@ if len(short_desc) >= 120:
 
 Standard Readme + Make a README 모두 권장. HF Model Card는 별도 제약 없음.
 
-### 4-3. 안티패턴 매칭 (8개)
+### 4-3. 안티패턴 매칭 (11개)
 
-`anti-patterns.md`의 8개 패턴에 대해:
+`anti-patterns.md`의 11개 패턴에 대해:
 1. 탐지 신호로 매칭 시도
 2. 매칭 시 → 처방 적용 (LLM 자동 수정)
 3. 적용 제외 그룹이면 → 경고만 출력, 수정 안 함
@@ -237,28 +237,14 @@ library_name: transformers  # TODO: 실제 라이브러리로 교체
 - YAML frontmatter: N/A (Package 그룹)
 ```
 
-## Phase 5: 통합 호출 (humanize-writing + rl-verify)
+## Phase 5: 사실 검증 (rl-verify 호출)
 
-Phase 4 검증을 통과한 초안에 대해 두 스킬을 순차 자동 호출한다.
+Phase 4 검증을 통과한 초안의 사실 정확성을 검증한다.
 
-### 5-A: humanize-writing 호출
-
-> 주의: `humanize-writing`과 `humanize-writing-portable` 두 스킬이 모두 `~/.claude/skills/`에 존재. 본 스킬은 **humanize-writing-portable**을 사용한다 (한국어 README 톤 정리 + 포터블 사전 기반).
+> 문장 톤 정리는 별도 스킬로 넘기지 않는다. 한국어 명료성은 Phase 4 안티패턴 #9~#11에서 초안 단계에 함께 걸러진다. 이전 판은 `humanize-writing-portable` 스킬을 호출했으나 그 스킬이 삭제되어 호출이 조용히 실패하고 있었다.
 
 ```
-Skill("humanize-writing-portable", initial_draft)
-→ 출력: AI 톤 제거된 초안
-```
-
-실패 시:
-- 콘솔 경고: "humanize-writing-portable 호출 실패. 원본 초안으로 진행합니다."
-- 사용자 안내: "수동으로 `/humanize-writing-portable README.md` 실행을 권장합니다."
-- 원본 초안 유지하고 Phase 5-B로 계속.
-
-### 5-B: rl-verify 호출
-
-```
-Skill("rl-verify", "다음 README의 사실 정확성을 Tier 1로 검증하라: <humanized_draft>")
+Skill("rl-verify", "다음 README의 사실 정확성을 Tier 1로 검증하라: <draft>")
 → 출력: PASS / PARTIAL / FAIL 리포트
 ```
 
@@ -355,7 +341,7 @@ brew install norwoodj/tap/helm-docs
 - 표준: Standard Readme
 - 그룹: Package (Library)
 - 언어: ko
-- 검증: 인라인 PASS, humanize PASS, rl-verify PASS
+- 검증: 인라인 PASS, rl-verify PASS
 - 다음 단계: 위 외부 도구 명령을 실행하세요.
 ```
 
