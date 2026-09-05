@@ -49,7 +49,7 @@ Demiurge는 하나의 확신 위에 세워졌다: **올바른 지식 구조와 �
 | **Commands** | 1 | 프로젝트 로컬 `wrap.md` (전역 `/commit`은 `skills/`로 마이그레이션됨) |
 | **CLI Tools** | 1 | `git cleanup-worktrees` (`bin/.local/bin/` → `~/.local/bin/`) |
 | **Stats CLI** | `demi` | `scripts/demi/` — 플러그인·스킬·에이전트 사용 통계 (uv packaged Python) |
-| **External Plugins** | 31 | `~/.claude/plugins/installed_plugins.json`이 관리하고 `CLAUDE.md` 호출 매핑으로 통합. demiurge가 실제로 chain하는 것은 그중 일부다. [외부 Plugin 생태계](#외부-plugin-생태계) 참조. |
+| **External Plugins** | 30 활성 | `~/.claude/plugins/installed_plugins.json`이 관리하고 `settings.json`의 `enabledPlugins`가 켜고 끈다. `CLAUDE.md` 호출 매핑으로 통합하며, demiurge가 실제로 chain하는 것은 그중 일부다. [외부 Plugin 생태계](#외부-plugin-생태계) 참조. |
 
 > 카운트 출처: `ls product/.claude/skills/demiurge/skills`, `ls product/.claude/rules` 직접 측정 + `~/.claude/plugins/installed_plugins.json`. 자동 검증은 `/wrap --check` 또는 `just stats`로 확인.
 
