@@ -67,11 +67,13 @@ uv run demi plugin-stats diff A.json B.json # 두 스냅샷 추세 비교
 ## 추적 대상 (5종)
 
 - **plugins** — `~/.claude/plugins/installed_plugins.json`
-- **skills** — `~/.claude/skills/` (전역) + 플러그인 `installPath/**/SKILL.md` + `product/.claude/skills/` (프로젝트 로컬)
-- **agents** — `~/.claude/agents/` + 플러그인 `**/agents/*.md` + 빌트인 하드코딩 목록
+- **skills** — `~/.claude/skills/` (전역) + 플러그인 `installPath/**/SKILL.md` + **skills-directory plugin** `~/.claude/skills/<plugin>/skills/*/SKILL.md`
+- **agents** — `~/.claude/agents/` + 플러그인 `**/agents/*.md` + skills-directory plugin `<plugin>/agents/*.md` + 빌트인 하드코딩 목록
 - **MCP servers** — `~/.claude.json` (top + projects) + 레포 루트 `.mcp.json` + 각 플러그인 번들 `.mcp.json`
   - MCP 호출 키(`mcp__server__tool` / `mcp__plugin_X_Y__tool`)는 서버 토큰으로 정규화되어 인벤토리와 매칭
 - **commands** — `product/.claude/commands/` + `~/.claude/commands/` (전역)
+
+> **skills-directory plugin이란**: `~/.claude/skills/<이름>/`에 `.claude-plugin/plugin.json`을 두면 마켓플레이스 등록 없이 플러그인 네임스페이스로 로드된다. 스킬이 한 단계 깊은 `<이름>/skills/*/SKILL.md`에 놓이므로, 전역 스킬용 `skills/*/SKILL.md` glob으로는 잡히지 않는다. demiurge 자체 자산이 이 배치라 별도 스캐너(`scan_skills_dir_plugins`)로 수집한다 — 이 스캐너가 없던 동안 demiurge 스킬 21개가 인벤토리에서 통째로 누락됐다.
 
 ## 산출물
 

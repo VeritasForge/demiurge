@@ -32,6 +32,7 @@ def _gather(days: int):
     demiurge_mcp = repo_root / ".mcp.json"
     extras = [demiurge_mcp] if demiurge_mcp.is_file() else None
     assets = (collector.scan_inventory(home, project)
+              + collector.scan_skills_dir_plugins(home)
               + collector.scan_builtin_agents()
               + collector.scan_plugins(plugins_json)
               + collector.scan_plugin_skills_agents(plugins_json)

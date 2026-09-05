@@ -126,6 +126,68 @@ def scan_inventory(home: Path, project: Path) -> list[Asset]:
     return assets
 
 
+def scan_skills_dir_plugins(home: Path) -> list[Asset]:
+    """`~/.claude/skills/<dir>/`에 `.claude-plugin/plugin.json`이 있는
+    skills-directory plugin의 skills/agents를 수집한다.
+
+    Claude Code는 이 배치를 플러그인 네임스페이스로 로드하므로 호출 키가
+    `<plugin>:<name>` 형태로 기록된다. scan_inventory의 `skills/*/SKILL.md`
+    glob은 한 단계 얕아 이 배치를 통째로 놓치므로(자산이 인벤토리에서 사라짐)
+    별도 스캐너가 필요하다.
+
+    plugin.json이 없는 디렉터리는 건너뛴다 — 평범한 전역 스킬은
+    scan_inventory가 이미 수집하므로 중복 등록을 막는다."""
+    root = home / "skills"
+    if not root.is_dir():
+        return []
+    out: list[Asset] = []
+    seen: set[str] = set()
+    for pdir in sorted(p for p in root.iterdir() if p.is_dir()):
+        manifest = pdir / ".claude-plugin" / "plugin.json"
+        if not manifest.is_file():
+            continue
+        try:
+            pname = json.loads(
+                manifest.read_text(encoding="utf-8")
+            ).get("name") or pdir.name
+        except (OSError, json.JSONDecodeError):
+            pname = pdir.name
+        for sk in sorted((pdir / "skills").glob("*/SKILL.md")):
+            dname = sk.parent.name
+            full = f"{pname}:{dname}"
+            if full in seen:
+                continue
+            seen.add(full)
+            fm = parse_frontmatter(sk)
+            nm = fm.get("name", dname)
+            out.append(
+                Asset(
+                    id=full,
+                    type="skill",
+                    source=f"plugin:{pname}",
+                    aliases=frozenset({full, f"{pname}:{nm}", dname, nm}),
+                    refs=_refs_from_fm(fm),
+                )
+            )
+        for ag in sorted((pdir / "agents").glob("*.md")):
+            base = ag.stem
+            fm = parse_frontmatter(ag)
+            nm = fm.get("name", base)
+            full = f"{pname}:{nm}"
+            if full in seen:
+                continue
+            seen.add(full)
+            out.append(
+                Asset(
+                    id=full,
+                    type="agent",
+                    source=f"plugin:{pname}",
+                    aliases=frozenset({full, f"{pname}:{base}", nm, base}),
+                    refs=_refs_from_fm(fm),
+                )
+            )
+    return out
+
 BUILTIN_AGENTS = (
     "general-purpose",
     "Explore",

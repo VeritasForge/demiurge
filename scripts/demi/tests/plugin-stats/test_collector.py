@@ -8,6 +8,7 @@ from demi.plugin_stats.collector import (
     scan_mcp_servers,
     scan_plugin_skills_agents,
     scan_plugins,
+    scan_skills_dir_plugins,
 )
 
 
@@ -77,6 +78,39 @@ def test_scan_inventory_block_refs(fake_home):          # [Boundary] block-list 
 def test_scan_inventory_empty(tmp_path):                # [Error]
     assert scan_inventory(home=tmp_path / "nope", project=tmp_path / "none") == []
 
+
+def test_scan_skills_dir_plugins(tmp_path):             # [Happy] 네임스페이스 배치
+    """~/.claude/skills/<plugin>/skills/*/SKILL.md 배치(skills-directory plugin)를
+    수집한다. scan_inventory의 skills/*/SKILL.md glob은 한 단계 얕아 놓친다."""
+    home = tmp_path / ".claude"
+    pdir = home / "skills" / "demiurge"
+    (pdir / ".claude-plugin").mkdir(parents=True)
+    (pdir / ".claude-plugin" / "plugin.json").write_text('{"name": "demiurge"}')
+    (pdir / "skills" / "rl-verify").mkdir(parents=True)
+    (pdir / "skills" / "rl-verify" / "SKILL.md").write_text(
+        "---\nname: rl-verify\nskills: [organize]\n---\n"
+    )
+    (pdir / "agents").mkdir(parents=True)
+    (pdir / "agents" / "conv.md").write_text("---\nname: convergence-evaluator\n---\n")
+    out = {a.id: a for a in scan_skills_dir_plugins(home)}
+    assert "demiurge:rl-verify" in out and out["demiurge:rl-verify"].type == "skill"
+    assert "demiurge:convergence-evaluator" in out
+    # bare 이름도 alias — 옛 로그의 접두어 없는 호출 키와 매칭되어야 함
+    assert "rl-verify" in out["demiurge:rl-verify"].aliases
+    assert "organize" in out["demiurge:rl-verify"].refs
+
+
+def test_scan_skills_dir_plugins_skips_plain_skill(tmp_path):  # [Boundary]
+    """plugin.json이 없는 평범한 전역 스킬 디렉터리는 대상이 아니다
+    (scan_inventory가 이미 수집하므로 중복 등록을 막는다)."""
+    home = tmp_path / ".claude"
+    (home / "skills" / "plain").mkdir(parents=True)
+    (home / "skills" / "plain" / "SKILL.md").write_text("---\nname: plain\n---\n")
+    assert scan_skills_dir_plugins(home) == []
+
+
+def test_scan_skills_dir_plugins_missing(tmp_path):     # [Error]
+    assert scan_skills_dir_plugins(tmp_path / "nope") == []
 
 def test_scan_plugins(tmp_path):                        # [Happy]
     pj = tmp_path / "installed_plugins.json"
