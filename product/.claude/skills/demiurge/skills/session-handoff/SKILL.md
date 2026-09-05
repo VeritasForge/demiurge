@@ -13,7 +13,7 @@ allowed-tools: Read, Grep, Glob, Bash, Write, TaskList, TaskGet
 
 > 새 세션의 AI가 **이 문서 한 파일만** 읽고, 첫 turn에 **정확히 멈춘 자리**에서 이어받을 수 있어야 한다. 대화 맥락은 전부 사라진다고 가정한다.
 
-`release-handoff`(릴리즈/배포 운영 인계)와 다르다. 이건 *진행 중 작업의 세션 인계*다.
+릴리즈/배포 운영 인계 문서와 다르다. 이건 *진행 중 작업의 세션 인계*다.
 
 ## When to Use
 
@@ -22,7 +22,7 @@ allowed-tools: Read, Grep, Glob, Bash, Write, TaskList, TaskGet
 - 사용자가 "handoff", "다음 세션 인계", "context-clear 전 정리" 요청
 - `/session-handoff` 직접 호출
 
-**When NOT:** 릴리즈/배포 이관(→ `release-handoff`), 완료된 chunk의 사람용 1페이지 회고(→ DIGEST, 아래 구분 참조).
+**When NOT:** 릴리즈/배포 이관(이 스킬의 대상이 아님), 완료된 chunk의 사람용 1페이지 회고(→ DIGEST, 아래 구분 참조).
 
 ## The Iron Rule — 기억으로 쓰지 말고 수집부터 하라
 
@@ -117,7 +117,7 @@ timeout 120 bash -c 'cd <repo>/backend && uv run pytest -q' 2>&1 | tail -3
 | #1이 `git status`부터 시작 | #1은 **단일 재진입 커맨드 1줄** |
 | judgments를 산문으로 | `결정 │ 적용 위치` table |
 | DIGEST(회고)와 섞음 | HANDOFF는 인계 전용 |
-| release-handoff로 처리 | 그건 배포 운영 인계 — 용도 다름 |
+| 배포 운영 인계 문서로 처리 | 용도 다름 — 이건 세션 인계 전용 |
 
 ## Quick Reference (실행 순서)
 

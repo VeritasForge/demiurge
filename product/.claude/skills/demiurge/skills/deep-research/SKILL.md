@@ -571,7 +571,7 @@ Quick Research 결과입니다. 중요한 의사결정에는 Full Research를 �
 
 ## 오케스트레이션 연계
 
-### Mode A: 개별 Agent 직접 호출
+### 개별 Agent 직접 호출
 
 개별 아키텍트 에이전트가 직접 사용하는 경우:
 
@@ -581,46 +581,6 @@ User → Agent → Phase 1 → Phase 2 → Phase 3 → 응답에 통합
 
 - 에이전트가 자신의 도메인 관점에서 3단계 모두 수행
 - 결과를 리뷰/권고사항에 근거로 포함
-
-### Mode B: 오케스트레이션 연계
-
-`architect-orchestration` 스킬과 함께 사용하는 경우:
-
-```
-Orchestrator ─── Phase 1 (광역 탐색) ───────────────┐
-                                                      │
-              ┌───────────────────────────────────────┤
-              ▼              ▼             ▼          │
-         Agent A         Agent B       Agent C        │
-         Phase 2         Phase 2       Phase 2        │
-        (자기 도메인)   (자기 도메인)  (자기 도메인)   │
-              └──────────────┬────────────┘           │
-                             ▼                        │
-                        Phase 3 (합성)                │
-                     (오케스트레이터)                  │
-```
-
-1. **오케스트레이터가 Phase 1** 수행 → `research_context` 생성
-2. `research_context`를 각 Agent 프롬프트에 주입
-3. **각 Agent가 자기 도메인에 대해 Phase 2** 수행 (필요 시)
-4. **오케스트레이터가 Phase 3** 수행 → 최종 합성
-
-#### research_context 형식
-
-```yaml
-research_context:
-  topic: "[조사 주제]"
-  phase1_summary: "[Phase 1 핵심 발견 요약]"
-  key_findings:
-    - finding: "[발견]"
-      confidence: "[Confirmed/Likely/Synthesized/Uncertain/Unverified]"
-      source: "[출처]"
-  relevant_to:
-    security: "[보안 관련 발견]"
-    data: "[데이터 관련 발견]"
-    integration: "[통합 관련 발견]"
-    # ... 관련 도메인별 요약
-```
 
 ---
 
@@ -877,6 +837,4 @@ claude mcp list
 
 ## 관련 리소스
 
-- 각 아키텍트 에이전트의 도메인 지식 (`.claude/skills/demiurge/agents/*.md`)
 - 아키텍처 패턴 스킬 카드 (`.claude/skills/demiurge/skills/*/SKILL.md`)
-- 오케스트레이션 프로토콜 (`.claude/skills/demiurge/skills/architect-orchestration/SKILL.md`)

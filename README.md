@@ -13,7 +13,6 @@
 - [구성 요소 (한눈에)](#구성-요소-한눈에)
 - [외부 Plugin 생태계](#외부-plugin-생태계)
 - [Quick Start](#quick-start)
-- [작동 원리](#작동-원리)
 - [사용법](#사용법)
 - [사용 통계 (`demi` CLI)](#사용-통계-demi-cli)
 - [구조](#구조)
@@ -46,10 +45,9 @@ Demiurge는 하나의 확신 위에 세워졌다: **올바른 지식 구조와 �
 
 | 컴포넌트 | 개수 | 위치 / 설명 |
 |---------|------|------------|
-| **Agents** | 21 | 15 architect + 6 investigation/evaluator (`product/.claude/agents/`) |
-| **Skills** | 44 | Architecture · AI Backend · Business · Workflow · Utility (`product/.claude/skills/`) |
+| **Skills** | 21 | Workflow · Utility · Career · Business (`product/.claude/skills/`) |
 | **Rules** | 3 | 전역 2 (`skills.md`, `agents.md`, `paths` frontmatter 지원) + 프로젝트 로컬 1 (`stow-deployment.md`) |
-| **Commands** | 1 | 프로젝트 로컬 `wrap.md` (전역 `/rl`·`/rl-fresh`·`/commit`·`/tdd-lfg`는 `skills/`로 마이그레이션됨) |
+| **Commands** | 1 | 프로젝트 로컬 `wrap.md` (전역 `/rl`·`/commit`은 `skills/`로 마이그레이션됨) |
 | **CLI Tools** | 1 | `git cleanup-worktrees` (`bin/.local/bin/` → `~/.local/bin/`) |
 | **Stats CLI** | `demi` | `scripts/demi/` — 플러그인·스킬·에이전트 사용 통계 (uv packaged Python) |
 | **External Plugins** | 10 | `compound-engineering` · `superpowers` · `ouroboros` · `context7` · `ralph-loop` · `codex` · `frontend-design` · `Notion` · `notion-workspace-plugin` · `typescript-lsp` — `~/.claude/plugins/installed_plugins.json` 관리, `CLAUDE.md` 호출 매핑으로 통합. 자세한 통합 방식은 [외부 Plugin 생태계](#외부-plugin-생태계) 참조. |
@@ -88,8 +86,6 @@ Demiurge는 자체 구현보다 **검증된 외부 plugin을 wrapping**한다. `
 
 | 항목 | demiurge 자체 | plugin 위임 |
 |------|-------------|------------|
-| 아키텍처 합의 | `architect-orchestration` (12개 agent) | — |
-| 코드베이스 조사 | `investigation-orchestration` | — |
 | 다관점 수렴 검증 | — | `ouroboros` + `compound-engineering` |
 | 라이브러리 문서 | — | `context7` |
 | 교훈 누적 | — | `compound-engineering:ce-compound` |
@@ -110,65 +106,11 @@ cd ~/lab/demiurge
 설치 후 아무 프로젝트에서:
 
 ```text
-/architect-orchestration <요구사항>     # 다중 아키텍트 합의 리뷰
 /deep-research <주제>                   # 3단계 심층 조사
-/investigation-orchestration <조사>     # 코드베이스 조사
 /autopilot <plan.md>                    # 자율주행 (HITL 학습 사이클 포함)
 ```
 
-## 작동 원리
-
-### 오케스트레이션 흐름
-
-```
-[요구사항] → [분석 & 라우팅] → [Tier 1: Strategic] → [Tier 2: Design] → [Tier 3: Quality] → [합의] → [결과]
-                                  (Sequential)         (Parallel)         (Parallel)         (라운드 기반 투표)
-```
-
-### Agent Tier
-
-| Tier | 에이전트 | 실행 |
-|------|---------|------|
-| **1 Strategic** | solution-architect, domain-architect | Sequential |
-| **2 Design** | application, data, integration, healthcare-informatics, llm, rag | Parallel |
-| **3 Quality** | security, sre, cloud-native, ai-safety | Parallel |
-| **4 Enabling** | eda-specialist, ml-platform, concurrency | 필요 시 |
-| **Investigation** | code, log, history, release-investigator + counter-reviewer + convergence-evaluator | Parallel |
-
-### 합의 프로토콜
-
-- **임계값**: 2/3 합의 (67%)
-- **거부권**: Tier 1 아키텍트
-- **최대 라운드**: 5
-- **소수 의견**: 항상 기록
-
 ## 사용법
-
-### 다중 에이전트 오케스트레이션 (복잡한, 횡단적 의사결정)
-
-```text
-/architect-orchestration 요구사항 분석 및 다중 아키텍트 리뷰 수행
-```
-
-### 개별 에이전트 리뷰 (집중 분석)
-
-```text
-domain-architect: 도메인 모델 및 Bounded Context 검토
-security-architect: 보안 위협 분석 및 암호화 검증
-solution-architect: 전체 시스템 아키텍처 설계
-```
-
-### 스킬 참조 (패턴 빠른 조회)
-
-```text
-domain-driven-design · eda · cloud-native · rag-architecture · ai-agent · prompt-engineering · ai-safety · llm-gateway · ml-platform · sre · testing-architecture · ...
-```
-
-### 코드베이스 조사 (버그·성능·구조 분석)
-
-```text
-/investigation-orchestration 코드베이스 조사 실행
-```
 
 ### 자율주행 (autopilot, MVP)
 
@@ -249,10 +191,9 @@ uv run demi plugin-stats unused --grade dead  # dead 자산만 (정리 후보)
 ```
 demiurge/
 ├── product/.claude/              # 전역 배포 (GNU Stow 경유 → ~/.claude/)
-│   ├── skills/      (44)
-│   ├── agents/      (21)
+│   ├── skills/      (21)
 │   ├── rules/       (2)          # 전역 룰: skills.md, agents.md (paths frontmatter)
-│   ├── commands/    (0)          # /rl·/rl-fresh·/commit·/tdd-lfg는 skills/로 마이그레이션됨
+│   ├── commands/    (0)          # /rl·/commit은 skills/로 마이그레이션됨
 │   ├── statusline.sh             # Claude Code 상태줄(statusLine) 스크립트
 │   └── CLAUDE.md                 # 응답 가이드라인 · TDD · 스킬 호출 규칙
 ├── bin/.local/bin/               # 전역 CLI 배포 (GNU Stow 경유 → ~/.local/bin/)

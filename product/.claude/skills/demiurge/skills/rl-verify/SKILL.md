@@ -1,6 +1,6 @@
 ---
 name: rl-verify
-description: "수렴 검증 플랜 생성 + 실행. 사용자가 /rl-verify로 직접 호출하거나, 다른 스킬(/qa 등)이 검증 단계로 자동 호출 가능."
+description: "수렴 검증 플랜 생성 + 실행. 사용자가 /rl-verify로 직접 호출하거나, 다른 스킬(/readme-writer 등)이 검증 단계로 자동 호출 가능."
 argument-hint: "[--force] <작업 설명 또는 문서 경로>"
 ---
 
@@ -111,7 +111,7 @@ argument-hint: "[--force] <작업 설명 또는 문서 경로>"
 | SIMPLIFIER | "정말 필요한가?" — 최소 대안 제시 | 선택 | 선택 | 권장 |
 | EVALUATOR | 종합 판정 | **필수** | **필수** | **필수** |
 
-> 역할은 논리적 역할이며, 어떤 agent/skill로 구현할지는 기존 "관점별 Agent 할당" 로직(custom agent → skill → 페르소나)을 그대로 따름.
+> 역할은 논리적 역할이며, 어떤 agent/skill로 구현할지는 2-3 Step 2의 소스별 호출 방식 표(등록 서브에이전트 → 스킬 → 페르소나)를 따름.
 
 ### 2-2. 검증 관점(Perspective) 도출
 
@@ -142,24 +142,33 @@ Phase 1에서 추출한 도메인 키워드를 아래 매핑 테이블에서 매
 | 클라우드, 인프라, K8s, Terraform | contrarian (ouroboros) | cloud-native-architect (demiurge), deployment-verification-agent (compound) | deep-research (demiurge) | simplifier (ouroboros) |
 | API, 통합, 이벤트, EDA | contrarian (ouroboros) | integration-architect (demiurge) | deep-research (demiurge) | simplifier (ouroboros) |
 | 코드 리뷰, PR, 코드 품질 | contrarian (ouroboros) | pattern-recognition-specialist (compound), architecture-strategist (compound) | repo-research-analyst (compound), requesting-code-review (superpowers skill) | code-simplicity-reviewer (compound) |
-| 테스트, TDD, QA | contrarian (ouroboros) | testing-architecture (demiurge skill), test-driven-development (superpowers skill) | deep-research (demiurge) | simplifier (ouroboros) |
+| 테스트, TDD, QA | contrarian (ouroboros) | test-driven-development (superpowers skill) | deep-research (demiurge) | simplifier (ouroboros) |
 | 프론트엔드, UI, UX | contrarian (ouroboros) | frontend-design (compound skill) | framework-docs-researcher (compound), agent-browser (compound skill) | simplifier (ouroboros) |
 | 리서치, 조사, 분석, Fact-Check | contrarian (ouroboros) | interview (ouroboros skill) | deep-research (demiurge), best-practices-researcher (compound), notion-research-documentation (notion skill) | simplifier (ouroboros) |
 | 문서화, README, API 문서, 기술 문서 | contrarian (ouroboros) | writing-plans (superpowers skill), writing-skills (superpowers skill) | document-review (compound skill), compound-docs (compound skill) | simplifier (ouroboros), document-review (compound skill) |
 | 디버깅, 버그, 오류 | contrarian (ouroboros) | systematic-debugging (superpowers skill) | deep-research (demiurge) | simplifier (ouroboros) |
 | Claude Code, plan mode, 스킬, Hook, 설정 | contrarian (ouroboros) | claude-code-guide (agent) | claude-code-guide (agent) | simplifier (ouroboros) |
 
-**공통 EVALUATOR**: convergence-evaluator (demiurge agent) — 모든 도메인에서 사용. 판정 라벨 부여 + 안정 카운터 업데이트 + report.md 갱신까지 담당.
+**공통 EVALUATOR**: convergence-evaluator — 모든 도메인에서 사용. 이 스킬 폴더의 `convergence-evaluator.md`를 general-purpose 에이전트에 주입해 실행하며, 판정 라벨 부여 + 안정 카운터 업데이트 + report.md 갱신까지 담당.
 
-#### Step 2: 실행 (이름 기반 호출)
+#### Step 2: 실행 (소스별 호출 방식)
 
-매핑 테이블의 실행 목록을 다음 우선순위로 호출한다. 파일시스템 경로/버전 조회 불필요 — Claude Code가 이름으로 해결.
+실행 목록의 각 항목은 이름 뒤의 소스 표기에 따라 아래 표의 방식으로 호출한다. 이름만으로 `Agent(subagent_type=...)`를 부르지 않는다 — 데미우르게 아키텍트, ouroboros 페르소나, compound-engineering 리뷰어는 Claude Code에 서브에이전트로 등록되어 있지 않아 이름 호출이 항상 "not found"로 실패한다(세션 로그 실측).
 
-```
-agent 항목  → Agent 도구 (subagent_type="{이름}")
-skill 항목  → Skill 도구 ("{이름}")
-매핑 테이블에 없는 도메인 → Explore agent + 전문가 페르소나 + 구체적 검증 지침
-```
+| 실행 목록 표기 | 종류 | 호출 방식 | 실패·미가용 시 폴백 |
+|---|---|---|---|
+| `(ouroboros)` — contrarian, simplifier | MCP 페르소나 | `ouroboros_lateral_think` 도구를 **1회** 호출한다. `personas`에는 실행 목록에 있는 것만 넣고(예: `["contrarian","simplifier"]`), `problem_context`에 검증 대상 요약과 검증 관점을, `current_approach`에 대상의 핵심 주장·설계를 넣는다 | 도구가 없거나 오류 → general-purpose 에이전트에 아래 폴백 페르소나를 붙여 실행하고, report.md 헤더에 "ouroboros MCP 미가용 → 폴백 페르소나 실행"을 기록한다 |
+| `(ouroboros skill)` — 예: interview | 스킬 | Skill 도구 `ouroboros:{이름}` | 스킬 목록에 없으면 페르소나 |
+| `(demiurge)` | 스킬 또는 페르소나 | 이름이 `demiurge:` 스킬 목록에 있으면(예: deep-research) Skill 도구 `demiurge:{이름}`. 아니면(아키텍트 역할명 — 별도 정의 파일 없음) general-purpose 에이전트 + "당신은 {도메인} 아키텍트다" 역할 지침 + 담당 검증 관점 + 구체적 검증 지시 | — |
+| `(demiurge skill)`, `(superpowers skill)`, `(compound skill)`, `(notion skill)` | 스킬 | Skill 도구 `{플러그인}:{이름}` | 스킬 목록에 없으면 페르소나 |
+| `(compound)` — 예: security-sentinel | 페르소나 (ce 스킬 내부 프롬프트 자산, 등록 서브에이전트 아님) | general-purpose 에이전트 + 역할 지침 + 담당 검증 관점 | — |
+| `(agent)` — 예: claude-code-guide | 등록 서브에이전트 | Agent 도구 `subagent_type="{이름}"` | not found → 페르소나 |
+| EVALUATOR | rl-verify 참조 파일 | general-purpose 에이전트에 이 스킬 폴더의 `convergence-evaluator.md` 전문을 붙여 실행 | — |
+| 매핑 테이블에 없는 도메인 | — | Explore agent + 전문가 페르소나 + 구체적 검증 지침 | — |
+
+**폴백 페르소나** (ouroboros MCP 미가용 시에만 사용):
+- contrarian: "대상이 전제하는 가정을 모두 나열하고, 각 가정의 반대가 참일 때 무엇이 깨지는지 따진다. 문제 정의 자체가 틀렸을 가능성과 '아무것도 하지 않을 때'의 결과를 반드시 검토한다. 반례는 구체적 상황 1개 이상으로 쓴다."
+- simplifier: "대상에서 없어도 목표가 달성되는 요소를 찾아 제거한 최소 대안을 제시한다. 각 요소에 대해 '이것이 없으면 무엇이 실패하는가'를 답하고, 답이 없으면 불필요로 분류한다."
 
 #### 필수 역할 포함 확인
 
@@ -169,7 +178,7 @@ Tier별 필수 역할(CONTRARIAN, RESEARCHER, EVALUATOR)이 실행 목록에 포
 1. **Tier별 최소 관점 수는 하한선** — 매핑 테이블 결과가 더 많으면 전부 실행
 2. **관점 간 독립성** — 같은 agent가 두 관점을 맡지 않도록 분리
 3. **불일치 발생 시 제3 관점 투입** — convergence-evaluator가 CONTESTED 판정 시 다음 iteration에서 새 관점 추가. 제3 관점 agent도 매핑 테이블 또는 페르소나 폴백을 따르되, CONTESTED 사유와 양쪽 이견을 프롬프트에 명시
-4. **convergence-evaluator는 매 iteration foreground subagent로 실행** — 검증 agent들의 출력을 종합하여 판정 라벨 부여 + 안정 카운터 업데이트 + report.md 갱신. Main agent는 순수 오케스트레이터로서 report.md를 읽고 수렴 여부만 판정
+4. **convergence-evaluator는 매 iteration foreground subagent로 실행** — general-purpose 에이전트에 이 스킬 폴더의 `convergence-evaluator.md` 전문을 붙여 실행한다. 검증 agent들의 출력(확정 후보가 있으면 반박 검증자 판정 포함)을 종합하여 판정 라벨 부여 + 안정 카운터 업데이트 + report.md 갱신. Main agent는 순수 오케스트레이터로서 report.md를 읽고 수렴 여부만 판정
 
 ---
 
@@ -195,7 +204,7 @@ Tier별 필수 역할(CONTRARIAN, RESEARCHER, EVALUATOR)이 실행 목록에 포
 1. **검증 항목** 테이블
 2. **Tier 및 필수 역할**
 3. **검증 관점 및 Agent 할당** 테이블
-4. **Agent별 상세 프롬프트** (검증 Agent만 — convergence-evaluator는 자체 프롬프트 내장)
+4. **Agent별 상세 프롬프트** (검증 Agent만 — convergence-evaluator는 참조 파일 주입으로 대체)
 5. **수렴 판정 기준**
 6. **완료 조건**
 7. **하지 말 것**
@@ -232,9 +241,9 @@ Tier별 필수 역할(CONTRARIAN, RESEARCHER, EVALUATOR)이 실행 목록에 포
 - 프롬프트: {구체적 검증 지시}
 
 ### convergence-evaluator (공통)
-- Agent: convergence-evaluator (demiurge agent)
-- 별도 프롬프트 불필요 — agent 정의에 판정 라벨 기준, 안정 카운터 규칙, report.md 갱신 형식이 내장되어 있음
-- 입력: 위 검증 Agent들의 출력 전체 + report.md 경로
+- 실행: general-purpose 에이전트 + `convergence-evaluator.md`(rl-verify 스킬 폴더) 전문 주입
+- 별도 프롬프트 불필요 — 참조 파일에 판정 라벨 기준, 안정 카운터 규칙, report.md 갱신 형식, 반박 검증자 판정 반영 규칙이 있음
+- 입력: 위 검증 Agent들의 출력 전체 + 반박 검증자 판정(있을 때) + report.md 경로
 
 ## 수렴/완료 기준
 - [ ] Tier 1-2: 모든 발견사항의 안정 카운터 >= 2 (판정 라벨 2회 연속 동일)
@@ -273,13 +282,17 @@ plan.md를 읽고 수렴 검증을 직접 실행합니다.
 ```
 plan.md 읽기
     ↓
-검증 Agent 실행 (Tier별 관점 수, foreground subagent)
-  + CONTESTED 항목 있으면 제3 관점 agent 추가 투입
+report.md에서 확정 후보 추출 — 안정 카운터가 임계값 바로 아래인 항목 (Tier 1·2: 1, Tier 3: 2)
     ↓
-convergence-evaluator 실행 (foreground subagent):
+검증 Agent 실행 (Tier별 관점 수, foreground subagent, 2-3 Step 2의 소스별 호출 방식)
+  + CONTESTED 항목 있으면 제3 관점 agent 추가 투입
+  + 확정 후보 있으면 반박 검증자 1개 추가 투입
+    (읽기 전용 general-purpose, convergence-evaluator.md의 "증거 반박 프로토콜" 절 + 확정 후보 목록 주입)
+    ↓
+convergence-evaluator 실행 (foreground subagent, convergence-evaluator.md 전문 주입):
   1. report.md 읽기 (이전 iteration 상태)
-  2. 모든 Agent 출력 종합 → 판정 라벨 부여
-  3. 이전 대비 안정 카운터 업데이트
+  2. 모든 Agent 출력 + 반박 검증자 판정 종합 → 판정 라벨 부여
+  3. 이전 대비 안정 카운터 업데이트 (REFUTED 판정된 확정 후보는 라벨 REFUTED, 카운터 0)
   4. report.md 갱신
     ↓
 Main agent가 report.md를 읽고 수렴 여부만 판정:

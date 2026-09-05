@@ -26,7 +26,6 @@ allowed-tools: Read, Grep, Glob, Edit
 2. **Skills**: `.claude/skills/*/SKILL.md` 파일 목록 (상위 디렉터리명 = skill 이름)
 3. **Rules**: `.claude/rules/*.md` 파일 목록 (파일명에서 `.md` 제거 = rule 이름). 각 rule 파일의 frontmatter에서 `globs` 필드 추출
 4. **Commands**: `.claude/commands/*.md` 파일 목록 (파일명에서 `.md` 제거 = command 이름)
-5. **Tier 배정**: `.claude/skills/architect-orchestration/architect-registry.md` 파일에서 각 agent의 `tier` 필드 확인
 
 ### Step 2: CLAUDE.md 파싱
 
@@ -53,7 +52,6 @@ CLAUDE.md에서 다음 정보를 추출합니다:
 | 6 | Skill 이름 | Step 1 skill 디렉터리명 vs Skills 테이블의 skill 이름 |
 | 7 | Rule 이름 | Step 1 rule 파일명 vs Rules 테이블의 rule 이름 |
 | 8 | Rule globs | 각 rule 파일의 globs vs Rules 테이블의 Trigger Paths |
-| 9 | Tier 배정 | architect-registry.md의 tier vs Agent Tiers 테이블 |
 
 ### Step 4: 결과 보고
 
@@ -88,9 +86,8 @@ CLAUDE.md에서 다음 정보를 추출합니다:
 2. **Agents 테이블**: 누락된 agent 추가, 삭제된 agent 제거
 3. **Skills 테이블**: 누락된 skill 추가, 삭제된 skill 제거
 4. **Rules 테이블**: 누락된 rule 추가, 삭제된 rule 제거, glob 업데이트
-5. **Agent Tiers**: architect-registry.md 기준으로 tier 업데이트
-6. **Version**: patch 버전 bump (예: 3.0 → 3.1)
-7. **Changelog**: 변경 내용 추가
+5. **Version**: patch 버전 bump (예: 3.0 → 3.1)
+6. **Changelog**: 변경 내용 추가
 
 새로 추가된 agent/skill의 경우, 해당 파일을 읽어서 역할과 핵심 지식을 파악한 후 테이블에 추가합니다.
 

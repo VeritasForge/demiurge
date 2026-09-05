@@ -45,10 +45,10 @@ agent는 fresh context에서 시작부터 끝까지 명시된 모델로 실행�
 
 | 케이스 | 권장 model | 근거 |
 |---|---|---|
-| 단순 정보 추출 agent (Explore, log-investigator 등) | `haiku` 또는 명시 | 분량이 많아도 작업이 mechanical |
+| 단순 정보 추출 agent (Explore 등) | `haiku` 또는 명시 | 분량이 많아도 작업이 mechanical |
 | 균형 잡힌 조사·분석 agent | `inherit` (기본) 또는 `sonnet` | 부모 세션의 품질을 그대로 유지하거나 일관성 위해 sonnet |
 | 깊은 추론·전략적 판단 agent (architect 류) | `inherit` 또는 `opus` | 사용자가 opus 세션이면 그대로, 또는 명시적으로 opus |
-| 적대적/창의적 검토 (counter-reviewer 류) | `inherit` 또는 `opus` | 의외성 필요, downgrade 시 손실 큼 |
+| 적대적/창의적 검토 (반박 검증자 류) | `inherit` 또는 `opus` | 의외성 필요, downgrade 시 손실 큼 |
 
 > **원칙**: 부모 모델보다 작업 자체의 요구가 더 중요. agent는 fresh context라 부모와 분리되므로, 작업 복잡도에 맞춰 명시.
 
@@ -76,9 +76,8 @@ agent에는 `disable-model-invocation` 같은 필드가 **없다**. agent를 명
 
 ## 5. demiurge 컨벤션
 
-현재 demiurge에는 21개 agent가 `product/.claude/skills/demiurge/agents/`에 정의 (정확한 인벤토리는 `ls product/.claude/skills/demiurge/agents/` 확인, 배포 후 호출은 `demiurge:<agent-name>`). 공통 계열:
-- `architect` 계열 (14개): T2-T3 tier로 도메인별 아키텍처 자문
-- `investigation` 계열 (4개): 코드/로그/히스토리 조사 (Explore 패턴)
-- `meta-workflow` 계열 (3개): convergence-evaluator, counter-reviewer, eda-specialist 등 rl-verify·적대적 검토 지원
+현재 demiurge에는 자체 agent가 없다. 이전의 아키텍트·조사관 agent 21개는 사용 기록이 없어 2026-09-05에 정리했다(git 이력에 남아 있음). 새 agent가 필요하면 `product/.claude/skills/demiurge/agents/<name>.md`에 만들고 `just link`로 배포한다.
 
-신규 agent 추가 시 **생성 위치·`just link` 배포 절차는 CLAUDE.md '스킬/에이전트 개발 규칙' 섹션을 따른다** (항상 로드되므로 어느 레포에서든 유효 — 이 rule은 agent 고유 사항만 관리). 배포 상세 절차·cleanup 순서는 demiurge 레포에서 작업할 때 자동 주입되는 `stow-deployment` 규칙(`.claude/rules/stow-deployment.md`)이 주 출처. demiurge agent는 AID 컨벤션({Tier}-{Role}-R{Round})을 따를 것.
+rl-verify의 판정자(convergence-evaluator)와 review-ensemble의 반박 검증자(counter-reviewer)는 agent가 아니라 각 스킬 폴더 안의 페르소나 참조 파일로 관리한다 — 등록 서브에이전트가 아니므로 `subagent_type`으로 부르지 않고 general-purpose 에이전트에 파일 전문을 주입한다.
+
+신규 agent 추가 시 **생성 위치·`just link` 배포 절차는 CLAUDE.md '스킬/에이전트 개발 규칙' 섹션을 따른다** (항상 로드되므로 어느 레포에서든 유효 — 이 rule은 agent 고유 사항만 관리). 배포 상세 절차·cleanup 순서는 demiurge 레포에서 작업할 때 자동 주입되는 `stow-deployment` 규칙(`.claude/rules/stow-deployment.md`)이 주 출처.
