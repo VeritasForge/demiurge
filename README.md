@@ -25,7 +25,7 @@
 
 이 프로젝트는 그 이름을 의도적으로 빌려왔다. Claude Code는 강력한 원재료다. **Demiurge**는 이 원재료를 목적에 맞게 형상화하는 메타-설정(meta-configuration)이다. 신화의 데미우르고스가 혼돈에서 코스모스를 빚듯, 이 프로젝트는 빈 캔버스 상태의 Claude Code를 검증·자율실행·문서화 워크플로우가 짜인 작업 환경으로 변환한다.
 
-그러나 오늘날 "원재료"는 Claude Code 하나만으로 끝나지 않는다. 데미우르고스가 형상화하는 질료는 이제 세 층이다. 첫째는 Claude Code 런타임 자체이고, 둘째는 외부 plugin 생태계(`compound-engineering`, `superpowers`, `ouroboros`, `ralph-loop` 등)이며, 셋째는 외부 지식(공식 문서와 1차 출처)이다. Demiurge는 이 셋을 하나의 호출 규칙 아래로 끌어와, 자체 구현과 plugin 위임의 경계를 명문화한다.
+그러나 오늘날 "원재료"는 Claude Code 하나만으로 끝나지 않는다. 데미우르고스가 형상화하는 질료는 이제 세 층이다. 첫째는 Claude Code 런타임 자체이고, 둘째는 외부 plugin 생태계(`compound-engineering`, `superpowers`, `ouroboros`, `understand-anything` 등)이며, 셋째는 외부 지식(공식 문서와 1차 출처)이다. Demiurge는 이 셋을 하나의 호출 규칙 아래로 끌어와, 자체 구현과 plugin 위임의 경계를 명문화한다.
 
 ## 철학
 
@@ -44,9 +44,9 @@ Demiurge는 하나의 확신 위에 세워졌다: **올바른 지식 구조와 �
 
 | 컴포넌트 | 개수 | 위치 / 설명 |
 |---------|------|------------|
-| **Skills** | 21 | Workflow · Utility · Career · Business (`product/.claude/skills/demiurge/skills/`) |
+| **Skills** | 20 | Workflow · Utility · Career · Business (`product/.claude/skills/demiurge/skills/`) |
 | **Rules** | 3 | 전역 2 (`skills.md`, `agents.md`, `paths` frontmatter 지원) + 프로젝트 로컬 1 (`stow-deployment.md`) |
-| **Commands** | 1 | 프로젝트 로컬 `wrap.md` (전역 `/rl`·`/commit`은 `skills/`로 마이그레이션됨) |
+| **Commands** | 1 | 프로젝트 로컬 `wrap.md` (전역 `/commit`은 `skills/`로 마이그레이션됨) |
 | **CLI Tools** | 1 | `git cleanup-worktrees` (`bin/.local/bin/` → `~/.local/bin/`) |
 | **Stats CLI** | `demi` | `scripts/demi/` — 플러그인·스킬·에이전트 사용 통계 (uv packaged Python) |
 | **External Plugins** | 31 | `~/.claude/plugins/installed_plugins.json`이 관리하고 `CLAUDE.md` 호출 매핑으로 통합. demiurge가 실제로 chain하는 것은 그중 일부다. [외부 Plugin 생태계](#외부-plugin-생태계) 참조. |
@@ -63,7 +63,6 @@ Demiurge는 자체 구현보다 **검증된 외부 plugin을 wrapping**한다. `
 
 | 카테고리 | Plugin | demiurge에서의 역할 |
 |---------|--------|-------------------|
-| 자율 조정 | `ralph-loop` | `/rl` 반복 루프 (autopilot·rl-verify가 chain) |
 | 반론·단순화 관점 | `ouroboros` | `rl-verify`가 `ouroboros_lateral_think` 도구로 contrarian·simplifier 페르소나 호출 |
 | 문서·코드 리뷰 | `compound-engineering` | `ce-doc-review` · `ce-code-review` · `ce-debug` · `ce-compound` |
 | 협업·계획 | `superpowers` | `brainstorming` · `writing-plans` · `subagent-driven-development` · `test-driven-development` |
@@ -88,7 +87,7 @@ Demiurge는 자체 구현보다 **검증된 외부 plugin을 wrapping**한다. `
 |------|-------------|------------|
 | 수렴 검증 오케스트레이션 | `rl-verify` (판정자·반박 검증자 페르소나 내장) | 검증 관점 일부를 `ouroboros`·`compound-engineering`에 위임 |
 | 리뷰 엔진 합성 | `review-ensemble` (여러 리뷰 엔진 병렬 실행 후 병합) | 각 엔진이 `code-review`·`compound-engineering`·`codex` |
-| 자율 완주 | `autopilot` (모드 판별 + 결정 로그 + DIGEST) | 반복 실행은 `ralph-loop` (`/rl`) |
+| 자율 완주 | `autopilot` (모드 판별 + 결정 로그 + DIGEST) | — |
 | 심층 조사 | `deep-research` (3단계 프로토콜) | 웹 조사 도구는 런타임 기본 제공 |
 | 개별 리뷰·계획·디버깅 | — | `compound-engineering` · `superpowers` |
 | 교훈 누적 | — | `compound-engineering:ce-compound` |
@@ -197,7 +196,7 @@ demiurge/
 ├── product/.claude/              # 전역 배포 (GNU Stow 경유 → ~/.claude/)
 │   ├── skills/demiurge/          # skills-directory plugin (네임스페이스: demiurge)
 │   │   ├── .claude-plugin/       # plugin.json — 마켓플레이스 등록 없이 로드
-│   │   └── skills/      (21)     # /demiurge:<name>으로 호출
+│   │   └── skills/      (20)     # /demiurge:<name>으로 호출
 │   ├── rules/       (2)          # 전역 룰: skills.md, agents.md (paths frontmatter)
 │   ├── statusline.sh             # Claude Code 상태줄(statusLine) 스크립트
 │   └── CLAUDE.md                 # 응답 가이드라인 · TDD · 스킬 호출 규칙

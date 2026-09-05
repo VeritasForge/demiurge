@@ -24,11 +24,11 @@ Claude Code skill 또는 command를 생성·수정할 때 적용. 공식 입장:
 | 패턴 | model 명시? | 예시 |
 |---|---|---|
 | skill 본문에서 시작→종료까지 완결되는 작업 | ✅ 명시 가능 | `/demiurge:commit` (git status→메시지→commit→push 4단계가 한 turn 안에서 끝남) |
-| skill body 직후 같은 turn에서 사용자 task가 시작되는 작업 | ❌ 미명시 (세션 모델 상속) | `/demiurge:rl` (skill 후 첫 iteration 시작), `/demiurge:autopilot` (모드 판별 → 자율 실행 시작) |
+| skill body 직후 같은 turn에서 사용자 task가 시작되는 작업 | ❌ 미명시 (세션 모델 상속) | `/demiurge:autopilot` (모드 판별 → 자율 실행 시작) |
 | 같은 turn 안에서 다른 skill을 chain 호출하는 작업 | ❌ 미명시 | `/demiurge:debug` (상황 판별 → ce-debug 또는 systematic-debugging 호출) |
 
 ### 위반 시 결과 (실측 사례)
-사용자가 opus 세션에서 `/rl "어려운 task"`를 호출할 때, skill frontmatter에 `model: claude-sonnet-4-6`이 있으면 **첫 iteration이 sonnet으로 silently downgrade**된다. 첫 iteration은 보통 방향·설계·테스트 골격 결정이 일어나는 시점이라 회복이 어렵다.
+opus 세션에서 반복 실행 skill(당시 `/demiurge:rl`, 2026-09-06에 삭제)을 호출할 때 frontmatter에 `model: claude-sonnet-4-6`이 있으면 **첫 iteration이 sonnet으로 silently downgrade**됐다. 첫 iteration은 보통 방향·설계·테스트 골격 결정이 일어나는 시점이라 회복이 어렵다. 같은 함정이 `/demiurge:autopilot`처럼 skill 직후 사용자 task가 시작되는 skill 전체에 적용된다.
 
 ### 비대칭이 의도된 경우 주석 명시
 한 그룹의 skill 중 일부만 model을 명시하면 미래 개발자가 "왜 일관성이 없지?"라고 잘못된 통일 리팩토링을 시도할 수 있다. frontmatter 직후 `<!-- model intentionally omitted — see ... -->` 또는 `<!-- model: X — turn 전체가 ... 작업이므로 명시 -->` 같은 한 줄 주석으로 결정 근거를 영구 기록한다.

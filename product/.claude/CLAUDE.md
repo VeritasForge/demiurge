@@ -61,9 +61,9 @@ For multi-step tasks, state a brief plan — one line per step: `1. [Step] → v
 2. **스킬 검색**: 착수 전 `ls ~/.claude/skills/ ~/.claude/agents/`로 실제 목록을 확인하고(아래 호출 매핑 표에 없는 것이 훨씬 많다), 이 플랜에 쓸 스킬·에이전트를 각 Task에 명시한다.
 3. **경로 검증**: 참조하는 모든 파일·디렉토리 경로는 작성 전 `ls`/`grep`으로 실존을 확인한다 — 상상한 경로로 spec을 쓰면 구현 단계에서 막힌다. 사례: `src/domain/run/escape-counter.ts`를 가정했으나 그 디렉토리 자체가 없었다.
 4. **진행 추적**: subagent-driven-development는 자체 ledger 파일에 진행을 남긴다. 그 외(executing-plans·ce-work·순수 plan mode)는 **플랜 파일의 체크박스(`- [ ]`)를 갱신**해 추적한다 — `TaskCreate`·`TodoWrite`류 도구는 현재 모델에서 기본 비활성이라 쓸 수 없다.
-5. **Task별 검증**: 각 Task 완료 후 /demiurge:rl로 해당 Task의 완료조건을 검증한다. 새 사실·오류 발견 시 Task를 수정해 재수행한다. /demiurge:rl은 고정 상태 파일(`.claude/ralph-loop.local.md`)을 쓰므로 **두 개를 동시에 돌리지 않는다** — Task를 병렬 실행하는 도구에서도 /demiurge:rl 검증은 순차로 돌린다.
+5. **Task별 검증**: 각 Task 완료 후 그 Task의 완료조건에 적힌 검증 명령을 **실제로 실행하고 출력을 확인**한다. 명령을 돌리지 않은 채 통과했다고 적지 않는다. 실패하거나 새 사실·오류가 드러나면 Task를 수정해 재수행한다.
 6. **코드 리뷰**: 코드 작성 Task 완료 후, 실행 도구에 내장 리뷰(예: subagent-driven-development의 Task reviewer)가 있으면 그걸로 충분하다. 없으면(executing-plans, 순수 plan mode 등) `/code-review`를 최소 1회 실행한다. **어느 쪽 리뷰든** React/Next.js 코드는 Vercel best-practices 기준을 포함한다.
-7. **최종 검증**: 모든 Task 완료 후 /demiurge:rl로 플랜 전체 완료조건을 검증한다. 미충족 항목은 원인을 분석해 보완 Task를 추가하고 재검증한다.
+7. **최종 검증**: 모든 Task 완료 후 플랜 전체 완료조건을 같은 방식(검증 명령 실행 + 출력 확인)으로 검증한다. 미충족 항목은 원인을 분석해 보완 Task를 추가하고 재검증한다.
 
 제약사항(버전 하한·의존성 제한 등)은 writing-plans가 플랜 필수 헤더로 이미 강제하므로 중복 기재하지 않는다. 금지사항·고려사항은 되돌리기 어려운 변경·보안 경계·여러 프로젝트에 영향을 주는 결정이 포함된 플랜에만 적는다. 플랜 문서 품질 검증(/compound-engineering:ce-doc-review)과 다관점 사실 검증(/demiurge:rl-verify)도 **매 플랜 의무가 아니다** — 같은 고위험 플랜에만 선택적으로 쓴다.
 

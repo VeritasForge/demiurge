@@ -18,7 +18,7 @@ allowed-tools: Read, Grep, Glob, Bash, Write, TaskList, TaskGet
 ## When to Use
 
 - context window가 거의 차서 곧 `/clear` 해야 할 때
-- autopilot/rl 같은 장기 자율 작업 중간 인계
+- autopilot 같은 장기 자율 작업 중간 인계
 - 사용자가 "handoff", "다음 세션 인계", "context-clear 전 정리" 요청
 - `/session-handoff` 직접 호출
 
@@ -90,7 +90,7 @@ timeout 120 bash -c 'cd <repo>/backend && uv run pytest -q' 2>&1 | tail -3
 
 ## 산출물 경로
 
-- 기본: `docs/autopilot/<slug>/HANDOFF.md` (autopilot/rl 작업과 같은 slug 디렉토리)
+- 기본: `docs/autopilot/<slug>/HANDOFF.md` (autopilot 작업과 같은 slug 디렉토리)
 - `<slug>`는 인자로 받거나 진행 중 plan 파일명(`docs/superpowers/plans/`의 최신 mtime)에서 추론
 - 같은 디렉토리에 이미 HANDOFF가 있으면 **덮어쓰지 말고** 최신 상태로 갱신하되, 이전 재진입 기록은 하단 "맥락 참고용"으로 보존
 

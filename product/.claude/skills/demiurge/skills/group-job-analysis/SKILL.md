@@ -307,7 +307,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
   {법인} {포지션}: {판정} {매칭률}% | 강점: {top} | 리스크: {top}
   ```
 - **Compact 트리거**: 풀 분석 **2개 완료마다** 컨텍스트 정리
-- **순차 실행**: 병렬 금지 (컨텍스트 공유 + ralph-loop 제약)
+- **순차 실행**: 병렬 금지 (앞 분석 결과를 뒤 분석이 참조하므로 컨텍스트를 공유해야 함)
 
 **Exit Criteria**: 모든 Tier A 포지션의 분석 파일 저장, L1 요약 수집
 
