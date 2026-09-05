@@ -23,36 +23,35 @@
 
 플라톤의 *티마이오스*에서 **데미우르고스**(δημιουργός)는 영원한 형상(Forms)을 응시하며 혼돈의 질료를 질서 있는 우주로 빚어내는 신적 장인이다. 무에서 창조하는 신이 아니라, 이미 있는 것을 목적에 맞게 *형상화*하는 존재다.
 
-이 프로젝트는 그 이름을 의도적으로 빌려왔다. Claude Code는 강력한 원재료다. **Demiurge**는 이 원재료를 구조화된 다중 전문가 시스템으로 빚어내는 메타-설정(meta-configuration)이다. 신화의 데미우르고스가 혼돈에서 코스모스를 빚듯, 이 프로젝트는 Claude Code를 빈 캔버스에서 어떤 소프트웨어 아키텍처 문제든 추론할 수 있는 거버넌스 시스템으로 변환한다.
+이 프로젝트는 그 이름을 의도적으로 빌려왔다. Claude Code는 강력한 원재료다. **Demiurge**는 이 원재료를 목적에 맞게 형상화하는 메타-설정(meta-configuration)이다. 신화의 데미우르고스가 혼돈에서 코스모스를 빚듯, 이 프로젝트는 빈 캔버스 상태의 Claude Code를 검증·자율실행·문서화 워크플로우가 짜인 작업 환경으로 변환한다.
 
-그러나 오늘날 "원재료"는 Claude Code 하나만으로 끝나지 않는다. 데미우르고스가 형상화하는 질료는 이제 **세 층(三層)**이다 — (1) Claude Code 런타임 자체, (2) 외부 plugin 생태계 (`compound-engineering`, `superpowers`, `ouroboros`, `context7`, `ralph-loop`, …), (3) 외부 지식 (공식 문서·아키텍처 BoK(Body of Knowledge)·도메인 패턴). Demiurge는 이 셋을 단일 거버넌스 아래로 끌어와, 자체 구현과 plugin 위임의 경계를 명문화하고 단계별 수렴 프로토콜로 *형상화*한다.
+그러나 오늘날 "원재료"는 Claude Code 하나만으로 끝나지 않는다. 데미우르고스가 형상화하는 질료는 이제 세 층이다. 첫째는 Claude Code 런타임 자체이고, 둘째는 외부 plugin 생태계(`compound-engineering`, `superpowers`, `ouroboros`, `ralph-loop` 등)이며, 셋째는 외부 지식(공식 문서와 1차 출처)이다. Demiurge는 이 셋을 하나의 호출 규칙 아래로 끌어와, 자체 구현과 plugin 위임의 경계를 명문화한다.
 
 ## 철학
 
 Demiurge는 하나의 확신 위에 세워졌다: **올바른 지식 구조와 거버넌스가 Claude Code를 소프트웨어 엔지니어링에서 전지전능하게 만들 수 있다.**
 
-이 저장소에는 소스 코드가 없다. 에이전트, 규칙, 스킬, 오케스트레이션 프로토콜, 그리고 외부 plugin 호출 매핑으로 이루어진 **순수한 메타-설정**이다. 코드가 아닌 **지식이 지렛대**다 — 올바른 패턴·원칙·프레임워크를 어떤 plugin·skill·agent에 어떻게 위임할지가 핵심 설계 결정이다.
+이 저장소에는 소스 코드가 없다. 규칙, 스킬, 그리고 외부 plugin 호출 매핑으로 이루어진 **순수한 메타-설정**이다. 코드가 아닌 **지식이 지렛대**다. 올바른 패턴과 원칙을 어떤 plugin·skill에 어떻게 위임할지가 핵심 설계 결정이다.
 
-이 확신은 다섯 가지 운영 원칙으로 구현된다:
+이 확신은 네 가지 운영 원칙으로 구현된다:
 
-- **다중 전문가 합의** — Tier 1~4 아키텍트(15 architect + 6 investigation/evaluator)가 라운드 기반 합의 투표로 의사결정. 단일 관점보다 우수한 결정 + 소수 의견 항상 기록.
-- **자동 거버넌스** — `paths` frontmatter rule이 파일 경로별 작성·리뷰 규칙을 자동 적용 (`skills.md`, `agents.md`, 프로젝트 로컬 `stow-deployment.md`). 계층적·병렬 리뷰가 품질을 보장.
-- **Plugin 생태계 wrapping** — 검증된 외부 plugin(`compound-engineering`, `ouroboros`, `context7`, `superpowers`, `ralph-loop` 등)을 자체 구현으로 대체하지 않고, `CLAUDE.md` 호출 매핑·skill chain으로 통합. 자체 구현 vs 위임 경계는 [외부 Plugin 생태계](#외부-plugin-생태계)에 명문화.
-- **자율주행 + HITL 학습 보존** — `autopilot` skill로 명시 호출 시에만 자율 완주(평소엔 HITL 학습 기회 보존). 완주 후 `DIGEST.md`로 사용자가 깨어나 결정 로그를 검토·학습시키는 사이클.
-- **사용 데이터 자가 진단** — `demi` CLI가 자산을 `active`/`live`/`dead` 3등급으로 추적, 의존성 그래프 기반 false-positive 회피. 메타-설정 자체가 자기 사용을 측정한다.
+- **수렴할 때까지 검증** — `rl-verify`가 여러 관점의 검증자를 붙여 발견마다 판정 라벨을 매기고, 같은 판정이 연속으로 나올 때까지 반복한다. 확정 직전 발견은 별도 반박 검증자가 근거를 다시 읽어 뒤집을 수 있는지 확인한다.
+- **자동 거버넌스** — `paths` frontmatter rule이 파일 경로별 작성 규칙을 자동 적용한다 (`skills.md`, `agents.md`, 프로젝트 로컬 `stow-deployment.md`). 스킬 파일을 열면 그 규칙이 함께 로드된다.
+- **Plugin 생태계 wrapping** — 검증된 외부 plugin을 자체 구현으로 대체하지 않고, `CLAUDE.md` 호출 매핑과 skill chain으로 통합한다. 자체 구현과 위임의 경계는 [외부 Plugin 생태계](#외부-plugin-생태계)에 명문화되어 있다.
+- **사용 데이터 자가 진단** — `demi` CLI가 자산을 `active`/`live`/`dead` 3등급으로 추적하고, 의존성 그래프로 false positive를 걸러낸다. 메타-설정이 자기 사용을 측정하고, 그 측정으로 자기를 정리한다.
 
 ## 구성 요소 (한눈에)
 
 | 컴포넌트 | 개수 | 위치 / 설명 |
 |---------|------|------------|
-| **Skills** | 21 | Workflow · Utility · Career · Business (`product/.claude/skills/`) |
+| **Skills** | 21 | Workflow · Utility · Career · Business (`product/.claude/skills/demiurge/skills/`) |
 | **Rules** | 3 | 전역 2 (`skills.md`, `agents.md`, `paths` frontmatter 지원) + 프로젝트 로컬 1 (`stow-deployment.md`) |
 | **Commands** | 1 | 프로젝트 로컬 `wrap.md` (전역 `/rl`·`/commit`은 `skills/`로 마이그레이션됨) |
 | **CLI Tools** | 1 | `git cleanup-worktrees` (`bin/.local/bin/` → `~/.local/bin/`) |
 | **Stats CLI** | `demi` | `scripts/demi/` — 플러그인·스킬·에이전트 사용 통계 (uv packaged Python) |
-| **External Plugins** | 10 | `compound-engineering` · `superpowers` · `ouroboros` · `context7` · `ralph-loop` · `codex` · `frontend-design` · `Notion` · `notion-workspace-plugin` · `typescript-lsp` — `~/.claude/plugins/installed_plugins.json` 관리, `CLAUDE.md` 호출 매핑으로 통합. 자세한 통합 방식은 [외부 Plugin 생태계](#외부-plugin-생태계) 참조. |
+| **External Plugins** | 31 | `~/.claude/plugins/installed_plugins.json`이 관리하고 `CLAUDE.md` 호출 매핑으로 통합. demiurge가 실제로 chain하는 것은 그중 일부다. [외부 Plugin 생태계](#외부-plugin-생태계) 참조. |
 
-> 카운트 출처: `ls product/.claude/{agents,skills,rules,commands}` 직접 측정 + `~/.claude/plugins/installed_plugins.json`. 자동 검증은 `just stats` 또는 `demi plugin-stats inventory`로 확인.
+> 카운트 출처: `ls product/.claude/skills/demiurge/skills`, `ls product/.claude/rules` 직접 측정 + `~/.claude/plugins/installed_plugins.json`. 자동 검증은 `/wrap --check` 또는 `just stats`로 확인.
 
 ## 외부 Plugin 생태계
 
@@ -65,31 +64,34 @@ Demiurge는 자체 구현보다 **검증된 외부 plugin을 wrapping**한다. `
 | 카테고리 | Plugin | demiurge에서의 역할 |
 |---------|--------|-------------------|
 | 자율 조정 | `ralph-loop` | `/rl` 반복 루프 (autopilot·rl-verify가 chain) |
-| 진화·검증 | `ouroboros` | 다관점 수렴, contrarian·simplifier 페르소나 |
-| 학습·문서 리뷰 | `compound-engineering` | `ce-learnings-researcher` · `ce-compound` · `ce-doc-review` · `ce-code-review` |
-| 협업·계획 | `superpowers` | `brainstorming` · `writing-skills` · `writing-plans` · `tdd` |
-| 라이브러리 문서 | `context7` | 공식 docs 1차 출처 조회 (`deep-research` Phase 2에서 chain) |
-| IDE · 보조 코딩 | `typescript-lsp` · `codex` | TS LSP, Codex rescue 위임 |
-| 워크스페이스 | `Notion` · `notion-workspace-plugin` | 문서·작업 추적 |
-| UI 설계 | `frontend-design` | visual companion, 컴포넌트 가이드 |
+| 반론·단순화 관점 | `ouroboros` | `rl-verify`가 `ouroboros_lateral_think` 도구로 contrarian·simplifier 페르소나 호출 |
+| 문서·코드 리뷰 | `compound-engineering` | `ce-doc-review` · `ce-code-review` · `ce-debug` · `ce-compound` |
+| 협업·계획 | `superpowers` | `brainstorming` · `writing-plans` · `subagent-driven-development` · `test-driven-development` |
+| 코드베이스 이해 | `understand-anything` | 지식그래프 생성·질의 (`.ua/` 있는 레포에서 탐색 우선 경로) |
+| 보조 코딩 | `codex` | 다른 모델 계열로 재검토·구조 위임 (`/codex:rescue`) |
+| 워크스페이스 | `notion` · `atlassian` | 문서·이슈 추적 |
+| UI 설계 | `frontend-design` · `vercel` | 비주얼 디자인 품질, React/Next.js 기준 |
 
 ### 통합 패턴 — 단계별 수렴
 
 외부 plugin 호출은 `CLAUDE.md` "Skills/Agents 호출 매핑" 절에서 *언제 어떤 plugin을 호출할지* 명문화돼 있다 (호출 매핑 = 거버넌스).
 
 ```
-[판단 지점] → ce-learnings-researcher → context7 → multi-agent → ouroboros → 결정
-              (과거 교훈)               (1차 출처)  (다관점)     (수렴)
+[판단 지점] → deep-research → rl-verify ──┬─ contrarian/simplifier (ouroboros)
+              (1차 출처 조사)  (수렴 검증)  ├─ 도메인 검증 관점 (compound 리뷰어 페르소나)
+                                           └─ 판정자 → 안정 카운터 → 수렴 시 종료
 ```
 
 ### 자체 구현 vs Plugin 위임 경계
 
 | 항목 | demiurge 자체 | plugin 위임 |
 |------|-------------|------------|
-| 다관점 수렴 검증 | — | `ouroboros` + `compound-engineering` |
-| 라이브러리 문서 | — | `context7` |
+| 수렴 검증 오케스트레이션 | `rl-verify` (판정자·반박 검증자 페르소나 내장) | 검증 관점 일부를 `ouroboros`·`compound-engineering`에 위임 |
+| 리뷰 엔진 합성 | `review-ensemble` (여러 리뷰 엔진 병렬 실행 후 병합) | 각 엔진이 `code-review`·`compound-engineering`·`codex` |
+| 자율 완주 | `autopilot` (모드 판별 + 결정 로그 + DIGEST) | 반복 실행은 `ralph-loop` (`/rl`) |
+| 심층 조사 | `deep-research` (3단계 프로토콜) | 웹 조사 도구는 런타임 기본 제공 |
+| 개별 리뷰·계획·디버깅 | — | `compound-engineering` · `superpowers` |
 | 교훈 누적 | — | `compound-engineering:ce-compound` |
-| 자율 반복 루프 | — | `ralph-loop` (`/rl`) |
 
 근거: `product/.claude/CLAUDE.md` "Skills/Agents 호출 규칙" 절.
 
@@ -106,20 +108,22 @@ cd ~/lab/demiurge
 설치 후 아무 프로젝트에서:
 
 ```text
-/deep-research <주제>                   # 3단계 심층 조사
-/autopilot <plan.md>                    # 자율주행 (HITL 학습 사이클 포함)
+/demiurge:deep-research <주제>     # 3단계 심층 조사
+/demiurge:rl-verify <대상>         # 수렴할 때까지 다관점 검증
+/demiurge:autopilot <plan.md>      # 자율주행 (사람 검토 사이클 포함)
 ```
+
+> 스킬은 `demiurge` 플러그인 네임스페이스로 로드되므로 접두어가 붙는다. 목록 확인은 `/plugin` 또는 `just stats`.
 
 ## 사용법
 
 ### 자율주행 (autopilot, MVP)
 
 ```text
-/autopilot <plan.md>            # 명시 호출 시에만 발동 — 평소 HITL 학습 기회 보존
-/goal autopilot으로 ...          # /goal 1회로 통합 진입
+/demiurge:autopilot <plan.md>   # 명시 호출 시에만 발동 — 평소엔 사람이 개입하는 흐름 유지
 ```
 
-> autopilot은 자율 완주 후 `DIGEST.md`(사람용 1페이지 요약)를 자동 생성. 자세한 절차는 `product/.claude/skills/autopilot/README.md` 참조.
+> autopilot은 자율 완주 후 `DIGEST.md`(사람용 1페이지 요약)를 자동 생성한다. 자세한 절차는 `product/.claude/skills/demiurge/skills/autopilot/README.md` 참조.
 
 ### 문서 동기화
 
@@ -191,9 +195,10 @@ uv run demi plugin-stats unused --grade dead  # dead 자산만 (정리 후보)
 ```
 demiurge/
 ├── product/.claude/              # 전역 배포 (GNU Stow 경유 → ~/.claude/)
-│   ├── skills/      (21)
+│   ├── skills/demiurge/          # skills-directory plugin (네임스페이스: demiurge)
+│   │   ├── .claude-plugin/       # plugin.json — 마켓플레이스 등록 없이 로드
+│   │   └── skills/      (21)     # /demiurge:<name>으로 호출
 │   ├── rules/       (2)          # 전역 룰: skills.md, agents.md (paths frontmatter)
-│   ├── commands/    (0)          # /rl·/commit은 skills/로 마이그레이션됨
 │   ├── statusline.sh             # Claude Code 상태줄(statusLine) 스크립트
 │   └── CLAUDE.md                 # 응답 가이드라인 · TDD · 스킬 호출 규칙
 ├── bin/.local/bin/               # 전역 CLI 배포 (GNU Stow 경유 → ~/.local/bin/)
@@ -210,7 +215,7 @@ demiurge/
 └── README.md                     # 이 문서
 ```
 
-개별 에이전트·스킬·규칙 인벤토리는 `product/.claude/CLAUDE.md` 또는 `just stats` 출력 참조.
+개별 스킬·규칙 인벤토리는 `just stats` 출력 참조. 문서와 실제 파일이 어긋났는지는 `/wrap --check`로 확인한다.
 
 ## 확장
 
@@ -221,8 +226,10 @@ just new-command <name>     # 커맨드 템플릿 생성 + 자동 심링크
 
 전역 vs 프로젝트 로컬 선택 기준:
 
-- **전역** (`product/.claude/skills/`, `product/.claude/agents/`) — 여러 프로젝트에서 재사용. 파일 생성 후 `just link` 필수.
-- **프로젝트 로컬** (`<repo>/.claude/skills/`, `<repo>/.claude/agents/`) — 특정 레포 도메인 지식·워크플로우와 결합. stow 불필요, 레포와 함께 버전 관리.
+- **전역** (`product/.claude/skills/demiurge/skills/<name>/`) — 여러 프로젝트에서 재사용. 파일 생성 후 `just link` 필수. 배포되면 `/demiurge:<name>`으로 호출된다.
+- **프로젝트 로컬** (`<repo>/.claude/skills/<name>/`) — 특정 레포 도메인 지식·워크플로우와 결합. stow 불필요, 레포와 함께 버전 관리.
+
+> 서브에이전트가 필요하면 `product/.claude/skills/demiurge/agents/<name>.md`에 만든다. 다만 현재 demiurge는 자체 에이전트를 두지 않는다 — 정의 파일이 프롬프트에 실리는지 확인하기 어려워, 페르소나가 필요한 스킬은 자기 폴더 안에 참조 파일을 두고 직접 주입한다 (`rl-verify/convergence-evaluator.md`, `review-ensemble/counter-reviewer.md`).
 
 ## 라이선스
 
