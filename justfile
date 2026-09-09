@@ -2,29 +2,31 @@
 
 set shell := ["bash", "-cu"]
 
+# 기본은 사용자 홈. 임시 배포 검증은 `just deploy_target=/절대/경로 link`로 실행한다.
+deploy_target := env_var("HOME")
+export DEMIURGE_DEPLOY_TARGET := deploy_target
+
 # 사용 가능한 명령 목록
 default:
     @just --list
 
 # 전역 심링크 생성/갱신
 link:
-    mkdir -p ~/.local/bin
-    stow -v -R --no-folding -t ~ product
-    stow -v -R --no-folding -t ~ bin
-    @echo "✅ product → ~/.claude, bin → ~/.local/bin linked"
+    stow -v -R --no-folding -t "$DEMIURGE_DEPLOY_TARGET" product bin
+    @echo "✅ Claude·Codex 지침과 공용 CLI 링크 생성/갱신 완료"
 
 # 전역 심링크 해제
 unlink:
-    stow -v -D --no-folding -t ~ product
-    stow -v -D --no-folding -t ~ bin
+    stow -v -D --no-folding -t "$DEMIURGE_DEPLOY_TARGET" product bin
     @echo "🔓 symlinks removed"
 
 # 심링크 상태 확인
 status:
     #!/usr/bin/env bash
     set -euo pipefail
+    shopt -s nullglob
     echo "=== Skills (symlinked) ==="
-    for d in ~/.claude/skills/*/; do
+    for d in "$DEMIURGE_DEPLOY_TARGET"/.claude/skills/*/; do
         name=$(basename "$d")
         # --no-folding: 디렉토리 자체가 심링크이거나, 내부에 심링크 파일이 있으면 OK
         if [ -L "${d%/}" ] || [ -L "${d}SKILL.md" ] || find "${d}" -maxdepth 2 -type l -print -quit 2>/dev/null | grep -q .; then
@@ -35,7 +37,7 @@ status:
     done
     echo ""
     echo "=== Commands (symlinked) ==="
-    for f in ~/.claude/commands/*; do
+    for f in "$DEMIURGE_DEPLOY_TARGET"/.claude/commands/*; do
         [ -e "$f" ] || continue
         name=$(basename "$f")
         if [ -L "$f" ]; then
@@ -46,15 +48,15 @@ status:
     done
     echo ""
     echo "=== CLAUDE.md ==="
-    if [ -L ~/.claude/CLAUDE.md ]; then
+    if [ -L "$DEMIURGE_DEPLOY_TARGET/.claude/CLAUDE.md" ]; then
         echo "  ✅ CLAUDE.md (symlinked)"
     else
         echo "  ⚠️  CLAUDE.md (not from product)"
     fi
     echo ""
     echo "=== Agents (symlinked) ==="
-    if [ -d ~/.claude/agents ]; then
-        for f in ~/.claude/agents/*; do
+    if [ -d "$DEMIURGE_DEPLOY_TARGET/.claude/agents" ]; then
+        for f in "$DEMIURGE_DEPLOY_TARGET"/.claude/agents/*; do
             [ -e "$f" ] || continue
             name=$(basename "$f")
             if [ -L "$f" ]; then
@@ -68,13 +70,12 @@ status:
     fi
     echo ""
     echo "=== Bin (~/.local/bin, symlinked from product) ==="
-    if [ -d ~/.local/bin ]; then
+    if [ -d "$DEMIURGE_DEPLOY_TARGET/.local/bin" ]; then
         found=false
-        for f in ~/.local/bin/*; do
+        for f in "$DEMIURGE_DEPLOY_TARGET"/.local/bin/*; do
             [ -e "$f" ] || [ -L "$f" ] || continue
             name=$(basename "$f")
-            target=$(readlink "$f" 2>/dev/null || echo "")
-            if [ -L "$f" ] && [[ "$target" == *"/demiurge/bin/"* ]]; then
+            if [ -L "$f" ] && [[ "$f" -ef "bin/.local/bin/$name" ]]; then
                 echo "  ✅ $name"
                 found=true
             fi
@@ -85,6 +86,8 @@ status:
     else
         echo "  ❌ ~/.local/bin not found"
     fi
+    echo ""
+    bash scripts/check-codex-links.sh "$(pwd -P)" "$DEMIURGE_DEPLOY_TARGET"
 
 # statusLine 설정을 settings.json에 비파괴적으로 병합 (statusLine 키만 갱신, 다른 키는 보존)
 setup-statusline:

@@ -2,7 +2,7 @@
 
 **Demiurge Harness**
 
-> 소스 코드 없음 · 런타임 의존성 없음 · 순수 `.claude/` 설정 · GNU Stow 기반 배포
+> Claude Code·Codex용 개인 하니스 · GNU Stow 기반 공동 배포 · 사용 통계 CLI
 
 ---
 
@@ -13,6 +13,7 @@
 - [구성 요소 (한눈에)](#구성-요소-한눈에)
 - [외부 Plugin 생태계](#외부-plugin-생태계)
 - [Quick Start](#quick-start)
+- [Codex 전역 지침](#codex-전역-지침)
 - [사용법](#사용법)
 - [사용 통계 (`demi` CLI)](#사용-통계-demi-cli)
 - [구조](#구조)
@@ -31,7 +32,9 @@
 
 Demiurge는 하나의 확신 위에 세워졌다: **올바른 지식 구조와 거버넌스가 Claude Code를 소프트웨어 엔지니어링에서 전지전능하게 만들 수 있다.**
 
-이 저장소에는 소스 코드가 없다. 규칙, 스킬, 그리고 외부 plugin 호출 매핑으로 이루어진 **순수한 메타-설정**이다. 코드가 아닌 **지식이 지렛대**다. 올바른 패턴과 원칙을 어떤 plugin·skill에 어떻게 위임할지가 핵심 설계 결정이다.
+이 저장소의 핵심은 규칙, 스킬, 외부 plugin 호출 매핑이다. 여기에 배포·검증 스크립트와 사용 통계 CLI가 함께 있다. 올바른 패턴과 원칙을 어떤 plugin·skill에 어떻게 위임할지가 핵심 설계 결정이다.
+
+Claude용 자산은 `product/.claude/`, Codex용 지침은 `product/.codex/`에 독립적으로 관리한다. 아래 스킬·플러그인 구성은 Claude용이며, Codex는 [전역 지침](#codex-전역-지침)과 현재 설치된 Codex 스킬을 사용한다.
 
 이 확신은 네 가지 운영 원칙으로 구현된다:
 
@@ -47,6 +50,7 @@ Demiurge는 하나의 확신 위에 세워졌다: **올바른 지식 구조와 �
 | **Skills** | 20 | Workflow · Utility · Career · Business (`product/.claude/skills/demiurge/skills/`) |
 | **Rules** | 3 | 전역 2 (`skills.md`, `agents.md`, `paths` frontmatter 지원) + 프로젝트 로컬 1 (`stow-deployment.md`) |
 | **Commands** | 1 | 프로젝트 로컬 `wrap.md` (전역 `/commit`은 `skills/`로 마이그레이션됨) |
+| **Codex 지침** | 3 | `AGENTS.md` + 설명·질문·문서 참조 + 계획·검증·배포 참조 (`product/.codex/`) |
 | **CLI Tools** | 1 | `git cleanup-worktrees` (`bin/.local/bin/` → `~/.local/bin/`) |
 | **Stats CLI** | `demi` | `scripts/demi/` — 플러그인·스킬·에이전트 사용 통계 (uv packaged Python) |
 | **External Plugins** | 30 활성 | `~/.claude/plugins/installed_plugins.json`이 관리하고 `settings.json`의 `enabledPlugins`가 켜고 끈다. `CLAUDE.md` 호출 매핑으로 통합하며, demiurge가 실제로 chain하는 것은 그중 일부다. [외부 Plugin 생태계](#외부-plugin-생태계) 참조. |
@@ -99,12 +103,14 @@ Demiurge는 자체 구현보다 **검증된 외부 plugin을 wrapping**한다. `
 ```bash
 git clone <repo> ~/lab/demiurge
 cd ~/lab/demiurge
-./bootstrap.sh          # stow/just/jq 설치, ~/.claude/ 및 ~/.local/bin/ 심링크 생성 + 상태줄(statusLine) 자동 설정
+./bootstrap.sh          # stow/just/jq 설치, ~/.claude/·~/.codex/·~/.local/bin/ 공동 배포 + Claude 상태줄 설정
 ```
 
 > **전제 조건:** macOS + Homebrew. fish 사용자는 `bootstrap.sh`가 `fish_add_path -U`로 `~/.local/bin`을 자동 등록.
 
-설치 후 아무 프로젝트에서:
+기존 `~/.codex/AGENTS.md`가 있으면 먼저 [Codex 최초 전환](#codex-최초-전환)을 수행한다. 설치기는 기존 지침을 자동 병합·이동·덮어쓰지 않는다. Codex CLI·플러그인의 설치와 로그인은 이 배포에 포함하지 않는다.
+
+설치 후 Claude Code에서:
 
 ```text
 /demiurge:deep-research <주제>     # 3단계 심층 조사
@@ -113,6 +119,82 @@ cd ~/lab/demiurge
 ```
 
 > 스킬은 `demiurge` 플러그인 네임스페이스로 로드되므로 접두어가 붙는다. 목록 확인은 `/plugin` 또는 `just stats`.
+
+## Codex 전역 지침
+
+`product/.codex/AGENTS.md`는 새 Codex 세션에서 읽을 개인 전역 지침이다. 한국어 응답·리뷰,
+근거 확인, 최소 변경, 완료조건과 검증, 설치된 스킬의 선택 기준을 담는다.
+`demiurge/communication.md`와 `engineering.md`는 작업 종류에 맞춰 읽는 상세 참조다.
+조직·프로젝트 전용 규칙이나 개인 절대 경로는 포함하지 않는다. 코드 탐색은 각 저장소의
+지침을 따르며, 제공되는 인덱스의 최신성을 확인하고 실제 소스와 대조한다.
+
+이 배포는 Claude 스킬을 Codex에 설치하지 않는다. Superpowers·Vercel 관련 스킬·OpenAI
+도구는 현재 Codex에 실제로 제공되는 목록에서 찾아 사용한다. 캐시의 존재만으로 활성화나
+호출 성공을 판단하지 않는다. `config.toml`, 인증 파일, 플러그인 캐시, 모델·권한·MCP 설정은
+관리하지 않는다. Codex용 자체 스킬·에이전트와 통계 수집도 첫 버전의 범위 밖이다.
+
+### Codex 최초 전환
+
+기존 전역 지침이 일반 파일이면 Stow가 충돌로 중단한다. 먼저 내용을 다시 읽고
+`product/.codex/AGENTS.md`와 상세 참조에 필요한 일반 원칙·예외가 반영됐는지 대조한다.
+조직·프로젝트 전용 규칙과 개인 절대 경로는 배포 원본에 합치지 않는다. 유지해야 하는
+저장소 전용 규칙은 사용자가 승인한 범위에서 해당 저장소의 `AGENTS.md`로 분리하고,
+이관하지 않는 항목도 전환 전에 확인한다. 다른 곳을 가리키는 심볼릭 링크나 디렉터리는 자동 이관하지 않는다.
+
+반영·분리·제외할 항목을 검토한 사용자만 다음을 실행한다. 기존 원문은 고유 디렉터리에
+백업해 보존하고 이름 충돌을 피한다.
+
+```bash
+# Demiurge 저장소 루트에서 실행. 원문 보존을 먼저 검토할 것.
+if [ -f "$HOME/.codex/AGENTS.md" ] && [ ! -L "$HOME/.codex/AGENTS.md" ]; then
+    codex_backup_dir=$(mktemp -d "$HOME/.codex/agents-before-demiurge-$(date +%Y%m%d-%H%M%S).XXXXXX") &&
+    mv "$HOME/.codex/AGENTS.md" "$codex_backup_dir/AGENTS.md" &&
+    printf '기존 지침 백업: %s/AGENTS.md\n' "$codex_backup_dir"
+fi
+stow -n -v -R --no-folding -t "$HOME" product bin &&
+just link &&
+just status
+```
+
+`AGENTS.override.md`에 내용이 있으면 Codex는 그 파일을 전역 `AGENTS.md`보다 먼저 선택한다.
+`CODEX_HOME`을 별도로 설정한 경우에도 기본 배포 위치와 실제 로딩 위치가 다를 수 있다.
+`just status`는 이 조건들을 경고하지만 임의로 수정하지 않는다.
+백업 이후 배포가 실패하면 출력한 백업 위치를 보존하고 아래 복구 절차를 따른다.
+
+### 검증과 복구
+
+`just status`는 Codex 원본 3개를 가리키는 링크가 정확한지 검사한다. 누락·일반 파일·
+다른 대상·끊어진 링크는 실패 종료 코드로 알린다. override 경고는 링크 실패와 구분한다.
+이 명령은 실제 모델에 지침이 전달됐는지를 검사하지 않는다.
+
+배포 후 새 Codex 세션에서 '현재 로드한 전역 지침의 경로와 핵심 규칙을 설명해줘'라고
+요청한다. 문서 작성·코드 검토 요청에서도 해당 상세 참조를 읽고 가용 스킬을 선택하는지
+확인한다. 지원되는 CLI에서는 `codex debug prompt-input`으로 프롬프트 입력을 점검할 수도
+있지만 출력에는 다른 개인 지침이 포함될 수 있으므로 원본을 외부에 공유하지 않는다.
+권한 오류로 검사하지 못하면 **링크 검증 성공 / 실제 로딩 미검증**으로 구분한다.
+
+전환을 되돌릴 때는 **Codex 원본이 존재하는 동안 `just unlink` → Codex 원본을 별도
+보관 위치로 이동 → 백업한 기존 AGENTS.md 복원 → `just link`로 Claude·공용 CLI 재배포**
+순서를 지킨다. `just unlink`는 두 하니스와 공용 CLI를 모두 해제한다.
+Codex 원본이 여전히 product 안에 있으면 복원한 일반 AGENTS.md와 다시 충돌하므로,
+원본을 배포 대상에서 제외한 후 나머지를 재배포해야 한다. 원본·기존 지침은 삭제하지 않는다.
+Codex 배포를 되돌린 상태에서는 현재 `just status`의 Codex 검사가 실패하는 것이 예상 동작이다.
+
+사용자 홈을 건드리지 않는 자동 검증:
+
+```bash
+python3 -m unittest discover -s scripts/tests -v
+bash -n bootstrap.sh scripts/check-codex-links.sh
+```
+
+테스트는 실제 just·Stow를 사용하며 최초 배포·재배포·충돌·잘못된 링크·해제를 검증한다.
+`link`·`unlink`·`status`는 `just deploy_target=/존재하는/절대경로 link`처럼 대상만 바꿀 수
+있다. 기본은 사용자 홈이며 HOME을 재지정하지 않는다. 이 옵션은 세 명령에만 적용된다.
+`bootstrap.sh`와 `setup-statusline`은 실제 사용자 홈에 적용되므로 임시 검증에 사용하지 않는다.
+
+Codex 지침의 기준: [전역 지침과 우선순위](https://learn.chatgpt.com/docs/agent-configuration/agents-md),
+[스킬 발견·실행](https://learn.chatgpt.com/docs/build-skills),
+[공식 모범 사례](https://learn.chatgpt.com/guides/best-practices).
 
 ## 사용법
 
@@ -135,8 +217,8 @@ cd ~/lab/demiurge
 
 ```bash
 just status    # 심링크 상태 확인
-just link      # 심링크 생성/갱신 (product → ~/.claude, bin → ~/.local/bin)
-just unlink    # 심링크 해제
+just link      # ~/.claude·~/.codex·~/.local/bin 심링크 공동 생성/갱신
+just unlink    # 두 하니스와 공용 CLI 심링크 공동 해제
 ```
 
 > ⚠️ 파일 삭제·이동 시 순서: `just unlink → 소스 변경 → just link`. 역순으로 하면 `~/.claude/` 하위에 dangling symlink가 남는다. 자세한 근거는 `.claude/rules/stow-deployment.md` 참조.
@@ -200,12 +282,17 @@ demiurge/
 │   ├── rules/       (2)          # 전역 룰: skills.md, agents.md (paths frontmatter)
 │   ├── statusline.sh             # Claude Code 상태줄(statusLine) 스크립트
 │   └── CLAUDE.md                 # 응답 가이드라인 · TDD · 스킬 호출 규칙
+├── product/.codex/               # 전역 배포 (GNU Stow 경유 → ~/.codex/)
+│   ├── AGENTS.md                 # Codex 핵심 지침과 참조 읽기 조건
+│   └── demiurge/                 # communication.md · engineering.md
 ├── bin/.local/bin/               # 전역 CLI 배포 (GNU Stow 경유 → ~/.local/bin/)
 │   └── git-cleanup-worktrees
 ├── scripts/demi/                 # 사용 통계 CLI (uv packaged Python)
 │   ├── src/demi/plugin_stats/    # collector · analyzer · reporter · commands
 │   ├── reports/plugin-stats/     # latest.md + snapshots/*.json (git 추적)
 │   └── tests/                    # pytest (Happy/Boundary/Error 카테고리)
+├── scripts/check-codex-links.sh  # Codex 링크의 정확한 원본·끊어짐 검사
+├── scripts/tests/               # 실제 just·Stow를 사용하는 배포 테스트
 ├── .claude/                      # 프로젝트 로컬 (demiurge 한정, stow 미경유)
 │   ├── rules/stow-deployment.md
 │   └── commands/wrap.md
@@ -219,8 +306,8 @@ demiurge/
 ## 확장
 
 ```bash
-just new-skill <name>       # 스킬 템플릿 생성 + 자동 심링크
-just new-command <name>     # 커맨드 템플릿 생성 + 자동 심링크
+just new-skill <name>       # Claude 스킬 템플릿 생성 + 공동 재배포
+just new-command <name>     # Claude 커맨드 템플릿 생성 + 공동 재배포
 ```
 
 전역 vs 프로젝트 로컬 선택 기준:

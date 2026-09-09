@@ -2,6 +2,8 @@
 set -e
 
 echo "🚀 Demiurge AI Harness Setup"
+echo "Claude·Codex 전역 지침을 함께 배포합니다. 기존 일반 파일은 덮어쓰지 않습니다."
+echo "~/.codex/AGENTS.md가 이미 있으면 README의 'Codex 최초 전환'을 먼저 확인하세요."
 echo ""
 
 # Homebrew 확인
@@ -44,7 +46,7 @@ fi
 echo ""
 
 # 심링크 생성
-echo "🔗 Linking product → ~/.claude, bin → ~/.local/bin..."
+echo "🔗 Linking product → ~/.claude + ~/.codex, bin → ~/.local/bin..."
 cd "$(dirname "$0")"
 just link
 
@@ -65,4 +67,5 @@ else
 fi
 
 echo ""
-echo "🎉 Done! Run 'just' for available commands."
+echo "🎉 배포 완료. just status로 링크를 확인하고 새 Codex 세션에서 지침 적용을 확인하세요."
+echo "Codex 모델·권한·MCP·인증·플러그인 설정은 변경하지 않았습니다."
