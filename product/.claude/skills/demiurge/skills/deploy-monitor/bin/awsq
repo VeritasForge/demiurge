@@ -1,0 +1,162 @@
+#!/usr/bin/env python3
+"""AWS CloudWatch 조회. 결과는 stdout JSON.
+
+  awsq logs --region R --log-group G [--log-group G2 ...] --start EPOCH --end EPOCH
+            --query-file F [--limit 1000]
+  awsq metric --region R --namespace N --metric M --dimension Name=Value [...]
+            --start EPOCH --end EPOCH [--period 300] [--stat Maximum]
+
+종료 코드: 0 성공, 2 조회 실패(AWS_ERROR), 3 자격증명 만료·없음(AWS_AUTH_EXPIRED).
+logs 폴링 간격은 환경변수 AWSQ_POLL_SECONDS(기본 2초)로 바꾼다.
+"""
+
+import argparse
+import datetime
+import json
+import os
+import subprocess
+import sys
+import time
+
+MAX_POLLS = 60
+TERMINAL = {"Complete", "Failed", "Cancelled", "Timeout"}
+EXPIRED_MARKERS = (
+    "session has expired",
+    "reauthenticate",
+    "expiredtoken",
+    "unable to locate credentials",
+    "error loading sso token",
+    "token has expired",
+    "security token included in the request is expired",
+)
+
+
+class AwsError(Exception):
+    def __init__(self, message, expired=False):
+        super().__init__(message)
+        self.expired = expired
+
+
+def first_line(text):
+    lines = text.strip().splitlines()
+    return lines[0] if lines else ""
+
+
+def aws(region, *args):
+    cmd = ["aws", *args, "--region", region, "--output", "json"]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=120)
+    except (OSError, subprocess.SubprocessError) as exc:
+        raise AwsError(str(exc))
+    if result.returncode != 0:
+        stderr = result.stderr
+        expired = any(m in stderr.lower() for m in EXPIRED_MARKERS)
+        raise AwsError(first_line(stderr) or f"aws exit {result.returncode}", expired)
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise AwsError(f"invalid aws output: {exc}")
+
+
+def iso(epoch):
+    moment = datetime.datetime.fromtimestamp(int(epoch), datetime.timezone.utc)
+    return moment.strftime("%Y-%m-%dT%H:%M:%SZ")
+
+
+def cmd_logs(args):
+    with open(args.query_file) as f:
+        query = f.read()
+    started = aws(
+        args.region, "logs", "start-query",
+        "--log-group-names", *args.log_group,
+        "--start-time", str(int(args.start)),
+        "--end-time", str(int(args.end)),
+        "--query-string", query,
+        "--limit", str(args.limit),
+    )
+    interval = float(os.environ.get("AWSQ_POLL_SECONDS", "2"))
+    status = "Timeout"
+    data = {}
+    for _ in range(MAX_POLLS):
+        data = aws(
+            args.region, "logs", "get-query-results", "--query-id", started["queryId"]
+        )
+        status = data.get("status", "")
+        if status in TERMINAL:
+            break
+        time.sleep(interval)
+    else:
+        raise AwsError("query did not finish: still " + (status or "unknown"))
+    if status != "Complete":
+        raise AwsError(f"query status {status}")
+    rows = [
+        {c["field"]: c["value"] for c in row if c["field"] != "@ptr"}
+        for row in data.get("results", [])
+    ]
+    scanned = data.get("statistics", {}).get("bytesScanned", 0.0)
+    return {"status": status, "rows": rows, "bytes_scanned": scanned}
+
+
+def cmd_metric(args):
+    data = aws(
+        args.region, "cloudwatch", "get-metric-statistics",
+        "--namespace", args.namespace,
+        "--metric-name", args.metric,
+        "--dimensions", *args.dimension,
+        "--start-time", iso(args.start),
+        "--end-time", iso(args.end),
+        "--period", str(args.period),
+        "--statistics", args.stat,
+    )
+    points = [
+        {
+            "t": int(datetime.datetime.fromisoformat(p["Timestamp"]).timestamp()),
+            "v": p[args.stat],
+        }
+        for p in data.get("Datapoints", [])
+    ]
+    points.sort(key=lambda p: p["t"])
+    return {"datapoints": points}
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(prog="awsq")
+    sub = parser.add_subparsers(dest="cmd", required=True)
+    logs = sub.add_parser("logs")
+    logs.add_argument("--region", required=True)
+    logs.add_argument("--log-group", action="append", required=True)
+    logs.add_argument("--start", type=float, required=True)
+    logs.add_argument("--end", type=float, required=True)
+    logs.add_argument("--query-file", required=True)
+    logs.add_argument("--limit", type=int, default=1000)
+    logs.set_defaults(func=cmd_logs)
+    metric = sub.add_parser("metric")
+    metric.add_argument("--region", required=True)
+    metric.add_argument("--namespace", required=True)
+    metric.add_argument("--metric", required=True)
+    metric.add_argument("--dimension", action="append", required=True)
+    metric.add_argument("--start", type=float, required=True)
+    metric.add_argument("--end", type=float, required=True)
+    metric.add_argument("--period", type=int, default=300)
+    metric.add_argument("--stat", default="Maximum")
+    metric.set_defaults(func=cmd_metric)
+    return parser
+
+
+def main(argv):
+    args = build_parser().parse_args(argv[1:])
+    try:
+        result = args.func(args)
+    except OSError as exc:
+        print(f"AWS_ERROR: {exc}", file=sys.stderr)
+        return 2
+    except AwsError as exc:
+        tag = "AWS_AUTH_EXPIRED" if exc.expired else "AWS_ERROR"
+        print(f"{tag}: {exc}", file=sys.stderr)
+        return 3 if exc.expired else 2
+    print(json.dumps(result, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
