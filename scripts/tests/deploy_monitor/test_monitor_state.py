@@ -234,6 +234,20 @@ class TestMonitorState(MonitorStateCase):
         self.record(T0, T0 + H, "ok")  # 뒤늦은 record 가 되돌리지 않는다
         self.assertEqual(self.window(T0 + 3 * H)["start"], T0 + 2 * H)
 
+    def test_record_accumulates_bytes_scanned(self):
+        self.init()
+        self.assertEqual(
+            self.ok("summary", "--state", self.state)["bytes_scanned_total"], 0.0
+        )
+        self.ok("record", "--state", self.state, "--start", str(T0),
+                "--end", str(T0 + H), "--status", "ok", "--bytes-scanned", "1500.5")
+        self.ok("record", "--state", self.state, "--start", str(T0 + H),
+                "--end", str(T0 + 2 * H), "--status", "failed",
+                "--bytes-scanned", "500")
+        self.record(T0 + 2 * H, T0 + 3 * H, "ok")  # 생략하면 더하지 않는다
+        s = self.ok("summary", "--state", self.state)
+        self.assertEqual(s["bytes_scanned_total"], 2000.5)
+
     def test_invalid_utf8_error_does_not_echo_input(self):
         self.init()
         p = self.dir / "bad.json"

@@ -7,6 +7,7 @@
   monitor-state window --state F --now E
   monitor-state judge --state F --counts FILE --start S --end E
   monitor-state record --state F --start S --end E --status ok|failed [--reason TEXT]
+                      [--bytes-scanned FLOAT]
   monitor-state summary --state F
 
 종료 코드: 0 성공, 1 init 대상 파일이 이미 있음, 2 사용 오류·입력 오류·IO 오류,
@@ -99,6 +100,7 @@ def cmd_init(args):
         "judged": [],
         "tracked": {},
         "existing": {},
+        "bytes_scanned_total": 0.0,
     }
     save(args.state, state)
     return {"state": args.state}
@@ -201,6 +203,10 @@ def cmd_record(args):
         state["failures"].append(
             {"start": args.start, "end": args.end, "reason": args.reason or ""}
         )
+    if args.bytes_scanned is not None:
+        state["bytes_scanned_total"] = (
+            state.get("bytes_scanned_total", 0.0) + args.bytes_scanned
+        )
     save(args.state, state)
     return {"covered_until": state["covered_until"]}
 
@@ -221,6 +227,7 @@ def cmd_summary(args):
             if e["first_alert_at"] is not None
         ],
         "existing": state["existing"],
+        "bytes_scanned_total": state.get("bytes_scanned_total", 0.0),
     }
 
 
@@ -255,6 +262,7 @@ def build_parser():
     rec.add_argument("--end", type=int, required=True)
     rec.add_argument("--status", choices=["ok", "failed"], required=True)
     rec.add_argument("--reason")
+    rec.add_argument("--bytes-scanned", type=float)
     add("summary", cmd_summary)
     return parser
 
