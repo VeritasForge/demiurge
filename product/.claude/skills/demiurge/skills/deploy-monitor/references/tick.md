@@ -27,7 +27,7 @@ START="$(jq -r '.start // empty' "$D/window.json" 2>/dev/null)"; END="$(jq -r '.
 마지막 줄의 파일들은 **세션에 내용을 출력하지 않는다.** `cat`·`Read`·`jq .`·`jq .existing` 등으로 열지 않는다.
 집계 쿼리라도 메시지 안에 고객 이름·식별자·문장이 섞여 나오고, `monitor-state`의 정규화는 ID·숫자만 가린다.
 세션과 배너에 보이는 것은 `monitor-round`가 찍는 것뿐이다. 그 출력의 오류 이름은 `<src> · <예외 클래스> #<해시 6자리>` 꼴로 **메시지 본문을 담지 않는다**
-(예: `send_to_channel #3f9a1c`, `relay · SlackApiError #b20e47`). 같은 유형은 회차가 달라도 같은 이름이다. 감시 라벨·성공 지표는 계획에서 정한 이름 그대로 보인다.
+(예: `notify_customer #3f9a1c`, `payments · GatewayTimeoutError #b20e47`). 같은 유형은 회차가 달라도 같은 이름이다. 감시 라벨·성공 지표는 계획에서 정한 이름 그대로 보인다.
 이름만으로 원인을 알 수 없으면 실행자에게 CloudWatch에서 그 `src`(함수·로거)와 시각으로 찾아보라고 안내한다.
 
 ## 순서
@@ -35,9 +35,10 @@ START="$(jq -r '.start // empty' "$D/window.json" 2>/dev/null)"; END="$(jq -r '.
 ```
 1 window ─┬─ empty:true → "새 구간 없음" 한 줄, 끝
           └─ 2 로그 조회 → 3 지표 조회 → 4 Sentry ─┬─ 하나라도 실패 → 실패 처리, 끝 (final이어도 완료하지 않음)
-                                                   └─ 5 변환 → 6 judge ─┬─ exit 2 → 실패 처리
-                                                                         ├─ exit 3 → 중복 기상, 한 줄, 끝
-                                                                         └─ 7 record ok → 8 표시·배너 → 9 회차 기록 → final이면 10 완료
+                                                   └─ 5 변환 ─┬─ 실패 → 실패 처리, 끝
+                                                              └─ 6 judge ─┬─ exit 2 → 실패 처리
+                                                                          ├─ exit 3 → 중복 기상, 한 줄, 끝
+                                                                          └─ 7 record ok → 8 표시·배너 → 9 회차 기록 → final이면 10 완료
 ```
 
 1. **창 정하기.**
@@ -48,7 +49,8 @@ START="$(jq -r '.start // empty' "$D/window.json" 2>/dev/null)"; END="$(jq -r '.
    ```
 
    재생 실행이면 `$(date +%s)` 대신 지정된 경계 시각을 넣는다.
-   이후 모든 단계는 `window.json`의 `start`·`end`(머리말의 `START`·`END`)를 그대로 쓴다. 직접 계산하지 않는다 — `judge`는 start가 직전 끝과 이어지는지 검사하지 않으므로 다른 값을 넣으면 빈 구간이나 겹침이 생긴다.
+   이후 모든 단계는 `window.json`의 `start`·`end`(머리말의 `START`·`END`)를 그대로 쓴다. 직접 계산하지 않는다 — `judge`는 start가 덮인 구간 끝과 다르면 exit 2로 거부한다.
+   창은 `[START, END)`다. `awsq logs`가 Logs Insights에 `END-1`을 끝 시각으로 넘기므로 경계의 초가 두 회차에 겹쳐 세지지 않는다.
    `empty: true`면 판정하지 않는다(`judge`는 길이 0인 창에 exit 2). 예약이 밀려 늦게 깨어나도 `window`가 직전 끝부터 지금까지를 주므로 따로 보정하지 않는다.
 2. **로그 조회.** 결과는 파일로만 받는다.
 
@@ -73,17 +75,27 @@ START="$(jq -r '.start // empty' "$D/window.json" 2>/dev/null)"; END="$(jq -r '.
    echo "metrics_rc=$RC"
    ```
 
-4. **Sentry** (`plan.json`의 `sentry`가 null이 아닐 때만). 연결된 Sentry 도구로 그 프로젝트에서 **처음 본 시각(first seen)이 `[START, END)` 안**인 이슈만 찾는다. 배포 전부터 있던 이슈는 보지 않는다.
-   결과를 `{"<short ID>": <이벤트 수>}` 꼴로 `$D/sentry.json`에 쓴다(없으면 `{}`). 이슈 제목은 원문이 섞일 수 있어 파일에도 쓰지 않는다.
-   Sentry 조회가 실패하면 그 회차는 실패다(아래 [조회 실패](#조회-실패), 사유 `sentry`).
-5. **변환.** 2~4단계가 모두 성공했을 때만.
+4. **Sentry.** 먼저 지난 회차의 결과를 지운다 — `sentry`가 null이어도 한다(남은 파일이 5단계에 실려 옛 이슈로 판정되는 것을 막는다):
 
    ```bash
    <머리말>
+   rm -f "$D/sentry.json"
+   ```
+
+   `plan.json`의 `sentry`가 null이 아닐 때만 아래를 한다. 연결된 Sentry 도구로 그 프로젝트에서 **처음 본 시각(first seen)이 `[START, END)` 안**인 이슈만 찾는다. 배포 전부터 있던 이슈는 보지 않는다.
+   결과를 `{"<short ID>": <이벤트 수>}` 꼴로 `$D/sentry.json`에 쓴다(없으면 `{}`). 이슈 제목은 원문이 섞일 수 있어 파일에도 쓰지 않는다.
+   Sentry 조회가 실패하면 그 회차는 실패다(아래 [조회 실패](#조회-실패), 사유 `sentry`).
+5. **변환.** 2~4단계가 모두 성공했을 때만. 지난 회차의 `round.counts.json`을 먼저 지운다 — 변환이 실패했는데 옛 파일이 남아 있으면 6단계가 새 창을 옛 건수로 판정하고 구간을 덮어 버린다.
+
+   ```bash
+   <머리말>
+   rm -f "$D/round.counts.json"
    METRIC_ARGS=(); while read -r l; do METRIC_ARGS+=(--metric "$l=$D/metric.$l.json"); done < <(jq -r '.metrics[].label' "$D/plan.json")
    SENTRY_ARGS=(); [ -f "$D/sentry.json" ] && SENTRY_ARGS=(--sentry "$D/sentry.json")
-   "$B/monitor-round" convert --plan "$D/plan.json" --awsq "$D/round.awsq.json" --out "$D/round.counts.json" "${METRIC_ARGS[@]}" "${SENTRY_ARGS[@]}"
+   "$B/monitor-round" convert --plan "$D/plan.json" --awsq "$D/round.awsq.json" --out "$D/round.counts.json" "${METRIC_ARGS[@]}" "${SENTRY_ARGS[@]}"; echo "convert_rc=$?"
    ```
+
+   `convert_rc`가 0이 아니면(`ROUND_ERROR`) 그 회차는 실패다. 사유 `convert`로 [조회 실패](#조회-실패) 처리하고 6단계로 가지 않는다.
 
    출력은 행 수·잘림 여부·라벨별 건수·지표별 최댓값과 점 개수(`metrics`)·스캔량뿐이다. 회차 기록의 지표 값은 여기서 옮긴다(`metric.*.json`을 열지 않는다). 감시 라벨·성공 지표에 걸린 행은 오류 유형에서 빠지고(같은 일로 배너 두 번 방지),
    지표는 상한을 넘은 점 개수가 `metric:<label>><상한>`, **점이 하나도 없으면 `nodata:<label>`** 감시 라벨이 된다 — 빈 `datapoints`는 "정상"이 아니라 "자료 없음"이다.
@@ -131,26 +143,39 @@ START="$(jq -r '.start // empty' "$D/window.json" 2>/dev/null)"; END="$(jq -r '.
 같은 로그 그룹을 보는 확인(전체 ERROR 유형, 티켓 감시 라벨, 성공 지표)은 **한 쿼리**로 합친다. 스캔량 과금이 쿼리 수만큼 늘기 때문이다.
 행마다 `level`, `src`(함수·로거 이름 — 메시지와 **따로 낸 필드**), `sig`(메시지 앞부분), `n`을 내는 것이 `monitor-round convert`와의 약속이다. 레포마다 필드 이름이 다르면 `as`로 맞춘다.
 
+아래 예시는 JSON 로그 필드가 `lvl`(수준)·`fn`(함수 이름)·`text`(메시지)인 레포다. 필드 이름은 레포 인프라 기록의 "로그 형식" 칸에서 가져온다.
+
 ```
-fields level, func as src, substr(msg, 0, 120) as sig
-| filter level = "ERROR" or msg like /환불 API 호출 실패|user_not_found|환불 처리 완료/
+fields if(ispresent(lvl), lvl, "ERROR") as level,
+       if(ispresent(lvl), fn, "stderr") as src,
+       substr(if(ispresent(lvl), text, @message), 0, 120) as sig
+| filter lvl = "ERROR"
+      or text like /환불 API 호출 실패|user_not_found|환불 처리 완료/
+      or (not ispresent(lvl) and @message like /Traceback|Exception ignored/)
 | stats count(*) as n by level, src, sig
 ```
+
+- 마지막 `filter` 줄은 **수준 필드가 없는 오류 줄**(JSON 로거를 거치지 않고 표준 오류로 바로 찍히는 Python `Traceback …`, `Exception ignored in …` 같은 줄)을 잡는 분기다.
+  이런 줄은 `lvl = "ERROR"`에 걸리지 않아 빠뜨리기 쉽다. `src`는 고정값 `stderr`, 수준은 `ERROR`로 묶는다.
+  이 분기의 문구는 레포 인프라 기록의 "수준 없는 오류 줄" 칸에 적힌 패턴을 쓴다. 기록에 "없음"이면 이 분기를 뺀다.
 
 - 원문 행(`fields @message` 그대로)을 내보내는 쿼리를 쓰지 않는다. 늘 `stats count(*) … by`로 집계해서 받는다.
 - `sig`는 유형을 가를 만큼만 자른다(`substr`). 감시 문구는 메시지 앞부분에 오는 것을 고른다 — 잘린 뒤에 있으면 못 잡는다.
 - 배포 전 기준선도 같은 쿼리를 쓴다. 기준선은 `--limit 10000`으로 조회한다(SKILL.md 시작 모드 5단계).
 - 조회 시간이 길어 `awsq`가 기다리다 포기해도 쿼리를 멈추는 호출(`stop-query`)은 하지 않는다. 조회 전용으로 만든 설계라서다 — 쿼리는 AWS 쪽 시간 제한에 맞춰 스스로 끝난다.
+  회차 조회의 대기 한도는 `awsq logs`의 기본값 120초다. 넘기면 `AWS_ERROR: query did not finish within …s … (queryId …)`(exit 2)로 그 회차는 실패이고,
+  queryId(쿼리 번호, 고객 정보 아님)를 회차 기록에 적는다. 같은 회차 안에서 다시 돌리지 않는다 — 다시 돌리면 같은 구간의 스캔을 한 번 더 산다.
 
 ## 조회 실패
 
-로그(2단계)·지표(3단계)·Sentry(4단계) 중 하나라도 실패하면 그 회차는 실패다. 남은 조회를 이어 하지 않는다. `judge` exit 2도 같은 처리다.
+로그(2단계)·지표(3단계)·Sentry(4단계) 중 하나라도 실패하면 그 회차는 실패다. 남은 조회를 이어 하지 않는다. 변환(5단계) 실패와 `judge` exit 2도 같은 처리다.
 
 | 원인 | 배너 | 세션 | 사유 |
 |---|---|---|---|
 | `awsq` exit 3 (`AWS_AUTH_EXPIRED`) | `"$B/notify" auth "AWS 로그인 만료: 재로그인 필요"` | "`! aws login`을 실행해 주세요." | `auth` |
 | `awsq` exit 2 (`AWS_ERROR`) | `"$B/notify" anomaly "$T 조회 실패"` | `AWS_ERROR` 줄의 요지 | `aws_error` |
 | Sentry 실패 | `"$B/notify" anomaly "$T 조회 실패"` | Sentry 연결 확인 요청 | `sentry` |
+| `monitor-round convert` 실패 | `"$B/notify" anomaly "$T 조회 실패"` | `ROUND_ERROR` 요지 | `convert` |
 | `judge` exit 2 | `"$B/notify" anomaly "$T 조회 실패"` | `STATE_ERROR` 요지 | `judge_input` |
 
 ```bash
@@ -172,15 +197,15 @@ BYTES="$(jq -r '.bytes_scanned // 0' "$D/round.awsq.json" 2>/dev/null || echo 0)
 ## 회차 기록 형식 (세션, 3~6줄)
 
 ```
-[SHOP-42 회차] 10-22 20:06–21:08 KST · 조회 2건(로그 1·지표 1) · 스캔 46.0 MB
-알림 1건: new send_to_channel #3f9a1c 3건 (배너 보냄)
+[LEDGER-42 회차] 10-22 20:06–21:08 KST · 조회 2건(로그 1·지표 1) · 스캔 46.0 MB
+알림 1건: new notify_customer #3f9a1c 3건 (배너 보냄)
 기존 오류 1유형 1건 (완료 요약에 모음) · 성공 지표 refund_ok 5건 · CPU 최대 40.1% / 상한 80%
 ```
 
 실패 회차:
 
 ```
-[SHOP-42 회차] 10-22 20:06–21:08 KST · 조회 실패(AWS 로그인 만료) — 판정 못 함
+[LEDGER-42 회차] 10-22 20:06–21:08 KST · 조회 실패(AWS 로그인 만료) — 판정 못 함
 `! aws login`을 실행해 주세요. 다음 회차가 20:06부터 다시 조회합니다.
 ```
 

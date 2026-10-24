@@ -1,5 +1,5 @@
 {"status": "Complete", "rows": [
- {"level": "ERROR", "src": "send_to_channel", "sig": "Slack 전송 실패 channel=C0AB12CD34 team=T0XY98ZW76 user=U0QW12ER34: 환불 문의드립니다 010-1234-5678", "n": "3"},
- {"level": "ERROR", "src": "send_message", "sig": "OSError: [Errno 104] Connection reset by peer", "n": "1"},
+ {"level": "ERROR", "src": "notify_customer", "sig": "알림 전송 실패 channel=C0AB12CD34 team=T0XY98ZW76 user=U0QW12ER34: 환불 문의드립니다 010-1234-5678", "n": "3"},
+ {"level": "ERROR", "src": "fetch_rates", "sig": "OSError: [Errno 104] Connection reset by peer", "n": "1"},
  {"level": "INFO", "src": "refund", "sig": "환불 처리 완료", "n": "5"}
 ], "bytes_scanned": 50331648.0}

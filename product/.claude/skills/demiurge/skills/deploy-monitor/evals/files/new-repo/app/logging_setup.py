@@ -8,10 +8,10 @@ class JsonFormatter(logging.Formatter):
     def format(self, record):
         return json.dumps(
             {
-                "level": record.levelname,
-                "logger_type": record.name,
-                "func": record.funcName,
-                "msg": record.getMessage(),
+                "severity": record.levelname,
+                "logger_name": record.name,
+                "handler": record.funcName,
+                "event": record.getMessage(),
             },
             ensure_ascii=False,
         )

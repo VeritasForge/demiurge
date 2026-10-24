@@ -1,3 +1,7 @@
-fields level, func as src, substr(msg, 0, 120) as sig
-| filter level = "ERROR" or msg like /환불 API 호출 실패|user_not_found|환불 처리 완료/
+fields if(ispresent(severity), severity, "ERROR") as level,
+       if(ispresent(severity), handler, "stderr") as src,
+       substr(if(ispresent(severity), event, @message), 0, 120) as sig
+| filter severity = "ERROR"
+      or event like /환불 API 호출 실패|user_not_found|환불 처리 완료/
+      or (not ispresent(severity) and @message like /Traceback|Exception ignored/)
 | stats count(*) as n by level, src, sig

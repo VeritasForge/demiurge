@@ -1,6 +1,6 @@
 {"status": "Complete", "rows": [
- {"level": "ERROR", "src": "send_message", "sig": "OSError: [Errno 104] Connection reset by peer", "n": "1"},
- {"level": "ERROR", "src": "__del__", "sig": "CeleryClient.__del__ Traceback (most recent call last)", "n": "2"},
- {"level": "ERROR", "src": "post", "sig": "Slack 전송 포기 ratelimited", "n": "4"},
+ {"level": "ERROR", "src": "fetch_rates", "sig": "OSError: [Errno 104] Connection reset by peer", "n": "1"},
+ {"level": "ERROR", "src": "__del__", "sig": "WorkerPool.__del__ Traceback (most recent call last)", "n": "2"},
+ {"level": "ERROR", "src": "charge", "sig": "결제 게이트웨이 재시도 포기 ratelimited", "n": "4"},
  {"level": "INFO", "src": "refund", "sig": "환불 처리 완료", "n": "7"}
 ], "bytes_scanned": 48234496.0}

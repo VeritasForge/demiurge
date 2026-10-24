@@ -31,10 +31,10 @@ Bash 호출 사이에는 셸 변수가 남지 않으므로, 명령마다 `B="<�
 - 인자가 `tick <경로>`면 **회차 모드** → `references/tick.md`를 읽고 그대로 따른다.
 - 그 밖(티켓 키)이면 **시작 모드** → 아래 순서.
 
-회차 모드의 요점: `window` → 조회(로그·지표·Sentry, 결과는 파일로) → 실패면 `record --status failed` → 성공이면 `monitor-round convert` → `judge`(반드시 `window`가 준 start·end) → `record --status ok` → `monitor-round show`와 배너 → `final`이면 완료(`monitor-round summary`, `notify done`, `CronDelete`).
+회차 모드의 요점: `window` → 조회(로그·지표·Sentry, 결과는 파일로) → 실패면 `record --status failed` → 성공이면 `monitor-round convert`(실패면 `record --status failed`) → `judge`(반드시 `window`가 준 start·end) → `record --status ok` → `monitor-round show`와 배너 → `final`이면 완료(`monitor-round summary`, `notify done`, `CronDelete`).
 
 **조회 실패**: `awsq` exit 3이면 `"$B/notify" auth "AWS 로그인 만료: 재로그인 필요"`, 세션에 `! aws login` 안내, `record --status failed`.
-exit 2, Sentry 조회 실패, `judge` exit 2(입력 오류)이면 같은 기록에 `"$B/notify" anomaly "<티켓> 조회 실패"`. 실패한 회차는 판정하지 않고, 어떤 경우에도 "이상 없음"이라고 쓰지 않는다. 다음 회차가 빠진 구간부터 다시 본다.
+exit 2, Sentry 조회 실패, `monitor-round convert` 실패, `judge` exit 2(입력 오류)이면 같은 기록에 `"$B/notify" anomaly "<티켓> 조회 실패"`. 실패한 회차는 판정하지 않고, 어떤 경우에도 "이상 없음"이라고 쓰지 않는다. 다음 회차가 빠진 구간부터 다시 본다.
 
 ## 시작 모드
 
@@ -58,26 +58,36 @@ exit 2, Sentry 조회 실패, `judge` exit 2(입력 오류)이면 같은 기록�
    | Sentry | 레포가 쓰고 Claude Code에 연결돼 있으면 배포 후 처음 본 이슈. 연결이 인증되지 않았으면 "인증할까요, Sentry는 빼고 진행할까요?" |
    | 대상별 점검 주기 | 짧게 볼 것·길게 볼 것. 예약은 가장 짧은 주기로 하나만 건다 — 매 회차는 직전 회차 이후만 스캔하므로 회차를 잘게 나눠도 총 스캔량은 같다 |
    | 종료 시각 | 예: 배포 후 24시간 |
+   | 감시 시작 시각 | 기본은 배포 시각. 이미 지난 구간을 재생할 때 실행자와 정한 구간만 보려면 그 시작 시각(배포 시각 이상, 종료 시각 미만). 기준선은 이 값과 무관하게 배포 시각 직전 7일이다 |
    | 급증 기준 | 기준선 시간당 평균의 `3.0`배 이상이면서 최소 `5`건, 같은 이상 재알림은 `5`건 더 쌓일 때 |
    | 기준선 | 배포 시각 이전 7일 = 168시간(다르게 정하면 그 값을 `plan.json`의 `baseline_hours`에) |
 
-5. **상태 준비.** `plan.json`과 `tick.query`(형식은 아래, 쿼리는 `references/tick.md`의 예시)를 쓰고, 한 번의 Bash 호출로:
+5. **상태 준비.** `plan.json`과 `tick.query`(형식은 아래, 쿼리는 `references/tick.md`의 예시)를 쓰고, 기준선을 먼저 조회한다(한 번의 Bash 호출):
 
    ```bash
    B="<스크립트 폴더 절대경로>"; D="<작업 폴더 절대경로>"; DEPLOY=<배포 epoch>; HOURS="$(jq .baseline_hours "$D/plan.json")"
-   "$B/monitor-state" init --state "$D/state.json" --ticket <티켓> --deploy-time "$DEPLOY" --end-time <종료 epoch> \
-     --spike-multiplier 3.0 --spike-min 5 --realert-step 5
    LG=(); while read -r g; do LG+=(--log-group "$g"); done < <(jq -r '.log_groups[]' "$D/plan.json")
    "$B/awsq" logs --region "$(jq -r .region "$D/plan.json")" "${LG[@]}" --start "$((DEPLOY - HOURS * 3600))" --end "$DEPLOY" \
-     --query-file "$D/tick.query" --limit 10000 > "$D/baseline.awsq.json"; echo "baseline_rc=$?"
-   "$B/monitor-round" convert --plan "$D/plan.json" --awsq "$D/baseline.awsq.json" --out "$D/baseline.counts.json" \
-     --mode baseline --limit 10000
+     --query-file "$D/tick.query" --limit 10000 --max-wait 900 > "$D/baseline.awsq.json"; rc=$?; echo "baseline_rc=$rc"
+   [ "$rc" -eq 0 ] && "$B/monitor-round" convert --plan "$D/plan.json" --awsq "$D/baseline.awsq.json" \
+     --out "$D/baseline.counts.json" --mode baseline --limit 10000
    ```
 
-   - 기준선 조회가 실패하면(`awsq` exit 2·3) 시작하지 않고 원인을 알린다 — 기준선 없이 판정하면 모든 오류가 "새 유형"이 된다.
+   - 기준선 조회가 실패하면(`awsq` exit 2·3) `convert`는 돌지 않는다. 시작하지 않고 원인을 알린다 — 기준선 없이 판정하면 모든 오류가 "새 유형"이 된다.
+   - 7일치 조회는 몇 분 걸릴 수 있어 `--max-wait 900`(15분)을 준다. 그래도 `AWS_ERROR: query did not finish within …s … (queryId …)`이면
+     **곧바로 다시 돌리지 않는다.** 그 쿼리는 AWS 쪽에서 계속 돌며 이미 과금되고 있고, 다시 돌리면 같은 스캔을 한 번 더 산다.
+     실행자에게 queryId와 함께 알리고, 대기 한도를 늘려 다시 할지·기준선 길이(`baseline_hours`)를 줄일지 정한 뒤에 한 번 다시 한다.
    - `convert`가 `truncated: true`를 내면(행 수가 10000에 닿음) **시작하지 않는다.** 잘린 기준선으로는 예전부터 있던 유형이 "새 유형"으로 판정돼 소음 배너가 울린다.
-     실행자에게 알리고 더 짧은 묶음 키를 제안한다(예: `substr(msg, 0, 120)` → `substr(msg, 0, 40)`, 또는 `sig`를 예외 클래스만 `parse`로 뽑기). 쿼리를 고친 뒤 기준선부터 다시 한다.
-   - 성공하면 `"$B/monitor-state" baseline --state "$D/state.json" --counts "$D/baseline.counts.json" --hours "$HOURS"`.
+     실행자에게 알리고 더 짧은 묶음 키를 제안한다(예: `substr(…, 0, 120)` → `substr(…, 0, 40)`, 또는 `sig`를 예외 클래스만 `parse`로 뽑기). 쿼리를 고친 뒤 기준선부터 다시 한다.
+   - 기준선이 성공했을 때만 상태 파일을 만든다(한 번의 Bash 호출). 감시 시작 시각을 따로 정했으면 `--watch-start <epoch>`를 붙인다(생략하면 배포 시각):
+
+     ```bash
+     B="<스크립트 폴더 절대경로>"; D="<작업 폴더 절대경로>"; HOURS="$(jq .baseline_hours "$D/plan.json")"
+     "$B/monitor-state" init --state "$D/state.json" --ticket <티켓> --deploy-time <배포 epoch> --end-time <종료 epoch> \
+       --spike-multiplier 3.0 --spike-min 5 --realert-step 5 [--watch-start <감시 시작 epoch>] \
+       && "$B/monitor-state" baseline --state "$D/state.json" --counts "$D/baseline.counts.json" --hours "$HOURS"
+     ```
+
    - `convert` 출력의 `bytes_scanned`를 `plan.json`의 `baseline_bytes`에 적는다 — 완료 요약의 총 스캔량에 더한다.
 6. **시작 기록.** 세션 화면에 확정한 계획(볼 대상, 주기, 종료 시각, 급증 기준, 기준선 스캔량)을 남기고 한 줄을 덧붙인다:
    "이 세션은 모니터링 전용으로 열어 두고, Mac이 잠들지 않게 해 주세요." 그다음 `"$B/notify" start "<티켓> 모니터링 시작"`.
@@ -86,8 +96,10 @@ exit 2, Sentry 조회 실패, `judge` exit 2(입력 오류)이면 같은 기록�
      분은 정각·30분을 피한다(예: 60분 주기 `7 * * * *`, 15분 주기 `7,22,37,52 * * * *`). 돌려받은 job ID를 `plan.json`의 `cron_job_id`에 적고 세션에 남긴다.
    - 실행자에게 알린다: 이 예약은 **이 세션 안에서만** 돌고, 세션이 **대기 중일 때만** 실행되며, recurring 예약은 **7일 뒤 자동 만료**된다.
      예약은 주기의 최대 절반(최대 30분)까지 늦게 실행될 수 있지만, 회차는 직전 회차 끝부터 지금까지를 보므로 빈 구간이 생기지 않는다.
-   - 종료 시각이 이미 지났으면 예약하지 않고 **재생 실행**한다: 배포 시각부터 종료 시각까지 확정한 주기 경계마다 `window --now`를 그 경계로 바꿔
-     회차 모드를 차례로 돌린다(마지막 경계는 종료 시각). 마지막 회차가 완료 요약을 쓴다.
+   - 종료 시각이 이미 지났으면 예약하지 않고 **재생 실행**한다: 감시 시작 시각(`init --watch-start`, 없으면 배포 시각)부터 종료 시각까지 확정한 주기 경계마다
+     `window --now`를 그 경계로 바꿔 회차 모드를 차례로 돌린다(마지막 경계는 종료 시각). 마지막 회차가 완료 요약을 쓴다.
+   - 앞부분을 건너뛰고 싶으면 4단계에서 감시 시작 시각을 정해 `init --watch-start`로 넘긴다. **보지 않은 구간을 `record --status ok`로 넘기지 않는다** —
+     조회하지 않은 구간이 "덮인 구간"으로 기록되어 완료 요약이 그 구간도 본 것처럼 말하게 된다.
    - **재생 중 조회가 실패하면 재생을 멈춘다.** 그 회차의 실패 처리(배너·`! aws login` 안내·`record failed`)를 **한 번만** 하고 남은 경계를 돌리지 않는다 — 경계마다 실패 배너를 띄우지 않는다.
      세션에 "재로그인 뒤 알려 주시면 <KST 경계>부터 이어서 재생합니다"라고 남긴다. 실행자가 알려 주면 **같은 경계부터** 다시 돈다(`window`가 덮인 구간 끝부터 다시 준다).
 
@@ -95,16 +107,16 @@ exit 2, Sentry 조회 실패, `judge` exit 2(입력 오류)이면 같은 기록�
 
 ```json
 {
-  "ticket": "SHOP-42",
-  "repo": "shop-api",
-  "region": "ap-northeast-1",
-  "log_groups": ["/ecs/shop-api-prod"],
+  "ticket": "LEDGER-42",
+  "repo": "ledger-api",
+  "region": "eu-west-1",
+  "log_groups": ["/ecs/ledger-api-prod"],
   "error_level": "ERROR",
   "watch": {"refund_api_fail": "환불 API 호출 실패", "user_not_found": "user_not_found"},
   "success": {"refund_ok": "환불 처리 완료"},
   "metrics": [
     {"label": "cpu", "namespace": "AWS/ECS", "metric": "CPUUtilization",
-     "dimensions": ["ClusterName=shop-prod", "ServiceName=shop-api-prod"], "stat": "Maximum", "limit": 80}
+     "dimensions": ["ClusterName=ledger-prod", "ServiceName=ledger-api-prod"], "stat": "Maximum", "limit": 80}
   ],
   "sentry": null,
   "period_minutes": 60,

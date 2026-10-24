@@ -1,7 +1,7 @@
 {
   "ticket": "SHOP-42",
   "repo": "shop-api",
-  "region": "ap-northeast-1",
+  "region": "us-west-2",
   "log_groups": [
     "/ecs/shop-api-prod"
   ],
