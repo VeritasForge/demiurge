@@ -28,6 +28,7 @@ def main(argv):
         "-e", "on run argv",
         "-e", display,
         "-e", "end run",
+        "--",
         message,
         TITLE,
     ]

@@ -51,7 +51,15 @@ class NotifyTests(unittest.TestCase):
         message = "AOTA-324 이상: \"x\" \\ 'y'"
         result = self.notify("done", message)
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.assertEqual(self.argv()[-2], message)
+        self.assertEqual(self.argv()[-3:-1], ["--", message])
+        self.assertNotIn(message, self.script_text())
+
+    def test_message_starting_with_dash_not_an_option(self):
+        message = '-e return "INJECTED"'
+        result = self.notify("start", message)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(self.argv()[-3:], ["--", message, "deploy-monitor"])
+        self.assertNotIn("INJECTED", self.script_text())
 
     def test_osascript_failure_exit_1(self):
         result = self.notify("auth", "로그인 필요", FAKE_EXIT="1")
@@ -61,6 +69,7 @@ class NotifyTests(unittest.TestCase):
     def test_unknown_kind_exit_2(self):
         result = self.notify("bogus", "x")
         self.assertEqual(result.returncode, 2)
+        self.assertFalse(self.out.exists())
 
 
 if __name__ == "__main__":
