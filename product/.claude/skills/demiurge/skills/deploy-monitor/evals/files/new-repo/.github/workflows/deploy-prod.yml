@@ -1,0 +1,24 @@
+name: deploy-prod
+on:
+  push:
+    branches: [main]
+env:
+  AWS_REGION: ap-northeast-1
+  ECR_REPOSITORY: shop-api
+  ECS_CLUSTER: shop-prod
+  ECS_SERVICE: shop-api-prod
+  TASK_DEFINITION: .aws/task-definition-prod.json
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.AWS_REGION }}
+          role-to-assume: ${{ secrets.DEPLOY_ROLE_ARN }}
+      - uses: aws-actions/amazon-ecs-deploy-task-definition@v2
+        with:
+          task-definition: ${{ env.TASK_DEFINITION }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}

@@ -1,0 +1,3 @@
+fields level, func, substr(msg, 0, 120) as sig
+| filter level = "ERROR" or msg like /환불 API 호출 실패|user_not_found|환불 처리 완료/
+| stats count(*) as n by level, func, sig

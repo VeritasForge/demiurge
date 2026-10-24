@@ -1,0 +1,33 @@
+{
+  "ticket": "SHOP-42",
+  "repo": "shop-api",
+  "region": "ap-northeast-1",
+  "log_groups": [
+    "/ecs/shop-api-prod"
+  ],
+  "error_level": "ERROR",
+  "query_file": "tick.query",
+  "watch": {
+    "refund_api_fail": "환불 API 호출 실패",
+    "user_not_found": "user_not_found"
+  },
+  "success": {
+    "refund_ok": "환불 처리 완료"
+  },
+  "metrics": [
+    {
+      "label": "cpu",
+      "namespace": "AWS/ECS",
+      "metric": "CPUUtilization",
+      "dimensions": [
+        "ClusterName=shop-prod",
+        "ServiceName=shop-api-prod"
+      ],
+      "stat": "Maximum",
+      "limit": 80
+    }
+  ],
+  "sentry": null,
+  "period_minutes": 60,
+  "cron_job_id": "a1b2c3d4"
+}
