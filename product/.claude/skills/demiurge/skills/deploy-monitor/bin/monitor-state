@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""배포 모니터링 회차 상태·판정·요약. 모든 시각은 epoch 초 정수, 결과는 stdout JSON.
+
+  monitor-state init --state F --ticket T --deploy-time E --end-time E
+                     --spike-multiplier 3.0 --spike-min 5 --realert-step 5
+  monitor-state baseline --state F --counts FILE --hours H
+  monitor-state window --state F --now E
+  monitor-state judge --state F --counts FILE --start S --end E
+  monitor-state record --state F --start S --end E --status ok|failed [--reason TEXT]
+  monitor-state summary --state F
+
+종료 코드: 0 성공, 1 init 대상 파일이 이미 있음, 2 사용 오류·입력 오류·IO 오류,
+3 이미 판정한 창과 겹침. 오류는 stderr 에 `STATE_ERROR: <상세>`.
+"""
+
+import argparse
+import json
+import os
+import re
+import sys
+import tempfile
+
+RULES = (
+    (re.compile(r"[\w.+-]+@[\w-]+(?:\.[\w-]+)+"), "<email>"),
+    (
+        re.compile(
+            r"\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b"
+        ),
+        "<uuid>",
+    ),
+    (re.compile(r"\b[UCTWDGBE](?=[A-Z0-9]*\d)[A-Z0-9]{8,}\b"), "<id>"),
+    (re.compile(r"\b[0-9a-fA-F]{8,}\b"), "<hex>"),
+    (re.compile(r"\d+"), "<n>"),
+    (re.compile(r"\s+"), " "),
+)
+MAX_LEN = 200
+
+
+class StateError(Exception):
+    def __init__(self, message, code=2):
+        super().__init__(message)
+        self.code = code
+
+
+def normalize(message):
+    for pattern, repl in RULES:
+        message = pattern.sub(repl, message)
+    return message.strip()[:MAX_LEN]
+
+
+def load(path):
+    try:
+        with open(path) as f:
+            return json.load(f)
+    except FileNotFoundError:
+        raise StateError(f"state file not found: {path}")
+    except json.JSONDecodeError as exc:
+        raise StateError(f"invalid JSON in {path}: {exc}")
+
+
+def save(path, state):
+    directory = os.path.dirname(os.path.abspath(path))
+    fd, tmp = tempfile.mkstemp(dir=directory, prefix=".monitor-state-")
+    try:
+        with os.fdopen(fd, "w") as f:
+            json.dump(state, f, ensure_ascii=False)
+        os.replace(tmp, path)
+    except BaseException:
+        if os.path.exists(tmp):
+            os.unlink(tmp)
+        raise
+
+
+def merge_counts(raw):
+    merged = {}
+    for message, n in raw.items():
+        sig = normalize(message)
+        merged[sig] = merged.get(sig, 0) + n
+    return merged
+
+
+def cmd_init(args):
+    if os.path.exists(args.state):
+        raise StateError(f"state file already exists: {args.state}", 1)
+    if args.end_time <= args.deploy_time:
+        raise StateError("end-time must be after deploy-time")
+    state = {
+        "ticket": args.ticket,
+        "deploy_time": args.deploy_time,
+        "end_time": args.end_time,
+        "spike_multiplier": args.spike_multiplier,
+        "spike_min": args.spike_min,
+        "realert_step": args.realert_step,
+        "baseline": {},
+        "covered_until": None,
+        "failures": [],
+        "judged": [],
+        "tracked": {},
+        "existing": {},
+    }
+    save(args.state, state)
+    return {"state": args.state}
+
+
+def cmd_baseline(args):
+    if args.hours <= 0:
+        raise StateError("hours must be positive")
+    state = load(args.state)
+    counts = merge_counts(load(args.counts))
+    state["baseline"] = {sig: n / args.hours for sig, n in counts.items()}
+    save(args.state, state)
+    return {"signatures": len(state["baseline"])}
+
+
+def cmd_window(args):
+    state = load(args.state)
+    start = state["covered_until"]
+    if start is None:
+        start = state["deploy_time"]
+    end = min(args.now, state["end_time"])
+    final = end >= state["end_time"]
+    if start >= end:
+        return {"start": start, "end": start, "final": final, "empty": True}
+    return {"start": start, "end": end, "final": final}
+
+
+def track(state, kind, signature, count):
+    """누적 total 을 올리고, 알려야 하면 알림 항목을 돌려준다."""
+    key = f"{kind}:{signature}"
+    entry = state["tracked"].setdefault(
+        key,
+        {"kind": kind, "signature": signature, "total": 0,
+         "last_alert_total": None, "first_alert_at": None},
+    )
+    entry["total"] += count
+    last = entry["last_alert_total"]
+    if last is not None and entry["total"] < last + state["realert_step"]:
+        return None
+    entry["last_alert_total"] = entry["total"]
+    return entry
+
+
+def cmd_judge(args):
+    state = load(args.state)
+    if args.start >= args.end:
+        raise StateError("empty window: start must be before end")
+    for other_start, other_end in state["judged"]:
+        if args.start < other_end and other_start < args.end:
+            raise StateError(
+                f"window [{args.start}, {args.end}) overlaps judged "
+                f"[{other_start}, {other_end})",
+                3,
+            )
+    payload = load(args.counts)
+    errors = merge_counts(payload.get("errors", {}))
+    hours = (args.end - args.start) / 3600.0
+    alerts, existing = [], {}
+    for sig, n in sorted(errors.items()):
+        if n <= 0:
+            continue
+        if sig not in state["baseline"]:
+            kind = "new"
+        elif (
+            n / hours >= state["spike_multiplier"] * state["baseline"][sig]
+            and n >= state["spike_min"]
+        ):
+            kind = "spike"
+        else:
+            existing[sig] = n
+            state["existing"][sig] = state["existing"].get(sig, 0) + n
+            continue
+        entry = track(state, kind, sig, n)
+        if entry:
+            alerts.append((entry, n))
+    for label, n in sorted(payload.get("watch", {}).items()):
+        if n > 0:
+            entry = track(state, "watch", label, n)
+            if entry:
+                alerts.append((entry, n))
+    out = []
+    for entry, n in alerts:
+        if entry["first_alert_at"] is None:
+            entry["first_alert_at"] = args.end
+        out.append(
+            {"kind": entry["kind"], "signature": entry["signature"],
+             "count": n, "total": entry["total"]}
+        )
+    state["judged"].append([args.start, args.end])
+    save(args.state, state)
+    return {"alerts": out, "existing": existing}
+
+
+def cmd_record(args):
+    state = load(args.state)
+    if args.status == "ok":
+        state["covered_until"] = args.end
+    else:
+        state["failures"].append(
+            {"start": args.start, "end": args.end, "reason": args.reason or ""}
+        )
+    save(args.state, state)
+    return {"covered_until": state["covered_until"]}
+
+
+def cmd_summary(args):
+    state = load(args.state)
+    covered = state["covered_until"]
+    return {
+        "ticket": state["ticket"],
+        "deploy_time": state["deploy_time"],
+        "end_time": state["end_time"],
+        "covered_until": state["deploy_time"] if covered is None else covered,
+        "failures": state["failures"],
+        "alerts": [
+            {"kind": e["kind"], "signature": e["signature"],
+             "total": e["total"], "first_alert_at": e["first_alert_at"]}
+            for e in state["tracked"].values()
+            if e["first_alert_at"] is not None
+        ],
+        "existing": state["existing"],
+    }
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(prog="monitor-state")
+    sub = parser.add_subparsers(dest="cmd", required=True)
+
+    def add(name, func):
+        p = sub.add_parser(name)
+        p.add_argument("--state", required=True)
+        p.set_defaults(func=func)
+        return p
+
+    init = add("init", cmd_init)
+    init.add_argument("--ticket", required=True)
+    init.add_argument("--deploy-time", type=int, required=True)
+    init.add_argument("--end-time", type=int, required=True)
+    init.add_argument("--spike-multiplier", type=float, required=True)
+    init.add_argument("--spike-min", type=int, required=True)
+    init.add_argument("--realert-step", type=int, required=True)
+    base = add("baseline", cmd_baseline)
+    base.add_argument("--counts", required=True)
+    base.add_argument("--hours", type=float, required=True)
+    win = add("window", cmd_window)
+    win.add_argument("--now", type=int, required=True)
+    judge = add("judge", cmd_judge)
+    judge.add_argument("--counts", required=True)
+    judge.add_argument("--start", type=int, required=True)
+    judge.add_argument("--end", type=int, required=True)
+    rec = add("record", cmd_record)
+    rec.add_argument("--start", type=int, required=True)
+    rec.add_argument("--end", type=int, required=True)
+    rec.add_argument("--status", choices=["ok", "failed"], required=True)
+    rec.add_argument("--reason")
+    add("summary", cmd_summary)
+    return parser
+
+
+def main(argv):
+    args = build_parser().parse_args(argv[1:])
+    try:
+        result = args.func(args)
+    except StateError as exc:
+        print(f"STATE_ERROR: {exc}", file=sys.stderr)
+        return exc.code
+    except OSError as exc:
+        print(f"STATE_ERROR: {exc}", file=sys.stderr)
+        return 2
+    except (KeyError, ValueError, TypeError, AttributeError) as exc:
+        print(f"STATE_ERROR: invalid input or state: {exc!r}", file=sys.stderr)
+        return 2
+    print(json.dumps(result, ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))
