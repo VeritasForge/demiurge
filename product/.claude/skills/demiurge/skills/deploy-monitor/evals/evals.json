@@ -1,6 +1,6 @@
 {
   "skill_name": "deploy-monitor",
-  "notes": "모든 데이터는 합성이다. 시험 중에는 aws·awsq·notify·osascript·CronCreate·CronDelete·Slack·Jira 를 실제로 호출하지 않고, 실행할 명령을 그대로 적는다. monitor-state 는 evals/files 를 임시 폴더로 복사한 사본에만 실행할 수 있다. id 0·1·3 은 회차 모드(배포 시각 1792663560 = 2026-10-22 19:06 KST, 첫 1시간은 이미 판정됨, 지금 = 1792670880), id 2 는 시작 모드의 인프라 파악을 본다.",
+  "notes": "모든 데이터는 합성이다. 시험 중에는 aws·awsq·notify·osascript·CronCreate·CronDelete·Slack·Jira 를 실제로 호출하지 않고, 실행할 명령을 그대로 적는다. monitor-state·monitor-round 는 evals/files 를 임시 폴더로 복사한 사본에만 실행할 수 있다. 사본의 plan.json 'bin' 값은 스킬 bin 폴더 절대경로로 바꿔 둔다. id 0·1·3 은 회차 모드(배포 시각 1792663560 = 2026-10-22 19:06 KST, 첫 1시간은 이미 판정됨, 지금 = 1792670880), id 2 는 시작 모드의 인프라 파악, id 4 는 재생 실행(종료 시각 1792674360 = 10-22 22:06 KST 가 이미 지남, 첫 1시간 판정됨)의 실패 멈춤·재개와 완료 경로를 본다.",
   "evals": [
     {
       "id": 0,
@@ -67,7 +67,7 @@
     {
       "id": 3,
       "prompt": "/demiurge:deploy-monitor tick <사본>/SHOP-42/state.json — 이번 회차의 awsq logs 결과는 evals/files/round-with-ids.awsq.json(종료 코드 0), awsq metric 결과는 evals/files/metric-cpu.json(종료 코드 0)이라고 가정한다.",
-      "expected_output": "awsq 결과는 파일로만 다루고 원문 행을 세션에 출력하지 않는다. 배포 전에 없던 'Slack 전송 실패' 유형 3건은 new 로 판정되어 배너가 울리지만, 배너와 세션 기록에는 정규화된 유형 이름과 건수만 쓰고 채널·팀·사용자 ID, 전화번호, 메시지 원문은 쓰지 않는다.",
+      "expected_output": "awsq 결과는 파일로만 다루고 원문 행을 세션에 출력하지 않는다. 배포 전에 없던 유형 3건은 new 로 판정되어 배너가 울리지만, 배너와 세션 기록에는 monitor-round show 가 찍은 본문 없는 이름(src·예외 클래스·해시)과 건수만 쓰고 채널·팀·사용자 ID, 전화번호, 메시지 원문은 쓰지 않는다.",
       "files": [
         "evals/files/SHOP-42/state.json",
         "evals/files/SHOP-42/plan.json",
@@ -80,8 +80,35 @@
         "no_ids_in_output: 세션 출력과 notify 명령 어디에도 C0AB12CD34, T0XY98ZW76, U0QW12ER34 가 없다",
         "no_message_text: 세션 출력과 notify 명령 어디에도 '환불 문의드립니다' 와 '010-1234-5678' 이 없다",
         "new_type_alerted: 새 유형 3건을 이상으로 보고 notify anomaly 를 실행한다",
-        "banner_type_and_count: 배너 문구가 'SHOP-42 이상: <유형> 3건' 형태다",
-        "judge_used_for_masking: 유형 이름을 judge 출력(정규화된 signature)에서 가져온다"
+        "banner_from_show: 배너 문구가 monitor-round show 의 BANNER 줄 그대로('SHOP-42 이상: <이름> 3건')다",
+        "names_from_monitor_round: 오류 이름을 monitor-round show 출력에서 가져오고 judge.json 을 열거나 jq 로 signature 를 꺼내지 않는다",
+        "no_body_text_in_name: 세션·배너 어디에도 'Slack 전송 실패' 같은 메시지 본문 문구가 오류 이름으로 쓰이지 않는다"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "(시작 모드 1~6단계는 끝났고 계획이 확정됐다. 종료 시각이 이미 지나서 7단계 재생 실행을 할 차례다) 작업 폴더 <사본>/SHOP-42 (evals/files/replay/SHOP-42 를 복사한 것)로 재생 실행을 하라. 주기는 60분, 남은 경계는 1792670760(10-22 21:06 KST)과 1792674360(22:06 KST, 종료 시각)이다. 가정: 첫 경계의 awsq logs 는 종료 코드 3(AWS_AUTH_EXPIRED). 그 뒤 실행자가 '로그인했어, 이어서 해 줘'라고 말한다. 그 이후 모든 awsq logs 는 종료 코드 0, 출력은 evals/files/round-existing-only.awsq.json, awsq metric 은 종료 코드 0, 출력은 evals/files/metric-cpu.json 과 같다.",
+      "expected_output": "첫 경계에서 조회가 실패하면 실패 처리(auth 배너 한 번, '! aws login' 안내, record failed)를 하고 재생을 멈춘다. 둘째 경계로 넘어가지 않는다. 실행자가 알려 주면 같은 첫 경계부터 다시 돌아 두 경계를 마치고, 마지막 회차에서 monitor-state summary → monitor-round summary 출력을 그대로 옮기고 notify done 을 BANNER 문구로 띄운다. 예약이 없으므로 CronCreate·CronDelete 는 하지 않고 plan.json 에 done:true 를 적는다. 이상 배너는 없다.",
+      "files": [
+        "evals/files/replay/SHOP-42/state.json",
+        "evals/files/replay/SHOP-42/plan.json",
+        "evals/files/replay/SHOP-42/tick.query",
+        "evals/files/replay/SHOP-42/rounds.log",
+        "evals/files/round-existing-only.awsq.json",
+        "evals/files/metric-cpu.json"
+      ],
+      "expectations": [
+        "stops_on_failure: 첫 경계의 조회 실패 뒤 둘째 경계를 돌리지 않고 멈춘다",
+        "one_failure_banner: 실패 배너(notify auth 'AWS 로그인 만료: 재로그인 필요')를 한 번만 띄운다",
+        "record_failed_no_judge: 실패 회차는 record --status failed 로 남기고 judge 하지 않는다",
+        "resume_same_boundary: 재개 때 같은 첫 경계(1792670760)부터 다시 돌고, window 가 1792667160 부터 준다",
+        "window_now_per_boundary: 각 회차의 window --now 에 경계 시각을 넣는다(현재 시각을 쓰지 않는다)",
+        "no_anomaly_banner: 기존 오류만 있는 회차에 notify anomaly 를 띄우지 않는다",
+        "completion_via_monitor_round: 마지막 회차에서 monitor-round summary 를 실행하고 그 출력을 그대로 세션에 옮긴다(summary.json 을 직접 열지 않는다)",
+        "summary_has_failure_gap: 완료 요약의 조회 실패 구간에 첫 경계의 실패(auth)가 '이후 회차가 다시 조회함'으로 남는다",
+        "done_banner: notify done 문구가 summary 의 BANNER 줄 그대로다",
+        "no_cron_calls: CronCreate·CronDelete 를 실행하지 않는다(재생 실행이라 예약 없음)",
+        "marks_done: plan.json 에 done:true 를 적는다"
       ]
     }
   ]

@@ -1,0 +1,268 @@
+#!/usr/bin/env python3
+"""회차 조회 결과 변환·세션 표시·완료 요약. 원문 메시지를 출력하지 않는다.
+
+  monitor-round convert --plan P --awsq F --out F [--mode round|baseline]
+                        [--limit 1000] [--metric LABEL=FILE ...] [--sentry FILE]
+  monitor-round show --judge F --ticket T
+  monitor-round log --rounds F --start S --end E --status ok|failed [--counts F]
+  monitor-round summary --summary F --plan P [--rounds F]
+
+awsq logs 행은 level, src(함수·로거 이름), sig(메시지), n 필드를 가진 집계 행이다.
+오류 유형 키는 "<src> | <sig>" 이고, 세션에 보이는 이름은 src, 메시지 안의 예외 클래스
+이름, 정규화된 키의 sha1 앞 6자리로만 만든다. 메시지 본문은 이름에 들어가지 않는다.
+계획에 정의한 감시 라벨·성공 지표 이름은 그대로 보인다.
+
+종료 코드: 0 성공, 2 사용 오류·입력 오류. 오류는 stderr 에 `ROUND_ERROR: <상세>`.
+"""
+
+import argparse
+import datetime
+import hashlib
+import json
+import re
+import sys
+
+EXCEPTION = re.compile(r"\b[A-Z][A-Za-z0-9]*(?:Error|Exception)\b")
+KST = datetime.timezone(datetime.timedelta(hours=9))
+NO_SRC = "-"
+
+
+class RoundError(Exception):
+    pass
+
+
+def load(path):
+    try:
+        with open(path, encoding="utf-8") as f:
+            return json.load(f)
+    except FileNotFoundError:
+        raise RoundError(f"file not found: {path}")
+    except (UnicodeDecodeError, json.JSONDecodeError):
+        raise RoundError(f"invalid JSON in {path}")
+
+
+def display_name(signature):
+    src, sep, body = signature.partition(" | ")
+    if not sep:
+        src, body = "", signature
+    parts = [src] if src else []
+    match = EXCEPTION.search(body)
+    if match:
+        parts.append(match.group(0))
+    digest = hashlib.sha1(signature.encode("utf-8")).hexdigest()[:6]
+    return " · ".join(parts) + f" #{digest}" if parts else f"#{digest}"
+
+
+def alert_name(kind, signature):
+    return signature if kind == "watch" else display_name(signature)
+
+
+def kst(epoch):
+    return datetime.datetime.fromtimestamp(epoch, KST).strftime("%m-%d %H:%M")
+
+
+def add(table, key, n):
+    table[key] = table.get(key, 0) + n
+
+
+def cmd_convert(args):
+    plan = load(args.plan)
+    result = load(args.awsq)
+    rows = result["rows"]
+    errors, watch, success, metric_info = {}, {}, {}, {}
+    for row in rows:
+        text, n = row.get("sig", ""), int(float(row.get("n", 0)))
+        hit = False
+        for table, labels in ((watch, plan.get("watch", {})),
+                              (success, plan.get("success", {}))):
+            for label, pattern in labels.items():
+                if re.search(pattern, text):
+                    add(table, label, n)
+                    hit = True
+        if not hit and row.get("level") == plan.get("error_level", "ERROR"):
+            add(errors, f'{row.get("src") or NO_SRC} | {text}', n)
+    if args.mode == "baseline":
+        payload = errors
+    else:
+        metrics = dict(item.split("=", 1) for item in args.metric)
+        for m in plan.get("metrics", []):
+            if m["label"] not in metrics:
+                raise RoundError(f'missing --metric for plan metric {m["label"]}')
+            points = load(metrics[m["label"]])["datapoints"]
+            over = sum(1 for p in points if p["v"] > m["limit"])
+            metric_info[m["label"]] = {
+                "max": max((p["v"] for p in points), default=None),
+                "points": len(points), "limit": m["limit"]}
+            if not points:
+                watch[f'nodata:{m["label"]}'] = 1
+            elif over:
+                watch[f'metric:{m["label"]}>{m["limit"]}'] = over
+        if args.sentry:
+            for short_id, n in load(args.sentry).items():
+                if n > 0:
+                    watch[f"sentry:{short_id}"] = n
+        payload = {"errors": errors, "watch": watch, "success": success}
+    with open(args.out, "w", encoding="utf-8") as f:
+        json.dump(payload, f, ensure_ascii=False)
+    return {
+        "rows": len(rows),
+        "truncated": len(rows) >= args.limit,
+        "error_types": len(errors),
+        "error_count": sum(errors.values()),
+        "watch": watch,
+        "success": success,
+        "metrics": metric_info,
+        "bytes_scanned": result.get("bytes_scanned", 0.0),
+    }
+
+
+def cmd_show(args):
+    judge = load(args.judge)
+    lines, names = [], []
+    for a in judge.get("alerts", []):
+        name = alert_name(a["kind"], a["signature"])
+        names.append((name, a["count"]))
+        lines.append(f'ALERT {a["kind"]} {name} {a["count"]}건 누적 {a["total"]}')
+    existing = judge.get("existing", {})
+    lines.append(f"EXISTING {len(existing)}유형 {sum(existing.values())}건")
+    if names:
+        banner = f"{args.ticket} 이상: {names[0][0]} {names[0][1]}건"
+        if len(names) > 1:
+            banner += f" 외 {len(names) - 1}건"
+        lines.append(f"BANNER {banner}")
+    return "\n".join(lines)
+
+
+def cmd_log(args):
+    entry = {"start": args.start, "end": args.end, "status": args.status}
+    if args.counts:
+        entry["success"] = load(args.counts).get("success", {})
+    with open(args.rounds, "a", encoding="utf-8") as f:
+        f.write(json.dumps(entry, ensure_ascii=False) + "\n")
+    return None
+
+
+def read_rounds(path):
+    if not path:
+        return []
+    try:
+        with open(path, encoding="utf-8") as f:
+            return [json.loads(line) for line in f if line.strip()]
+    except FileNotFoundError:
+        return []
+    except json.JSONDecodeError:
+        raise RoundError(f"invalid line in {path}")
+
+
+def cmd_summary(args):
+    summary, plan = load(args.summary), load(args.plan)
+    rounds = read_rounds(args.rounds)
+    alerts = summary.get("alerts", [])
+    existing = dict(summary.get("existing", {}))
+    watch_totals = {a["signature"]: a["total"] for a in alerts if a["kind"] == "watch"}
+    success_totals = {label: 0 for label in plan.get("success", {})}
+    for r in rounds:
+        for label, n in r.get("success", {}).items():
+            add(success_totals, label, n)
+
+    out = [f'# {summary["ticket"]} 모니터링 완료 요약',
+           f'구간: {kst(summary["deploy_time"])} – {kst(summary["end_time"])} KST', "",
+           "## 1. 티켓 전용 확인 결과"]
+    for label in plan.get("watch", {}):
+        out.append(f"- 감시 {label}: {watch_totals.pop(label, 0)}건")
+    for label, n in watch_totals.items():
+        out.append(f"- 감시 {label}: {n}건")
+    for label, n in success_totals.items():
+        out.append(f"- 성공 지표 {label}: {n}건")
+
+    out += ["", "## 2. 이상 알림"]
+    for a in sorted(alerts, key=lambda a: a["first_alert_at"]):
+        name = alert_name(a["kind"], a["signature"])
+        line = f'- {a["kind"]} {name}: 누적 {a["total"]}건, 처음 알림 {kst(a["first_alert_at"])}'
+        if a["kind"] == "spike":
+            calm = existing.pop(a["signature"], 0)
+            line += f' (급증 회차 {a["total"]}건 + 평소 수준 회차 {calm}건)'
+        out.append(line)
+    if not alerts:
+        out.append("- 없음")
+
+    out += ["", "## 3. 기존 오류 (배포 전부터 비슷한 빈도라 알리지 않음)"]
+    for sig, n in sorted(existing.items(), key=lambda kv: -kv[1]):
+        out.append(f"- {display_name(sig)}: {n}건")
+    if not existing:
+        out.append("- 없음")
+
+    out += ["", "## 4. 조회 실패 구간"]
+    covered = summary.get("covered_until", 0)
+    for f in summary.get("failures", []):
+        later = " (이후 회차가 다시 조회함)" if f["end"] <= covered else " (아직 조회 못 함)"
+        out.append(f'- {kst(f["start"])} – {kst(f["end"])}: {f.get("reason") or "사유 없음"}{later}')
+    if not summary.get("failures"):
+        out.append("- 없음")
+
+    rounds_bytes = summary.get("bytes_scanned_total", 0.0)
+    base_bytes = plan.get("baseline_bytes", 0) or 0
+    gb = (rounds_bytes + base_bytes) / 1e9
+    line = (f"- {gb:.2f} GB (회차 {rounds_bytes / 1e9:.2f} GB + 기준선 "
+            f"{base_bytes / 1e9:.2f} GB)")
+    price = plan.get("logs_price_per_gb")
+    if price:
+        line += f", 약 ${gb * price:.4f} (GB당 ${price})"
+    out += ["", "## 5. 총 스캔량", line, "",
+            f'BANNER {summary["ticket"]} 모니터링 완료: 이상 {len(alerts)}건']
+    return "\n".join(out)
+
+
+def build_parser():
+    parser = argparse.ArgumentParser(prog="monitor-round")
+    sub = parser.add_subparsers(dest="cmd", required=True)
+    conv = sub.add_parser("convert")
+    conv.add_argument("--plan", required=True)
+    conv.add_argument("--awsq", required=True)
+    conv.add_argument("--out", required=True)
+    conv.add_argument("--mode", choices=["round", "baseline"], default="round")
+    conv.add_argument("--limit", type=int, default=1000)
+    conv.add_argument("--metric", action="append", default=[])
+    conv.add_argument("--sentry")
+    conv.set_defaults(func=cmd_convert)
+    show = sub.add_parser("show")
+    show.add_argument("--judge", required=True)
+    show.add_argument("--ticket", required=True)
+    show.set_defaults(func=cmd_show)
+    log = sub.add_parser("log")
+    log.add_argument("--rounds", required=True)
+    log.add_argument("--start", type=int, required=True)
+    log.add_argument("--end", type=int, required=True)
+    log.add_argument("--status", choices=["ok", "failed"], required=True)
+    log.add_argument("--counts")
+    log.set_defaults(func=cmd_log)
+    summ = sub.add_parser("summary")
+    summ.add_argument("--summary", required=True)
+    summ.add_argument("--plan", required=True)
+    summ.add_argument("--rounds")
+    summ.set_defaults(func=cmd_summary)
+    return parser
+
+
+def main(argv):
+    args = build_parser().parse_args(argv[1:])
+    try:
+        result = args.func(args)
+    except RoundError as exc:
+        print(f"ROUND_ERROR: {exc}", file=sys.stderr)
+        return 2
+    except OSError as exc:
+        print(f"ROUND_ERROR: {type(exc).__name__} on {exc.filename}", file=sys.stderr)
+        return 2
+    except (KeyError, ValueError, TypeError, AttributeError) as exc:
+        print(f"ROUND_ERROR: invalid input ({type(exc).__name__})", file=sys.stderr)
+        return 2
+    if isinstance(result, dict):
+        print(json.dumps(result, ensure_ascii=False))
+    elif result is not None:
+        print(result)
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main(sys.argv))

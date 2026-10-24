@@ -6,7 +6,6 @@
     "/ecs/shop-api-prod"
   ],
   "error_level": "ERROR",
-  "query_file": "tick.query",
   "watch": {
     "refund_api_fail": "환불 API 호출 실패",
     "user_not_found": "user_not_found"
@@ -29,5 +28,9 @@
   ],
   "sentry": null,
   "period_minutes": 60,
-  "cron_job_id": "a1b2c3d4"
+  "cron_job_id": "a1b2c3d4",
+  "baseline_hours": 168,
+  "baseline_bytes": 734003200,
+  "logs_price_per_gb": 0.0076,
+  "bin": "<사본 준비 때 bin 절대경로로 바꾼다>"
 }
