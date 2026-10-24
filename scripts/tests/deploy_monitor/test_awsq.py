@@ -14,12 +14,12 @@ import json, os, sys
 d = os.environ["FAKE_DIR"]
 with open(os.path.join(d, "calls.jsonl"), "a") as f:
     f.write(json.dumps(sys.argv[1:]) + "\\n")
-if os.environ.get("FAKE_STDERR"):
+if os.environ.get("FAKE_STDERR") and os.environ.get("FAKE_FAIL_ON", sys.argv[2]) == sys.argv[2]:
     print(os.environ["FAKE_STDERR"], file=sys.stderr)
     sys.exit(int(os.environ.get("FAKE_EXIT", "255")))
 kind, sub = sys.argv[1], sys.argv[2]
 if sub == "start-query":
-    print(json.dumps({"queryId": "q-1"}))
+    print(os.environ.get("FAKE_RAW_START") or json.dumps({"queryId": "q-1"}))
 elif sub == "get-query-results":
     counter = os.path.join(d, "counter")
     n = int(open(counter).read()) if os.path.exists(counter) else 0
@@ -38,9 +38,9 @@ elif sub == "get-query-results":
         }))
 elif sub == "get-metric-statistics":
     print(json.dumps({"Label": "m", "Datapoints": [
-        {"Timestamp": "2026-10-24T01:10:00+00:00", "Maximum": 3.0, "Average": 1.0},
-        {"Timestamp": "2026-10-24T01:00:00+00:00", "Maximum": 7.0, "Average": 2.0},
-        {"Timestamp": "2026-10-24T01:05:00+00:00", "Maximum": 5.0, "Average": 1.5},
+        {"Timestamp": "2026-10-24T01:10:00" + os.environ.get("FAKE_TZ", "+00:00"), "Maximum": 3.0, "Average": 1.0},
+        {"Timestamp": "2026-10-24T01:00:00" + os.environ.get("FAKE_TZ", "+00:00"), "Maximum": 7.0, "Average": 2.0},
+        {"Timestamp": "2026-10-24T01:05:00" + os.environ.get("FAKE_TZ", "+00:00"), "Maximum": 5.0, "Average": 1.5},
     ]}))
 """
 
@@ -83,8 +83,8 @@ class AwsqTests(unittest.TestCase):
         )
         self.assertEqual(out["bytes_scanned"], 4096.0)
         for call in self.calls():
-            self.assertIn("--region", call)
-            self.assertIn("json", call)
+            self.assertEqual(call[call.index("--region") + 1], "ap-northeast-2")
+            self.assertEqual(call[call.index("--output") + 1], "json")
 
     def test_logs_passes_multiple_log_groups(self):
         result = self.logs("a", "b")
@@ -108,13 +108,47 @@ class AwsqTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2)
         self.assertTrue(result.stderr.startswith("AWS_ERROR:"), result.stderr)
 
-    def test_metric_datapoints_sorted(self):
-        result = self.awsq([
+    def metric(self, stat="Maximum", **extra):
+        return self.awsq([
             "metric", "--region", "ap-northeast-2", "--namespace", "AWS/ECS",
             "--metric", "CPUUtilization", "--dimension", "ClusterName=c",
             "--dimension", "ServiceName=s", "--start", "1790000000",
-            "--end", "1790003600", "--stat", "Maximum",
-        ])
+            "--end", "1790003600", "--stat", stat,
+        ], **extra)
+
+    def assert_aws_error(self, result):
+        self.assertEqual(result.returncode, 2, result.stderr)
+        self.assertTrue(result.stderr.startswith("AWS_ERROR:"), result.stderr)
+
+    def test_polling_exhaustion_exit_2(self):
+        self.assert_aws_error(self.logs("g1", FAKE_FINAL="Running"))
+
+    def test_expiry_during_get_query_results_exit_3(self):
+        result = self.logs("g1", FAKE_STDERR=EXPIRED, FAKE_FAIL_ON="get-query-results")
+        self.assertEqual(result.returncode, 3)
+        self.assertTrue(result.stderr.startswith("AWS_AUTH_EXPIRED:"), result.stderr)
+
+    def test_timeout_and_cancelled_statuses_exit_2(self):
+        for status in ("Timeout", "Cancelled"):
+            with self.subTest(status=status):
+                self.assert_aws_error(self.logs("g1", FAKE_FINAL=status))
+
+    def test_non_json_stdout_exit_2(self):
+        self.assert_aws_error(self.logs("g1", FAKE_RAW_START="not json"))
+
+    def test_unexpected_shape_exit_2(self):
+        self.assert_aws_error(self.logs("g1", FAKE_RAW_START="{}"))
+
+    def test_metric_missing_stat_exit_2(self):
+        self.assert_aws_error(self.metric(stat="p99"))
+
+    def test_metric_z_suffix_timestamp(self):
+        result = self.metric(FAKE_TZ="Z")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        self.assertEqual(json.loads(result.stdout)["datapoints"][0]["t"], 1792803600)
+
+    def test_metric_datapoints_sorted(self):
+        result = self.metric()
         self.assertEqual(result.returncode, 0, result.stderr)
         points = json.loads(result.stdout)["datapoints"]
         self.assertEqual([p["v"] for p in points], [7.0, 5.0, 3.0])

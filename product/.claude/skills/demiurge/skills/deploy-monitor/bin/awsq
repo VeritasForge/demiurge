@@ -63,6 +63,13 @@ def iso(epoch):
     return moment.strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
+def parse_timestamp(text):
+    # Python < 3.11 의 fromisoformat 은 끝의 Z 를 읽지 못한다.
+    if text.endswith("Z"):
+        text = text[:-1] + "+00:00"
+    return int(datetime.datetime.fromisoformat(text).timestamp())
+
+
 def cmd_logs(args):
     with open(args.query_file) as f:
         query = f.read()
@@ -110,7 +117,7 @@ def cmd_metric(args):
     )
     points = [
         {
-            "t": int(datetime.datetime.fromisoformat(p["Timestamp"]).timestamp()),
+            "t": parse_timestamp(p["Timestamp"]),
             "v": p[args.stat],
         }
         for p in data.get("Datapoints", [])
@@ -149,6 +156,9 @@ def main(argv):
         result = args.func(args)
     except OSError as exc:
         print(f"AWS_ERROR: {exc}", file=sys.stderr)
+        return 2
+    except (KeyError, ValueError, TypeError) as exc:
+        print(f"AWS_ERROR: unexpected aws output: {exc!r}", file=sys.stderr)
         return 2
     except AwsError as exc:
         tag = "AWS_AUTH_EXPIRED" if exc.expired else "AWS_ERROR"
