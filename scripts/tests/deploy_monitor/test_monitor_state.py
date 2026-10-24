@@ -1,6 +1,7 @@
 """bin/monitor-state 검증: 회차 창, 정규화, 신규/급증/watch 판정, 요약."""
 
 import json
+import os
 import tempfile
 import unittest
 from pathlib import Path
@@ -138,6 +139,11 @@ class TestMonitorState(MonitorStateCase):
         )
         self.assertEqual(r["existing"], {"channel <id> not found": 1})
         self.assertNotIn("C0BQ7V65QE5", json.dumps(r))
+        os.remove(self.state)
+        self.init()
+        self.baseline({"user 1234567 failed": 1, "user 12345678 failed": 1}, 7)
+        self.assertIn("user <n> failed", Path(self.state).read_text())
+        self.assertNotIn("<hex>", Path(self.state).read_text())
 
     def test_judge_new_spike_existing(self):
         self.init()
@@ -199,7 +205,6 @@ class TestMonitorState(MonitorStateCase):
         self.init()
         self.baseline({"OSError x": 168}, 168)
         self.judge_ok({"errors": {"OSError x": 2}, "watch": {}}, T0, T0 + H)
-        self.judge_ok({"errors": {"OSError x": 1}, "watch": {}}, T0 + H, T0 + 2 * H)
         self.record(T0, T0 + H, "ok")
         self.record(T0 + H, T0 + 2 * H, "failed", "aws expired")
         s = self.ok("summary", "--state", self.state)
@@ -210,8 +215,39 @@ class TestMonitorState(MonitorStateCase):
             s["failures"],
             [{"start": T0 + H, "end": T0 + 2 * H, "reason": "aws expired"}],
         )
-        self.assertEqual(s["existing"], {"OSError x": 3})
+        self.assertEqual(s["existing"], {"OSError x": 2})
         self.assertEqual(s["alerts"], [])
+
+    def test_judge_below_spike_min_is_existing(self):
+        self.init()
+        self.baseline({"OSError x": 168}, 168)
+        r = self.judge_ok({"errors": {"OSError x": 4}, "watch": {}}, T0, T0 + H)
+        self.assertEqual(r["alerts"], [])
+        self.assertEqual(r["existing"], {"OSError x": 4})
+
+    def test_judge_advances_window_without_record(self):
+        self.init()
+        self.judge_ok({"errors": {}, "watch": {}}, T0, T0 + H)
+        w = self.window(T0 + 2 * H)
+        self.assertEqual(w["start"], T0 + H)
+        self.judge_ok({"errors": {}, "watch": {}}, w["start"], w["end"])
+        self.record(T0, T0 + H, "ok")  # 뒤늦은 record 가 되돌리지 않는다
+        self.assertEqual(self.window(T0 + 3 * H)["start"], T0 + 2 * H)
+
+    def test_invalid_utf8_error_does_not_echo_input(self):
+        self.init()
+        p = self.dir / "bad.json"
+        p.write_bytes(
+            '{"errors": {"mail secret@x.com C0BQ7V65QE5 \ud55c'.encode("utf-8")[:-1]
+            + b'": 1}}'
+        )
+        r = self.ms("judge", "--state", self.state, "--counts", str(p),
+                    "--start", str(T0), "--end", str(T0 + H))
+        self.assertEqual(r.returncode, 2)
+        self.assertIn("STATE_ERROR", r.stderr)
+        for secret in ("secret@x.com", "C0BQ7V65QE5"):
+            self.assertNotIn(secret, r.stderr)
+            self.assertNotIn(secret, r.stdout)
 
 
 if __name__ == "__main__":

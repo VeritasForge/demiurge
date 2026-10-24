@@ -29,7 +29,7 @@ RULES = (
         "<uuid>",
     ),
     (re.compile(r"\b[UCTWDGBE](?=[A-Z0-9]*\d)[A-Z0-9]{8,}\b"), "<id>"),
-    (re.compile(r"\b[0-9a-fA-F]{8,}\b"), "<hex>"),
+    (re.compile(r"\b(?=[0-9a-fA-F]*[a-fA-F])[0-9a-fA-F]{8,}\b"), "<hex>"),
     (re.compile(r"\d+"), "<n>"),
     (re.compile(r"\s+"), " "),
 )
@@ -54,6 +54,8 @@ def load(path):
             return json.load(f)
     except FileNotFoundError:
         raise StateError(f"state file not found: {path}")
+    except UnicodeDecodeError:
+        raise StateError(f"invalid encoding in {path}")
     except json.JSONDecodeError as exc:
         raise StateError(f"invalid JSON in {path}: {exc}")
 
@@ -186,6 +188,7 @@ def cmd_judge(args):
              "count": n, "total": entry["total"]}
         )
     state["judged"].append([args.start, args.end])
+    state["covered_until"] = max(state["covered_until"] or 0, args.end)
     save(args.state, state)
     return {"alerts": out, "existing": existing}
 
@@ -193,7 +196,7 @@ def cmd_judge(args):
 def cmd_record(args):
     state = load(args.state)
     if args.status == "ok":
-        state["covered_until"] = args.end
+        state["covered_until"] = max(state["covered_until"] or 0, args.end)
     else:
         state["failures"].append(
             {"start": args.start, "end": args.end, "reason": args.reason or ""}
@@ -267,7 +270,10 @@ def main(argv):
         print(f"STATE_ERROR: {exc}", file=sys.stderr)
         return 2
     except (KeyError, ValueError, TypeError, AttributeError) as exc:
-        print(f"STATE_ERROR: invalid input or state: {exc!r}", file=sys.stderr)
+        print(
+            f"STATE_ERROR: invalid input or state ({type(exc).__name__})",
+            file=sys.stderr,
+        )
         return 2
     print(json.dumps(result, ensure_ascii=False))
     return 0
