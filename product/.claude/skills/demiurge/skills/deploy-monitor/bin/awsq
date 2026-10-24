@@ -2,9 +2,14 @@
 """AWS CloudWatch 조회. 결과는 stdout JSON.
 
   awsq logs --region R --log-group G [--log-group G2 ...] --start EPOCH --end EPOCH
-            --query-file F [--limit 1000]
-  awsq metric --region R --namespace N --metric M --dimension Name=Value [...]
+            --query-file F [--limit 1000] [--max-wait 120]
+  awsq metric --region R --namespace N --metric M --dimension Key=Value [...]
             --start EPOCH --end EPOCH [--period 300] [--stat Maximum]
+
+logs 창은 [start, end) 다. Logs Insights 의 end-time 은 그 초를 포함하므로 end-1 을 넘긴다.
+logs 는 결과를 최대 --max-wait 초 기다리고, 넘기면 AWS_ERROR 줄에 queryId 를 남기고 exit 2
+(쿼리는 AWS 쪽에서 계속 돌며 과금된다 — 다시 돌리기 전에 대기 한도를 늘릴지 판단한다).
+metric 의 --dimension Key=Value 는 aws-cli shorthand Name=Key,Value=Value 로 바꿔 넘긴다.
 
 종료 코드: 0 성공, 2 조회 실패(AWS_ERROR), 3 자격증명 만료·없음(AWS_AUTH_EXPIRED).
 logs 폴링 간격은 환경변수 AWSQ_POLL_SECONDS(기본 2초)로 바꾼다.
@@ -18,7 +23,6 @@ import subprocess
 import sys
 import time
 
-MAX_POLLS = 60
 TERMINAL = {"Complete", "Failed", "Cancelled", "Timeout"}
 EXPIRED_MARKERS = (
     "session has expired",
@@ -77,23 +81,25 @@ def cmd_logs(args):
         args.region, "logs", "start-query",
         "--log-group-names", *args.log_group,
         "--start-time", str(int(args.start)),
-        "--end-time", str(int(args.end)),
+        "--end-time", str(int(args.end) - 1),
         "--query-string", query,
         "--limit", str(args.limit),
     )
+    query_id = started["queryId"]
     interval = float(os.environ.get("AWSQ_POLL_SECONDS", "2"))
-    status = "Timeout"
-    data = {}
-    for _ in range(MAX_POLLS):
-        data = aws(
-            args.region, "logs", "get-query-results", "--query-id", started["queryId"]
-        )
+    deadline = time.monotonic() + args.max_wait
+    while True:
+        data = aws(args.region, "logs", "get-query-results", "--query-id", query_id)
         status = data.get("status", "")
         if status in TERMINAL:
             break
-        time.sleep(interval)
-    else:
-        raise AwsError("query did not finish: still " + (status or "unknown"))
+        remaining = deadline - time.monotonic()
+        if remaining <= 0:
+            raise AwsError(
+                f"query did not finish within {args.max_wait:g}s: still "
+                f"{status or 'unknown'} (queryId {query_id})"
+            )
+        time.sleep(min(interval, remaining))
     if status != "Complete":
         raise AwsError(f"query status {status}")
     rows = [
@@ -104,12 +110,20 @@ def cmd_logs(args):
     return {"status": status, "rows": rows, "bytes_scanned": scanned}
 
 
+def dimension_arg(item):
+    key, sep, value = item.partition("=")
+    if not sep or not key or not value:
+        raise AwsError(f"dimension must be Key=Value: {item}")
+    return f"Name={key},Value={value}"
+
+
 def cmd_metric(args):
+    dimensions = [dimension_arg(d) for d in args.dimension]
     data = aws(
         args.region, "cloudwatch", "get-metric-statistics",
         "--namespace", args.namespace,
         "--metric-name", args.metric,
-        "--dimensions", *args.dimension,
+        "--dimensions", *dimensions,
         "--start-time", iso(args.start),
         "--end-time", iso(args.end),
         "--period", str(args.period),
@@ -136,6 +150,7 @@ def build_parser():
     logs.add_argument("--end", type=float, required=True)
     logs.add_argument("--query-file", required=True)
     logs.add_argument("--limit", type=int, default=1000)
+    logs.add_argument("--max-wait", type=float, default=120)
     logs.set_defaults(func=cmd_logs)
     metric = sub.add_parser("metric")
     metric.add_argument("--region", required=True)

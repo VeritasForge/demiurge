@@ -3,12 +3,16 @@
 
   monitor-state init --state F --ticket T --deploy-time E --end-time E
                      --spike-multiplier 3.0 --spike-min 5 --realert-step 5
+                     [--watch-start E]
   monitor-state baseline --state F --counts FILE --hours H
   monitor-state window --state F --now E
   monitor-state judge --state F --counts FILE --start S --end E
   monitor-state record --state F --start S --end E --status ok|failed [--reason TEXT]
                       [--bytes-scanned FLOAT]
   monitor-state summary --state F
+
+기준선은 배포 시각에서 끝나고, 첫 창은 --watch-start(생략하면 배포 시각)부터다.
+judge 는 --start 가 덮인 구간 끝(covered_until)과 같아야 한다 — window 가 준 값 그대로.
 
 종료 코드: 0 성공, 1 init 대상 파일이 이미 있음, 2 사용 오류·입력 오류·IO 오류,
 3 이미 판정한 창과 겹침. 오류는 stderr 에 `STATE_ERROR: <상세>`.
@@ -87,6 +91,9 @@ def cmd_init(args):
         raise StateError(f"state file already exists: {args.state}", 1)
     if args.end_time <= args.deploy_time:
         raise StateError("end-time must be after deploy-time")
+    watch_start = args.deploy_time if args.watch_start is None else args.watch_start
+    if not args.deploy_time <= watch_start < args.end_time:
+        raise StateError("watch-start must be in [deploy-time, end-time)")
     state = {
         "ticket": args.ticket,
         "deploy_time": args.deploy_time,
@@ -95,7 +102,7 @@ def cmd_init(args):
         "spike_min": args.spike_min,
         "realert_step": args.realert_step,
         "baseline": {},
-        "covered_until": None,
+        "covered_until": watch_start,
         "failures": [],
         "judged": [],
         "tracked": {},
@@ -155,6 +162,14 @@ def cmd_judge(args):
                 f"[{other_start}, {other_end})",
                 3,
             )
+    covered = state["covered_until"]
+    if covered is None:
+        covered = state["deploy_time"]
+    if args.start != covered:
+        raise StateError(
+            f"window start {args.start} is not covered_until {covered}; "
+            "use the start that window returned"
+        )
     payload = load(args.counts)
     errors = merge_counts(payload.get("errors", {}))
     hours = (args.end - args.start) / 3600.0
@@ -248,6 +263,7 @@ def build_parser():
     init.add_argument("--spike-multiplier", type=float, required=True)
     init.add_argument("--spike-min", type=int, required=True)
     init.add_argument("--realert-step", type=int, required=True)
+    init.add_argument("--watch-start", type=int)
     base = add("baseline", cmd_baseline)
     base.add_argument("--counts", required=True)
     base.add_argument("--hours", type=float, required=True)

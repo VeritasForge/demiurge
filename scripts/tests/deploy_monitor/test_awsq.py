@@ -2,6 +2,7 @@
 
 import json
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -10,7 +11,7 @@ import fakes
 AWSQ = fakes.SKILL_BIN / "awsq"
 
 FAKE_AWS = """#!/usr/bin/env python3
-import json, os, sys
+import json, os, re, sys
 d = os.environ["FAKE_DIR"]
 with open(os.path.join(d, "calls.jsonl"), "a") as f:
     f.write(json.dumps(sys.argv[1:]) + "\\n")
@@ -18,6 +19,14 @@ if os.environ.get("FAKE_STDERR") and os.environ.get("FAKE_FAIL_ON", sys.argv[2])
     print(os.environ["FAKE_STDERR"], file=sys.stderr)
     sys.exit(int(os.environ.get("FAKE_EXIT", "255")))
 kind, sub = sys.argv[1], sys.argv[2]
+if "--dimensions" in sys.argv:
+    # 실제 aws-cli 2.x 의 shorthand 는 Name=..,Value=.. 만 받는다(ClusterName=x 는 ParamValidation)
+    i = sys.argv.index("--dimensions") + 1
+    while i < len(sys.argv) and not sys.argv[i].startswith("--"):
+        if not re.match(r"^Name=[^,]+,Value=.+$", sys.argv[i]):
+            print('Parameter validation failed: Unknown parameter in Dimensions[0]', file=sys.stderr)
+            sys.exit(252)
+        i += 1
 if sub == "start-query":
     print(os.environ.get("FAKE_RAW_START") or json.dumps({"queryId": "q-1"}))
 elif sub == "get-query-results":
@@ -57,16 +66,16 @@ class AwsqTests(unittest.TestCase):
 
     def awsq(self, args, **extra):
         env = fakes.env_with(
-            self.dir, FAKE_DIR=str(self.dir), AWSQ_POLL_SECONDS="0", **extra
+            self.dir, **{"FAKE_DIR": str(self.dir), "AWSQ_POLL_SECONDS": "0", **extra}
         )
         return fakes.run([str(AWSQ), *args], env)
 
-    def logs(self, *groups, **extra):
+    def logs(self, *groups, flags=(), **extra):
         args = ["logs", "--region", "ap-northeast-2"]
         for g in groups:
             args += ["--log-group", g]
         args += ["--start", "1790000000", "--end", "1790003600",
-                 "--query-file", str(self.dir / "q.txt")]
+                 "--query-file", str(self.dir / "q.txt"), *flags]
         return self.awsq(args, **extra)
 
     def calls(self):
@@ -120,8 +129,28 @@ class AwsqTests(unittest.TestCase):
         self.assertEqual(result.returncode, 2, result.stderr)
         self.assertTrue(result.stderr.startswith("AWS_ERROR:"), result.stderr)
 
-    def test_polling_exhaustion_exit_2(self):
-        self.assert_aws_error(self.logs("g1", FAKE_FINAL="Running"))
+    def test_polling_exhaustion_exit_2_with_query_id(self):
+        result = self.logs("g1", flags=["--max-wait", "1"], FAKE_FINAL="Running")
+        self.assert_aws_error(result)
+        self.assertIn("q-1", result.stderr)
+
+    def test_max_wait_bounds_polling_time(self):
+        started = time.monotonic()
+        result = self.logs(
+            "g1", flags=["--max-wait", "1"], FAKE_FINAL="Running",
+            AWSQ_POLL_SECONDS="0.3",
+        )
+        self.assert_aws_error(result)
+        self.assertLess(time.monotonic() - started, 10)
+        polls = [c for c in self.calls() if c[1] == "get-query-results"]
+        self.assertLessEqual(len(polls), 6)
+
+    def test_logs_end_time_is_exclusive(self):
+        result = self.logs("g1")
+        self.assertEqual(result.returncode, 0, result.stderr)
+        start = next(c for c in self.calls() if c[1] == "start-query")
+        self.assertEqual(start[start.index("--start-time") + 1], "1790000000")
+        self.assertEqual(start[start.index("--end-time") + 1], "1790003599")
 
     def test_expiry_during_get_query_results_exit_3(self):
         result = self.logs("g1", FAKE_STDERR=EXPIRED, FAKE_FAIL_ON="get-query-results")
@@ -156,7 +185,17 @@ class AwsqTests(unittest.TestCase):
         self.assertEqual(points[1]["t"] - points[0]["t"], 300)
         call = self.calls()[0]
         i = call.index("--dimensions")
-        self.assertEqual(call[i + 1 : i + 3], ["ClusterName=c", "ServiceName=s"])
+        self.assertEqual(
+            call[i + 1 : i + 3], ["Name=ClusterName,Value=c", "Name=ServiceName,Value=s"]
+        )
+
+    def test_metric_dimension_without_equals_exit_2(self):
+        result = self.awsq([
+            "metric", "--region", "r", "--namespace", "AWS/ECS",
+            "--metric", "CPUUtilization", "--dimension", "ClusterName",
+            "--start", "1790000000", "--end", "1790003600",
+        ])
+        self.assert_aws_error(result)
 
 
 if __name__ == "__main__":

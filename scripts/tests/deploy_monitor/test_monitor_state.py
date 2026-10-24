@@ -29,13 +29,19 @@ class MonitorStateCase(unittest.TestCase):
         self.assertEqual(r.returncode, 0, r.stderr)
         return json.loads(r.stdout)
 
-    def init(self, hours=24, step=5, mult="3.0", spike_min=5):
-        return self.ok(
+    def init_args(self, hours=24, step=5, mult="3.0", spike_min=5, watch_start=None):
+        args = [
             "init", "--state", self.state, "--ticket", "AOTA-1",
             "--deploy-time", str(T0), "--end-time", str(T0 + hours * H),
             "--spike-multiplier", mult, "--spike-min", str(spike_min),
             "--realert-step", str(step),
-        )
+        ]
+        if watch_start is not None:
+            args += ["--watch-start", str(watch_start)]
+        return args
+
+    def init(self, **kwargs):
+        return self.ok(*self.init_args(**kwargs))
 
     def write_json(self, name, data):
         p = self.dir / name
@@ -97,6 +103,40 @@ class TestMonitorState(MonitorStateCase):
         w2 = self.window(T0 + 2 * H)
         self.assertEqual(w2["start"], T0 + H)
         self.assertEqual(w2["end"], T0 + 2 * H)
+
+    def test_watch_start_moves_first_window_not_baseline(self):
+        self.init(hours=24, watch_start=T0 + 14 * H)
+        w = self.window(T0 + 15 * H)
+        self.assertEqual((w["start"], w["end"]), (T0 + 14 * H, T0 + 15 * H))
+        self.assertTrue(self.window(T0 + 13 * H)["empty"])
+        s = self.ok("summary", "--state", self.state)
+        self.assertEqual(s["deploy_time"], T0)
+        self.assertEqual(s["covered_until"], T0 + 14 * H)
+        # 감시 시작 이전 구간은 판정할 수 없다
+        r = self.judge({"errors": {}, "watch": {}}, T0, T0 + H)
+        self.assertEqual(r.returncode, 2)
+
+    def test_watch_start_must_be_within_deploy_and_end(self):
+        for ws in (T0 - 1, T0 + 24 * H, T0 + 25 * H):
+            with self.subTest(watch_start=ws):
+                r = self.ms(*self.init_args(watch_start=ws))
+                self.assertEqual(r.returncode, 2, r.stderr)
+                self.assertFalse(Path(self.state).exists())
+        self.init(watch_start=T0)
+        self.assertEqual(self.window(T0 + H)["start"], T0)
+
+    def test_judge_rejects_start_not_at_covered_until(self):
+        self.init()
+        payload = {"errors": {"Brand new": 1}, "watch": {}}
+        before = Path(self.state).read_text()
+        gap = self.judge(payload, T0 + H, T0 + 2 * H)  # 앞 구간을 건너뜀
+        self.assertEqual(gap.returncode, 2)
+        self.assertIn("covered", gap.stderr)
+        self.assertEqual(Path(self.state).read_text(), before)
+        self.judge_ok(payload, T0, T0 + H)
+        early = self.judge(payload, T0 + H + 60, T0 + 2 * H)
+        self.assertEqual(early.returncode, 2)
+        self.judge_ok(payload, T0 + H, T0 + 2 * H)
 
     def test_window_after_failure_covers_gap(self):
         self.init()
