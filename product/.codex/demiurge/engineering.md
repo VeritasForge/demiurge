@@ -90,10 +90,10 @@ Demiurge가 관리하는 전역 지침은 배포 위치에 새로 복사하지 �
 
 - Codex 지침의 원본은 `product/.codex/`다. `just link`는 `product`와 `bin` 패키지 전체를
   함께 배포하므로 Codex 파일만 변경했어도 배포 영향 범위는 두 패키지 전체다.
-- 스킬은 현재 Codex가 발견하는 사용자·프로젝트 `.agents/skills/` 또는 설치 플러그인의
-  구조를 따른다. 새 전역 스킬을 Demiurge로 배포하는 구조는 별도 설계 대상이다.
-  생성 명령은 실제 생성 경로와 형식을 확인한 뒤 사용한다. 현재 `just new-skill`·
-  `just new-command`는 Codex 자산 생성에 사용하지 않는다.
+- Codex 전용 전역 스킬은 `product/.codex/skills/<name>/SKILL.md`에서 관리하고
+  `just link`로 `~/.codex/skills/<name>/SKILL.md`에 배포한다. 기존 일반 파일이 있으면
+  내용을 보존한 뒤 충돌을 해소한다. 현재 `just new-skill`·`just new-command`는
+  Codex 자산 생성에 사용하지 않는다.
 - Codex 에이전트 정의와 스킬의 페르소나 참조 파일을 구분한다. 새 자산이 필요하면
   제공되는 제작 스킬·공식 문서로 형식과 지침 로딩 조건을 확인한다.
 - 다른 에이전트에 하니스 수정을 맡기면 원본 위치·배포 범위·검증 조건도 전달한다.

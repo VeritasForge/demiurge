@@ -128,10 +128,12 @@ cd ~/lab/demiurge
 조직·프로젝트 전용 규칙이나 개인 절대 경로는 포함하지 않는다. 코드 탐색은 각 저장소의
 지침을 따르며, 제공되는 인덱스의 최신성을 확인하고 실제 소스와 대조한다.
 
-이 배포는 Claude 스킬을 Codex에 설치하지 않는다. Superpowers·Vercel 관련 스킬·OpenAI
+이 배포는 Claude 스킬을 Codex에 설치하지 않는다. Codex 전용 `pr-feedback` 스킬은
+`product/.codex/skills/`에서 별도로 관리하며 전역 `~/.codex/skills/`에 배포한다.
+Superpowers·Vercel 관련 스킬·OpenAI
 도구는 현재 Codex에 실제로 제공되는 목록에서 찾아 사용한다. 캐시의 존재만으로 활성화나
 호출 성공을 판단하지 않는다. `config.toml`, 인증 파일, 플러그인 캐시, 모델·권한·MCP 설정은
-관리하지 않는다. Codex용 자체 스킬·에이전트와 통계 수집도 첫 버전의 범위 밖이다.
+관리하지 않는다. Codex용 자체 에이전트와 통계 수집은 범위 밖이다.
 
 ### Codex 최초 전환
 
@@ -151,7 +153,7 @@ if [ -f "$HOME/.codex/AGENTS.md" ] && [ ! -L "$HOME/.codex/AGENTS.md" ]; then
     mv "$HOME/.codex/AGENTS.md" "$codex_backup_dir/AGENTS.md" &&
     printf '기존 지침 백업: %s/AGENTS.md\n' "$codex_backup_dir"
 fi
-stow -n -v -R --no-folding -t "$HOME" product bin &&
+stow -n -v -R --no-folding --ignore='\.DS_Store$' -t "$HOME" product bin &&
 just link &&
 just status
 ```
@@ -163,7 +165,7 @@ just status
 
 ### 검증과 복구
 
-`just status`는 Codex 원본 3개를 가리키는 링크가 정확한지 검사한다. 누락·일반 파일·
+`just status`는 Codex 지침 3개와 `pr-feedback` 스킬의 링크가 정확한지 검사한다. 누락·일반 파일·
 다른 대상·끊어진 링크는 실패 종료 코드로 알린다. override 경고는 링크 실패와 구분한다.
 이 명령은 실제 모델에 지침이 전달됐는지를 검사하지 않는다.
 
@@ -284,7 +286,8 @@ demiurge/
 │   └── CLAUDE.md                 # 응답 가이드라인 · TDD · 스킬 호출 규칙
 ├── product/.codex/               # 전역 배포 (GNU Stow 경유 → ~/.codex/)
 │   ├── AGENTS.md                 # Codex 핵심 지침과 참조 읽기 조건
-│   └── demiurge/                 # communication.md · engineering.md
+│   ├── demiurge/                 # communication.md · engineering.md
+│   └── skills/pr-feedback/       # PR 리뷰 피드백 처리 스킬
 ├── bin/.local/bin/               # 전역 CLI 배포 (GNU Stow 경유 → ~/.local/bin/)
 │   └── git-cleanup-worktrees
 ├── scripts/demi/                 # 사용 통계 CLI (uv packaged Python)

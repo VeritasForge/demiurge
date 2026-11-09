@@ -12,12 +12,12 @@ default:
 
 # 전역 심링크 생성/갱신
 link:
-    stow -v -R --no-folding -t "$DEMIURGE_DEPLOY_TARGET" product bin
+    stow -v -R --no-folding --ignore='\.DS_Store$' -t "$DEMIURGE_DEPLOY_TARGET" product bin
     @echo "✅ Claude·Codex 지침과 공용 CLI 링크 생성/갱신 완료"
 
 # 전역 심링크 해제
 unlink:
-    stow -v -D --no-folding -t "$DEMIURGE_DEPLOY_TARGET" product bin
+    stow -v -D --no-folding --ignore='\.DS_Store$' -t "$DEMIURGE_DEPLOY_TARGET" product bin
     @echo "🔓 symlinks removed"
 
 # 심링크 상태 확인

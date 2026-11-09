@@ -12,7 +12,7 @@ deploy_root=$2
 failed=0
 
 echo "=== Codex 배포 링크 ==="
-for relative in .codex/AGENTS.md .codex/demiurge/communication.md .codex/demiurge/engineering.md; do
+for relative in .codex/AGENTS.md .codex/demiurge/communication.md .codex/demiurge/engineering.md .codex/skills/pr-feedback/SKILL.md; do
     source_file="$repo_root/product/$relative"
     deployed_file="$deploy_root/$relative"
     if [ ! -f "$source_file" ]; then

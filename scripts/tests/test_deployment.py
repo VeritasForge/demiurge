@@ -12,6 +12,7 @@ CODEX_FILES = (
     ".codex/AGENTS.md",
     ".codex/demiurge/communication.md",
     ".codex/demiurge/engineering.md",
+    ".codex/skills/pr-feedback/SKILL.md",
 )
 
 
@@ -69,6 +70,18 @@ class DeploymentTests(unittest.TestCase):
         self.assertEqual((self.target / ".codex/AGENTS.md").read_text(), "기존 지침")
         self.assertEqual(claude.readlink(), old_link)
         self.assertFalse((self.target / ".local/bin/new-tool").exists())
+
+    def test_ds_store_is_ignored_without_changing_existing_files(self):
+        source = self.repo / "product/.DS_Store"
+        source.write_text("저장소 운영체제 파일")
+        target = self.target / ".DS_Store"
+        target.write_text("기존 사용자 운영체제 파일")
+        self.run_just("link")
+        self.run_just("status")
+        self.assertEqual(target.read_text(), "기존 사용자 운영체제 파일")
+        self.run_just("unlink")
+        self.assertEqual(target.read_text(), "기존 사용자 운영체제 파일")
+        self.assertEqual(source.read_text(), "저장소 운영체제 파일")
 
     def test_bin_conflict_does_not_partially_deploy_product(self):
         conflict = self.target / ".local/bin/git-cleanup-worktrees"
