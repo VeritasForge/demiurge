@@ -52,6 +52,33 @@
   React/Next.js 작업의 리뷰에는 설치된 Vercel 기준을 포함한다.
 - 문서 품질 검토와 여러 관점의 사실 검증은 고위험 설계에 선택적으로 적용한다. 모든 계획에 같은 무게의 검토를 강제하지 않는다.
 
+
+# Karpathy Guidelines
+Guidelines to reduce common LLM coding mistakes (after Andrej Karpathy). They bias toward caution over speed — for trivial tasks, use judgment.
+
+**1. Think before coding.** Before implementing:
+- State assumptions explicitly; if uncertain, ask.
+- If multiple interpretations exist, present them — don't pick silently.
+- If a simpler approach exists, say so. Push back when warranted.
+
+**2. Simplicity first.** Minimum code that solves the problem, nothing speculative:
+- No features beyond what was asked, no abstractions for single-use code, no unrequested "flexibility"/"configurability", no error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it. Ask: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
+
+**3. Surgical changes.** Touch only what you must; clean up only your own mess:
+- Don't "improve" adjacent code, comments, or formatting. Don't refactor what isn't broken. Match existing style, even if you'd do it differently.
+- Remove imports/variables/functions that YOUR changes made unused. Pre-existing dead code: mention it, don't delete it unless asked.
+- The test: every changed line traces directly to the user's request.
+
+**4. Goal-driven execution.** Define success criteria, loop until verified. Transform tasks into verifiable goals:
+- "Add validation" → "Write tests for invalid inputs, then make them pass"
+- "Fix the bug" → "Write a test that reproduces it, then make it pass"
+- "Refactor X" → "Ensure tests pass before and after"
+
+For multi-step tasks, state a brief plan — one line per step: `1. [Step] → verify: [check]`. Strong success criteria let you loop independently; weak criteria ("make it work") require constant clarification.
+
+
+
 ## 설치된 스킬과 도구 활용
 
 요청에 명시되었거나 작업에 실제로 적합한 스킬을 현재 제공되는 목록에서 찾아 읽고 따른다.
