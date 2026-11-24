@@ -9,7 +9,9 @@ Claude Code subagent를 생성·수정할 때 적용. 공식 docs: [sub-agents.m
 
 > **참고**: "agent로 만들지 skill로 만들지" 선택 가이드는 별도 자료로 분리 (이 rule은 agent 작성에 집중). agent로 만들기로 결정한 뒤 아래 규칙 적용.
 
-## 1. Frontmatter 필드 (총 16개)
+## 1. Frontmatter 필드
+
+검증 기준: Claude Code 공식 sub-agents 문서(https://code.claude.com/docs/en/sub-agents), 2026-11-24 확인.
 
 ### 필수
 | 필드 | 형식 | 비고 |
@@ -38,6 +40,9 @@ Claude Code subagent를 생성·수정할 때 적용. 공식 docs: [sub-agents.m
 | `color` | UI 표시색 (red/blue/green/yellow/purple/orange/pink/cyan) |
 | `maxTurns` | 정수 — agentic turn 수 제한 |
 | `initialPrompt` | 자연어 — 첫 turn 자동 제출 |
+| `autoCompactWindow` | 공식 문서에 필드로 나열됨 (값·동작은 공식 문서 참조) |
+| `omitClaudeMd` | 공식 문서에 필드로 나열됨 (값·동작은 공식 문서 참조) |
+| `experimental` | 공식 문서에 필드로 나열됨 (값·동작은 공식 문서 참조) |
 
 ## 2. `model` 필드 결정 원칙
 

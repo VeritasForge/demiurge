@@ -42,7 +42,7 @@ opus 세션에서 반복 실행 skill(당시 `/demiurge:rl`, 2026-09-06에 삭�
 | `allowed-tools` | 본문에서 실제 사용하는 tool만 | grep으로 본문 vs frontmatter 일치 검증 |
 | `argument-hint` | 인자 받는 skill만 | 예: `"<prompt> [--max-iterations N]"` |
 | `disable-model-invocation` | `true` 시 사용자 명시 호출만 가능 (자동 미감지) | `/demiurge:parallel-ask` 같이 의도 명확한 명령형에 적합 (/demiurge:commit은 frontmatter `model` 고정으로 충분하여 미사용) |
-| `model` | 위 1번 원칙대로 | Anthropic API: `claude-haiku-4-5`, `claude-sonnet-4-6`, `claude-opus-4-7` 형식 |
+| `model` | 위 1번 원칙대로 | Anthropic API: `claude-haiku-5-5`, `claude-sonnet-5-5`, `claude-opus-5-5` 형식 |
 
 ## 3. Skill takes precedence over command
 
@@ -57,4 +57,8 @@ opus 세션에서 반복 실행 skill(당시 `/demiurge:rl`, 2026-09-06에 삭�
 
 ## 5. Provider 호환성
 
-`claude-haiku-4-5`, `claude-sonnet-4-6` 등 full model ID는 Anthropic API 정식 식별자. Bedrock/Vertex/Foundry에서는 alias(`haiku`, `sonnet`)가 다른 버전으로 resolve될 수 있으므로 그 환경에서 재사용 시 ID 재확인 필요.
+`claude-haiku-5-5`, `claude-sonnet-5-5` 등 full model ID는 Anthropic API 정식 식별자. Bedrock/Vertex/Foundry에서는 alias(`haiku`, `sonnet`)가 다른 버전으로 resolve될 수 있으므로 그 환경에서 재사용 시 ID 재확인 필요.
+
+## 6. 다른 스킬을 호출할 때
+
+`Skill(...)`이나 `/plugin:skill`로 다른 스킬을 부르는 문장을 쓰거나 고치면, 받는 스킬의 인자 표와 출력 형식을 열어 넘기는 인자와 기대하는 결과가 실제로 있는지 대조한다. 다른 스킬의 절차를 본뜰 때 그 스킬의 인자 이름이 섞여 들어오지 않았는지도 확인한다. 이유: 받는 쪽이 모르는 인자나 결과를 전제로 쓴 호출은 오류 없이 조용히 틀어진다.
