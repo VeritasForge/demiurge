@@ -1,7 +1,7 @@
 ---
 name: concept-explainer
-description: 기술 개념을 8가지 관점에서 심층 분석하여 시각화와 이모티콘이 포함된 가독성 높은 리포트를 생성합니다.
-allowed-tools: WebSearch, WebFetch, Read, Grep, Glob
+description: "기술 개념·패턴을 체계적으로 이해하거나 둘 이상을 비교하고 싶을 때 사용(예: 'CQRS 설명해줘', 'gRPC vs REST'). 8가지 관점 리포트를 만든다."
+allowed-tools: Skill, WebSearch, WebFetch, Read, Grep, Glob
 ---
 
 # Concept Explainer Skill
@@ -43,8 +43,6 @@ ASCII 다이어그램, 테이블, 이모티콘을 적극 활용하여 **가독�
 
 ## 실행 트리거 조건
 
-이 스킬이 호출되면 **항상** 아래 프로토콜을 실행합니다.
-
 **입력 형식**:
 - `/concept-explainer <개념 또는 질문>`
 - 예: `/concept-explainer Event Sourcing`
@@ -61,45 +59,12 @@ ASCII 다이어그램, 테이블, 이모티콘을 적극 활용하여 **가독�
 
 deep-research 프로토콜을 활용하여 개념에 대한 정보를 수집합니다.
 
-#### Step A-1: 쿼리 분해
-
-다음 절차로 쿼리를 분해합니다:
-
-1. 사용자 입력에서 **핵심 개념**과 **비교 대상**(있을 경우)을 추출
-2. 8가지 관점 각각에 대한 **검색 쿼리 3-5개**를 영어로 도출
-3. 검색 전략 수립
-
-```yaml
-query_plan:
-  concept: "[핵심 개념]"
-  comparison_targets: ["A", "B"]  # 비교 대상이 있는 경우
-  search_queries:
-    definition: "what is {concept} in software engineering"
-    architecture: "{concept} architecture how it works internally"
-    use_cases: "{concept} real world use cases best practices"
-    pros_cons: "{concept} advantages disadvantages tradeoffs"
-    comparison: "{concept_A} vs {concept_B} differences"
-    pitfalls: "{concept} common mistakes anti-patterns"
-```
-
-#### Step A-2: 병렬 WebSearch (4-7회)
-
-도출된 검색 쿼리로 **WebSearch**를 **병렬로** 실행합니다:
-
-- 공식 문서, 기술 블로그, 커뮤니티(Reddit 등) 포함
-- 최소 3개 이상 독립 출처 확보
-- SNS 검색 1회 포함 (Reddit 우선: `site:reddit.com {keyword}`)
-
-#### Step A-3: 심화 조사 (필요 시)
-
-유망한 출처에 대해 **WebFetch**로 상세 내용 확인:
-- 공식 문서의 아키텍처 다이어그램 설명
-- 실무 적용 사례 (case study)
-- 알려진 pitfall 및 anti-pattern
-
-#### Step A-4: 교차 검증
-
-수집된 정보를 교차 검증하여 신뢰도를 판정합니다.
+1. 사용자 입력에서 **핵심 개념**과 **비교 대상**(있을 경우)을 추출한다.
+2. `/demiurge:deep-research`를 **Phase 1~3만** 수행하도록 호출한다(rl-verify·organize 생략).
+   조사 질문에는 8개 섹션(정의, 핵심 개념, 아키텍처, 유즈 케이스, 장단점, 차이점, 주의점, 알아둘 것)을
+   채우는 데 필요한 관점을 담는다.
+3. deep-research 결과의 확신도와 출처를 유지한 채 8개 섹션으로 옮긴다. 근거가 부족한 섹션만
+   WebSearch·WebFetch로 보충한다.
 
 ---
 
@@ -372,8 +337,7 @@ query_plan:
 
 1. 모든 테이블은 **헤더 구분선** 포함 (`| --- |`)
 2. 셀 내용은 **간결하게** (긴 설명은 셀 밖에서)
-3. 비교 테이블은 **3-5개 기준**으로 제한
-4. 빈 셀은 `-` 또는 `N/A` 사용
+3. 빈 셀은 `-` 또는 `N/A` 사용
 
 ---
 
@@ -392,14 +356,4 @@ query_plan:
 
 ### 분량 가이드
 
-| 섹션 | 권장 분량 |
-|------|----------|
-| 1. 무엇인가 | 5-10줄 |
-| 2. 핵심 개념 | 15-25줄 |
-| 3. 아키텍처 | 20-35줄 |
-| 4. 유즈 케이스 | 15-25줄 |
-| 5. 장/단점 | 15-20줄 |
-| 6. 차이점 | 20-30줄 |
-| 7. 주의점 | 15-20줄 |
-| 8. 알아둬야 할 것 | 15-25줄 |
-| **전체** | **~150-200줄** |
+분량은 개념의 깊이에 맞춘다. 1. 무엇인가는 짧게, 3. 아키텍처와 6. 차이점은 가장 길게 쓴다.

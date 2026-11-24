@@ -41,21 +41,9 @@ Follow Conventional Commits format:
 
 Co-Authored-By: Claude <noreply@anthropic.com>
 
-### Types
-- feat: 새로운 에이전트, 규칙, 스킬, 커맨드 추가
-- fix: 기존 정의 오류 수정
-- docs: CLAUDE.md, ARCHITECTURE-INDEX.md 등 문서 변경
-- refactor: 기존 에이전트/규칙/스킬 구조 개선
-- chore: 설정, 빌드, 기타 잡무
-
-### Scopes (this project)
-- agents: .claude/agents/ 변경
-- rules: .claude/rules/ 변경
-- skills: .claude/skills/ 변경
-- orchestration: 오케스트레이션 관련 변경
-- docs: CLAUDE.md, ARCHITECTURE-INDEX.md, ADR 등
-
-If changes span multiple scopes, omit the scope or use the most prominent one.
+### Types and scope
+- type: feat | fix | docs | refactor | chore
+- scope: the module, directory, or skill name where the change is concentrated. Follow the scopes this repo already uses in `git log --oneline -20` first. If changes span multiple areas, omit the scope.
 
 ## Step 3: Stage & Commit
 

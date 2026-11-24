@@ -80,8 +80,8 @@
 
 ## 다중 매칭 처리
 
-여러 그룹이 동시에 매칭되면 (예: `package.json` + `turbo.json` → Package(npm) + Application(Monorepo)) Phase 2에서 AskUserQuestion `multiSelect: true`로 사용자가 적용할 그룹을 선택한다.
+여러 그룹이 동시에 매칭되면 (예: `package.json` + `turbo.json` → Package(npm) + Application(Monorepo)) Phase 2에서 후보 그룹을 글로 나열해 평문으로 묻고, 사용자가 적용할 그룹을 모두 고른다.
 
 ## 매칭 0건 처리
 
-시그널 파일이 없으면 (예: Markdown 문서 저장소) Phase 2에서 AskUserQuestion으로 그룹 직접 선택.
+시그널 파일이 없으면 (예: Markdown 문서 저장소) Phase 2에서 평문으로 물어 그룹을 직접 고르게 한다.

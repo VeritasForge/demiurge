@@ -2,6 +2,8 @@
 
 SKILL.md의 Phase 3(엔진 선택)과 Phase 4(엔진 실행)에서 읽는다.
 
+검증 기준: 내장 `/code-review`(E2)의 동작에 대한 서술은 Claude Code v2.1.331 실행 파일의 내장 프롬프트로 확인했다(2026-11-24).
+
 ---
 
 ## 모든 엔진에 공통으로 강제하는 것
@@ -17,7 +19,7 @@ SKILL.md의 Phase 3(엔진 선택)과 Phase 4(엔진 실행)에서 읽는다.
 
 통합 발견 스키마는 [merge.md](merge.md)의 "통합 발견 스키마" 절에 있다. `findings`는 그 스키마 배열이고, `coverage`는 그 엔진이 실제로 읽은 파일 목록이다.
 
-**`coverage`를 JSON 안에 넣는 이유(실측 근거)**: 이전 버전은 JSON 뒤에 `COVERAGE:` 텍스트 줄을 별도로 요구했는데, "JSON으로만 반환하라"는 지시와 "JSON 뒤에 텍스트를 붙여라"는 지시가 문자 그대로 상충한다 — 엄격 JSON 파서를 쓰는 호출부라면 그 줄 때문에 파싱이 깨지거나, 반대로 그 줄만 따로 회수하려는 파서가 findings 배열은 놓칠 수 있다. 응답을 **하나의 유효 JSON 객체**로 고정하면 이 모호함이 사라진다.
+**`coverage`를 JSON 안에 두는 이유**: 응답 전체가 **하나의 유효 JSON 객체**여야 엄격한 파서가 findings와 coverage를 함께 읽는다. JSON 뒤에 텍스트 줄을 덧붙이면 파싱이 깨진다.
 
 **`coverage`가 계수의 근거다.** `covering_engines`("그 파일을 실제로 본 엔진 수")는 Phase 6 검증 게이트의 세 조건 중 하나인데, 엔진이 무엇을 읽었는지 안 말하면 **추정할 수밖에 없고 그 추정이 게이트 발화를 가른다.** 특히 문서 파일처럼 일부 엔진만 읽는 대상에서 갈린다.
 
@@ -136,7 +138,7 @@ Agent로 부르는 전문 렌즈는 이 제약이 없다. 프롬프트에 절대
 
 이 엔진의 구조화된 발견 목록 출력 경로는 세션 설정에 따라 없을 수 있고, 그러면 같은 내용이 마크다운 산문으로 온다. **실패가 아니다** — 결과를 버리지 말고 [merge.md](merge.md)의 산문 매핑표로 옮긴 뒤, 매핑을 거쳤다는 사실을 커버리지에 적는다.
 
-### 체크아웃 필요 여부 (바이너리 내장 프롬프트로 확인, claude v2.1.235 기준)
+### 체크아웃 필요 여부 (바이너리 내장 프롬프트로 확인)
 
 - **diff 확보에는 체크아웃이 필요 없다.** 내장 프롬프트의 스코프 단계는 "If a PR number, branch name, or file path was passed as an argument, review that target instead" — 체크아웃 지시가 없고, PR 타깃이면 모델이 `gh pr diff`(읽기 전용)로 diff를 받아온다.
 - **단, medium 이상 레벨은 주변 맥락을 로컬 트리에서 읽는다.** 프롬프트가 "Read the enclosing function for each hunk", "find its callers (Grep for the symbol)"를 지시하는데, 이 Read/Grep은 현재 워킹트리를 본다. ce의 `pr-remote` 같은 오래된-트리 가드가 **없다.** 따라서 로컬 HEAD가 PR head가 아니면 주변 맥락 근거가 낡은 코드일 수 있다.

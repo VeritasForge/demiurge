@@ -1,9 +1,9 @@
 ---
 name: job-analysis
-description: 이직 분석 4단계 프로토콜. 기업 심층 조사 → 직무 분석 → 이력서 매칭 → 최종 평가 리포트 생성.
-allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, Write
+description: "특정 회사·포지션에 지원할지 판단하려고 기업·JD·이력서를 함께 분석할 때 사용. 결과 리포트는 career/에 저장한다."
+allowed-tools: WebSearch, WebFetch, Read, Grep, Write
 user-invocable: true
-argument-hint: "<company_name> <job_description_url_or_text>"
+argument-hint: "<company_name> <job_description_url_or_text> [--resume <path>]"
 ---
 
 # 🔍 Job Analysis Skill
@@ -19,7 +19,7 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 │                                                                     │
 │  Phase 0: 📋 입력 수집 + 분석 ID 생성                              │
 │  ┌─────────────────────────────────────────────────────────┐       │
-│  │  $ARGUMENTS 파싱 → 이력서 자동 감지 → career/ 준비     │       │
+│  │  $ARGUMENTS 파싱 → 이력서 경로 확인 → career/ 준비     │       │
 │  └───────────────────────┬─────────────────────────────────┘       │
 │                           │                                         │
 │  Phase 1: 🏢 기업 심층 조사 (Company Deep Research)                │
@@ -59,28 +59,11 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 |------|------|------|
 | **company_info** | ✅ | 기업명 + 웹사이트 또는 간략 설명 |
 | **job_description** | ✅ | JD 텍스트 또는 URL |
-| **resume** | ✅ (자동 감지) | 이력서 파일 경로 또는 직접 입력 |
+| **resume** | ✅ | 이력서 마크다운 파일 경로 (`--resume` 또는 인자) |
 
-### 이력서 자동 감지
+### 이력서 경로 확인
 
-다음 경로를 순서대로 탐색 (Glob 사용):
-
-1. `resume.md`, `RESUME.md`
-2. `career/resume.md`, `career/RESUME.md`
-3. `**/resume.md`, `**/RESUME.md`
-
-감지 실패 시 → 사용자에게 이력서 경로 또는 내용 입력 요청
-
----
-
-## 단계별 판단 원칙
-
-모든 Phase에서 다음 원칙을 **반드시** 적용합니다:
-
-1. **Phase 시작**: 분석 계획 수립 (목표, 수집할 정보, 판단 기준)
-2. **핵심 판단**: 매칭률 산출, 등급 판정, 가중치 결정 시
-3. **Phase 완료**: 결과 검증 + 다음 Phase 전환 판단
-4. **사고 패턴**: 가설 → 근거 수집 → 검증 → 수정 (필요 시)
+이력서: 사용자가 전달한 마크다운 파일 경로(`--resume` 또는 인자)를 쓴다. 전달받지 못했으면 찾아보지 말고 사용자에게 경로를 묻는다.
 
 ---
 
@@ -88,11 +71,11 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 
 ### Phase 0: 📋 입력 수집 및 분석 ID 생성
 
-1. `$ARGUMENTS` 파싱 및 분석 전략 수립
+1. `$ARGUMENTS` 파싱
 2. 분석 ID 생성: `{company-slug}-{role-slug}-{YYYY-MM-DD}`
    - slug 규칙: 영문소문자 + 하이픈, 한글 → 영문 표기
    - role-slug: 직무명을 영문소문자 + 하이픈으로 변환 (예: CTO → cto, Backend Lead → backend-lead)
-3. 이력서 자동 감지 (Glob으로 파일 탐색)
+3. 이력서 경로 확인: 사용자가 전달한 마크다운 파일 경로(`--resume` 또는 인자)를 쓴다. 전달받지 못했으면 찾아보지 말고 사용자에게 경로를 묻는다.
 4. `career/` 디렉토리 존재 확인 (없으면 생성)
 5. JD가 URL인 경우 → WebFetch로 내용 수집
 
@@ -106,8 +89,7 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 
 검색 쿼리 분해 후:
 
-- **WebSearch 3-5회** (기업 기본정보, 뉴스, 업계 평판)
-- **WebSearch 1-2회** (SNS: `site:reddit.com`, `site:twitter.com` 등)
+- 기업 기본정보·뉴스·업계 평판과 SNS(`site:reddit.com`, `site:twitter.com` 등)를, 각 항목이 2개 이상 독립 출처로 확인될 만큼 검색한다
 - 수집 항목:
   - 🏢 사업 내용 (What): 제품/서비스, 타깃 시장
   - ⚙️ 기술/비즈니스 모델 (How): 기술 스택, 수익 모델
@@ -116,7 +98,7 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 
 #### Step 1-2: 심화 탐색 (Deep Dive)
 
-**a) 💰 재무 안전성 평가** (WebSearch 1-2회 + WebFetch)
+**a) 💰 재무 안전성 평가** (WebSearch + WebFetch)
 
 - 투자 이력, 매출 모델, 런웨이
 - 재무 안전성 등급:
@@ -128,7 +110,7 @@ argument-hint: "<company_name> <job_description_url_or_text>"
 | 🟠 C (주의) | 주의 필요 | 초기 투자/매출 불분명 |
 | 🔴 D (위험) | 리스크 높음 | 자금난/구조조정/소송 다수 |
 
-**b) 🚩 레드플래그 조사** (WebSearch 1-2회)
+**b) 🚩 레드플래그 조사**
 
 - 소송, 논란, 높은 퇴사율, 문화 이슈
 - Glassdoor/블라인드 등 직원 리뷰
@@ -170,7 +152,7 @@ JD 체계적 파싱:
 
 - 생소한 기술 → WebSearch로 시장 채택도, 학습 곡선 조사
 
-#### Step 2-4: 채용 프로세스 조사 (WebSearch 1-2회)
+#### Step 2-4: 채용 프로세스 조사
 
 - `"{company} interview process engineer"` 검색
 - `"{company} 면접 후기 채용 과정"` 검색
@@ -195,15 +177,15 @@ JD 체계적 파싱:
 
 #### Step 3-2: 차원별 매칭률 산출
 
-각 차원 점수 산출 + 근거 명시:
+각 차원 점수 산출 + 근거 명시 (저장·출력하는 리포트에는 D1~D6 번호 없이 차원 이름만 쓴다):
 
 ```
-D1 기술 스택     ████████░░  78%  🟡
-D2 도메인 경험   ██████████  95%  🟢
-D3 리더십        ██████░░░░  58%  🟠
-D4 문화 적합     ████████░░  82%  🟢
-D5 성장 가능성   █████████░  88%  🟢
-D6 교육/자격     ███████░░░  70%  🟡
+기술 스택     ████████░░  78%  🟡
+도메인 경험   ██████████  95%  🟢
+리더십        ██████░░░░  58%  🟠
+문화 적합     ████████░░  82%  🟢
+성장 가능성   █████████░  88%  🟢
+교육/자격     ███████░░░  70%  🟡
 ```
 
 범위별 이모지: 🟢 ≥80% / 🟡 60-79% / 🟠 40-59% / 🔴 <40%
@@ -365,7 +347,7 @@ JD + 기업 분석 결과 기반 예측:
 
 ---
 
-## Phase 1: 🏢 기업 프로필
+## 🏢 기업 조사
 
 ### 기업 기본 정보
 {company profile card}
@@ -377,14 +359,14 @@ JD + 기업 분석 결과 기반 예측:
 {red flags or "특이사항 없음"}
 
 ### 🔍 출처 신뢰도
-{confidence tags per finding}
+{발견별 확신도 — 확인됨(독립 출처 2곳 이상) / 가능성 높음 / 불확실 처럼 평이한 말로}
 
 ---
 
-## Phase 2: 💼 직무 분석
+## 💼 직무 분석
 
 ### 핵심 책임
-{responsibilities with weights}
+{responsibilities with weights — R1·R2 번호 대신 짧은 이름으로}
 
 ### 🛠️ 기술 스택
 | 구분 | 기술 |
@@ -397,7 +379,7 @@ JD + 기업 분석 결과 기반 예측:
 
 ---
 
-## Phase 3: 📊 매칭 분석
+## 📊 이력서 매칭
 
 ### 차원별 매칭률
 {bar charts per dimension}
@@ -413,7 +395,7 @@ JD + 기업 분석 결과 기반 예측:
 
 ---
 
-## Phase 4: 🎯 최종 평가
+## 🎯 최종 평가
 
 ### 종합 판정
 {verdict box}
@@ -532,7 +514,6 @@ JD + 기업 분석 결과 기반 예측:
 
 분석 완료 전 반드시 확인:
 
-- [ ] 모든 Phase에서 단계별 분석 완료
 - [ ] Phase 1에서 deep-research 프로토콜 적용 (광역→심화→합성)
 - [ ] 출처 최소 3개 교차 검증
 - [ ] 모든 약점에 보완 전략 포함

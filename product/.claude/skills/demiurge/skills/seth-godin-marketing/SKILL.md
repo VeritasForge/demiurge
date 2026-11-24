@@ -1,8 +1,8 @@
 ---
 name: seth-godin-marketing
-description: Seth Godin 마케팅 철학 기반 전략·카피·콘텐츠 생성. 퍼미션 마케팅, 보랏빛 소, 트라이브 원칙 적용.
+description: "마케팅 전략·카피·이메일 캠페인·콘텐츠 기획·제품 론칭을 만들거나 리뷰할 때 사용. 세스 고딘의 퍼미션 마케팅·보랏빛 소·트라이브 원칙을 적용한다."
 user-invocable: true
-allowed-tools: WebSearch, WebFetch, Read, Write, Glob, Grep
+allowed-tools: Read, Write, Glob, Grep
 argument-hint: "<request_type> <target_audience> [context]"
 ---
 
@@ -31,13 +31,6 @@ argument-hint: "<request_type> <target_audience> [context]"
 /seth-godin-marketing copywriting "취업준비생" "랜딩페이지 hero section"
 /seth-godin-marketing email "신규 가입자" "웰컴 시퀀스 5부작"
 ```
-
-**자동 트리거 조건**:
-- 마케팅 전략 수립 요청 시
-- 카피 작성/리뷰 요청 시
-- 이메일 캠페인 설계 시
-- 콘텐츠 기획 시
-- 제품/서비스 론칭 시
 
 ---
 
@@ -114,7 +107,7 @@ Good output: "6개월째 영어학원만 바꾸고 계신가요? 우리는 '완�
 - **그들의 세계관은 무엇인가?** (이미 믿고 있는 것)
 - **그들의 지위 감각은 어떤가?** (올라가고 싶은가, 지키고 싶은가)
 
-정보가 부족하면 합리적 가정을 세우되, 가정임을 밝힌다.
+정보가 부족한 항목은 사용자에게 묻는다. 답을 받기 전에는 그 항목을 전제로 전략을 확정하지 않는다.
 
 ### Step 2: 최소 유효 시장 (Smallest Viable Market) 정의
 

@@ -1,7 +1,7 @@
 ---
 name: readme-writer
-description: README.md 파일을 생성하거나 업데이트하는 스킬. 프로젝트 유형(Package/Application/AI Asset/Curated/Metadata-bound)을 자동 탐지하고, 한국어 기본으로 README를 작성한다. 기존 README가 있으면 README.v2.md로 비파괴 출력. 생성 후 rl-verify를 자동 호출해 사실 정확성을 검증한다. /readme-writer로 사용자 호출, 또는 신규/기존 OSS 저장소에서 README 작성·갱신 요청 시 사용.
-allowed-tools: Bash, Read, Write, Edit, Glob, Grep, AskUserQuestion, Skill
+description: README.md 파일을 생성하거나 업데이트하는 스킬. 프로젝트 유형(Package/Application/AI Asset/Curated/Metadata-bound)을 자동 탐지하고, 한국어 기본으로 README를 작성한다. 기존 README가 있으면 README.v2.md로 비파괴 출력. 작성한 사실을 레포 파일과 대조해 검증한다. /readme-writer로 사용자 호출, 또는 신규/기존 OSS 저장소에서 README 작성·갱신 요청 시 사용.
+allowed-tools: Bash, Read, Write, Edit, Glob, Grep
 argument-hint: "[--lang ko|en|both] [--standard <name>] [--badges minimal|standard|extensive] [--force]"
 ---
 
@@ -50,80 +50,57 @@ Claude Code 작업 디렉토리의 README.md를 자동 생성하거나 갱신한
 - Platform: GitHub, npm
 - 현재 README.md: 없음 (신규 모드)
 - 언어 옵션: ko (기본)
+- 적용한 기본값: 언어 ko, 뱃지 standard, 표준 ○○ (바꾸려면 말씀해 주세요)
 ```
 
 다중 매칭 또는 0건 매칭 시 Phase 2로 진행.
 
 ## Phase 2: 그룹·표준·플랫폼·언어·뱃지 확정
 
-자동 탐지 결과 중 모호한 항목만 AskUserQuestion으로 사용자 확인. `references/standards-comparison.md`의 그룹별 추천 표를 1순위로 적용.
+기본값을 적용하고, 자동 탐지 결과 중 모호한 항목만 사용자에게 평문으로 확인한다. 적용한 기본값은 Phase 1 탐지 결과 출력에 함께 적어 사용자가 바꿀 수 있게 한다. `references/standards-comparison.md`의 그룹별 추천 표를 1순위로 적용.
 
 ### 2-1. 그룹 확정
 
-다중 매칭 시 (예: Package(CLI) + Package(Library) + Application(Monorepo)):
-```yaml
-AskUserQuestion:
-  question: "여러 그룹이 탐지되었습니다. 적용할 그룹을 모두 선택하세요."
-  multiSelect: true
-  options:
-    - "Package (CLI)"
-    - "Package (Library)"
-    - "Application (Monorepo)"
+다중 매칭 시 (예: Package(CLI) + Package(Library) + Application(Monorepo)) 후보 그룹을 글로 나열하고 평문으로 묻는다. 여러 개를 고를 수 있다.
+```
+여러 그룹이 탐지되었습니다. 적용할 그룹을 모두 알려 주세요.
+- Package (CLI)
+- Package (Library)
+- Application (Monorepo)
 ```
 
-0건 매칭 시:
-```yaml
-AskUserQuestion:
-  question: "시그널 파일이 탐지되지 않았습니다. 프로젝트 유형을 선택하세요."
-  multiSelect: false
-  options: [Package, Application, AI Asset, Curated List, Metadata-bound]
+0건 매칭 시 프로젝트 유형을 평문으로 묻는다.
+```
+시그널 파일이 탐지되지 않았습니다. 프로젝트 유형을 하나 알려 주세요.
+- Package / Application / AI Asset / Curated List / Metadata-bound
 ```
 
 ### 2-2. 표준 확정
 
-`--standard` 옵션 미지정 + 자동 추천 후보가 2개 이상이면 AskUserQuestion:
-```yaml
-AskUserQuestion:
-  question: "사용할 README 표준을 선택하세요."
-  multiSelect: false
-  options:
-    - Standard Readme (recommended for Library)
-    - Make a README
-    - Best-README-Template
-    - HF Model Card (recommended for AI Asset)
-    - Awesome Manifesto (recommended for Curated List)
-  # Ankane은 Ruby Gem 자동 탐지 시에만 옵션에 추가
-```
+`--standard` 옵션 미지정 시 `references/standards-comparison.md`의 그룹별 1순위 표준을 채택한다. 묻지 않는다. 확정한 그룹이 여럿이라 1순위 후보가 같은 순위로 둘 이상 남을 때만 그 후보들을 글로 나열해 평문으로 묻는다.
+
+참고용 표준 목록:
+- Standard Readme (Library 1순위)
+- Make a README
+- Best-README-Template
+- HF Model Card (AI Asset 1순위)
+- Awesome Manifesto (Curated List 1순위)
+- Ankane (Ruby Gem 자동 탐지 시에만 후보)
 
 ### 2-3. 언어 확정
 
-`--lang` 옵션 미지정 시:
-```yaml
-AskUserQuestion:
-  question: "README 언어를 선택하세요."
-  multiSelect: false
-  options:
-    - ko (한국어, 기본)
-    - en (영어)
-    - both (한국어 메인 + README.en.md 보조 + 상단 스위처)
-```
+묻지 않는다. `--lang` 옵션 미지정 시 `ko`를 쓴다.
+
+참고용 값: `ko` (한국어, 기본) / `en` (영어) / `both` (한국어 메인 + README.en.md 보조 + 상단 스위처)
 
 ### 2-4. 뱃지 프리셋 확정
 
-`--badges` 옵션 미지정 시:
-```yaml
-AskUserQuestion:
-  question: "뱃지 프리셋을 선택하세요."
-  multiSelect: false
-  options:
-    - minimal (2개: version, license)
-    - standard (4개: build, version, license, coverage) ← 기본
-    - extensive (6-7개: contributors/forks/stars/issues/license/version + optional LinkedIn)
-```
+묻지 않는다. `--badges` 옵션 미지정 시 `standard`를 쓴다.
 
-### 2-5. AskUserQuestion 4 질문 제약
-
-위 4개(그룹/표준/언어/뱃지)는 1 메시지에 동시 질문 가능 (multiSelect 혼합). 추가 질문 필요 시 별도 메시지로 분할.
+참고용 프리셋 정의:
+- minimal (2개: version, license)
+- standard (4개: build, version, license, coverage) ← 기본
+- extensive (6-7개: contributors/forks/stars/issues/license/version + optional LinkedIn)
 
 ## Phase 3: 초안 생성
 
@@ -138,7 +115,7 @@ Title → Description → Badges → Installation → Usage → Contributing →
 각 섹션 작성 가이드:
 - **Title**: 자동 탐지된 프로젝트명 (package.json의 `name`, Cargo.toml의 `[package].name` 등). 모호하면 사용자에게 질문.
 - **Description**: 한 줄 핵심 가치. 120자 미만 (Standard Readme 표준). 모호한 표현("A tool for...") 금지 (anti-patterns.md #1).
-- **Badges**: Phase 2-4에서 선택한 프리셋에 따라 Shields.io URL 생성.
+- **Badges**: Phase 2-4에서 정한 프리셋(기본 standard)에 따라 Shields.io URL 생성.
 - **Installation**: 자동 탐지된 패키지 매니저로 명령 작성 (npm install / pip install / cargo add 등).
 - **Usage**: 실제 코드 예제 (foo/bar/baz 금지, anti-patterns.md #4).
 - **Contributing**: 짧으면 인라인, 길면 `CONTRIBUTING.md` 링크.
@@ -216,7 +193,7 @@ Standard Readme + Make a README 모두 권장. HF Model Card는 별도 제약 �
 ### 4-4. YAML frontmatter 필드 검증 (AI Asset 그룹만)
 
 `platform-metadata.md`의 HF 섹션 필수 필드 체크:
-- `library_name` (2024.8 이후 명시 필수)
+- `library_name` (필수)
 - `pipeline_tag`
 - `license` 또는 (`license_name` + `license_link`)
 - `tags` 1개 이상
@@ -237,35 +214,27 @@ library_name: transformers  # TODO: 실제 라이브러리로 교체
 - YAML frontmatter: N/A (Package 그룹)
 ```
 
-## Phase 5: 사실 검증 (rl-verify 호출)
+## Phase 5: 사실 검증 (레포 대조)
 
-Phase 4 검증을 통과한 초안의 사실 정확성을 검증한다.
+> 문장 톤 정리는 별도 스킬로 넘기지 않는다. 한국어 명료성은 Phase 4 안티패턴 #9~#11에서 초안 단계에 함께 걸러진다.
 
-> 문장 톤 정리는 별도 스킬로 넘기지 않는다. 한국어 명료성은 Phase 4 안티패턴 #9~#11에서 초안 단계에 함께 걸러진다. 이전 판은 `humanize-writing-portable` 스킬을 호출했으나 그 스킬이 삭제되어 호출이 조용히 실패하고 있었다.
+Phase 4를 통과한 초안에서 사실 주장을 뽑아 레포 파일과 직접 대조한다. README의 사실은 대부분 레포 안에 근거가 있다.
 
-```
-Skill("rl-verify", "다음 README의 사실 정확성을 Tier 1로 검증하라: <draft>")
-→ 출력: PASS / PARTIAL / FAIL 리포트
-```
+| 주장 유형 | 대조할 곳 (예) |
+|---|---|
+| 설치·실행 명령 | package.json scripts, Makefile·justfile, pyproject.toml, Cargo.toml |
+| 버전·런타임 요구사항 | manifest의 version, engines, requires-python |
+| 라이선스 | LICENSE 파일, manifest의 license 필드 |
+| 파일·디렉터리 경로, 설정 키 | 실제 존재 여부(Glob), 설정 파일 |
+| 기능·API 이름 | 소스의 export, CLI 정의 |
 
-Tier 1 (경량) — 단일 문서, 영향 범위 제한.
+레포에서 근거를 찾을 수 없는 주장(외부 서비스 동작, 성능 수치 등)은 지어내지 않는다. 문장을 빼거나 "확인 필요"로 표시한다.
 
 결과 분기:
-- **PASS** → Phase 6 진행
-- **PARTIAL** 또는 **FAIL** → Phase 3 재진입 (1회만):
-  - rl-verify의 FAIL/PARTIAL 항목을 수정 지시로 변환
-  - Phase 3 Layer 1-3 재작성 (수정 지시 반영)
-  - Phase 4 인라인 검증 재실행
-  - Phase 5 재진입 안 함 (무한 루프 방지)
-  - 재시도 후에도 FAIL 항목 있으면 → README 상단 HTML 주석으로 표시:
-    ```html
-    <!-- readme-writer: rl-verify FAIL 항목 N개 — 수동 확인 필요 -->
-    ```
-
-rl-verify 호출 자체가 실패하면:
-- 콘솔 경고: "rl-verify 호출 실패. 검증을 건너뜁니다."
-- 사용자 안내: "수동으로 `/rl-verify README.md` 실행을 권장합니다."
-- 검증 스킵하고 Phase 6 진행.
+- 레포와 어긋난 주장이 0건 → Phase 6 진행
+- 1건 이상 → 어긋난 항목을 수정 지시로 바꿔 Phase 3에 1회 재진입한다(Phase 3 재작성 → Phase 4 재검증. Phase 5는 다시 돌지 않는다: 무한 루프 방지)
+  - 재시도 후에도 남으면 README 상단에 HTML 주석으로 표시:
+    `<!-- readme-writer: 레포와 대조되지 않은 항목 N개 — 수동 확인 필요 -->`
 
 ## Phase 6: 출력 + 외부 도구 안내
 
@@ -341,7 +310,7 @@ brew install norwoodj/tap/helm-docs
 - 표준: Standard Readme
 - 그룹: Package (Library)
 - 언어: ko
-- 검증: 인라인 PASS, rl-verify PASS
+- 검증: 인라인 PASS, 레포 대조 통과
 - 다음 단계: 위 외부 도구 명령을 실행하세요.
 ```
 

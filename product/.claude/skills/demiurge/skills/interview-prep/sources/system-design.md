@@ -24,15 +24,6 @@
 | Codemia | codemia.io/ | `site:codemia.io {topic}` | AI 피드백, 능동 연습 | Free~Premium |
 | Educative.io | educative.io/ | `site:educative.io system design {topic}` | 인터랙티브 스케치패드 | $59/mo |
 
-## Tier 3: 무료 학습 자료
-
-| 소스 | URL 패턴 | 정보 유형 |
-|------|----------|-----------|
-| System Design Primer (GitHub) | github.com/donnemartin/system-design-primer (233K+ stars) | 바이블, Anki 카드, 개념 정리 |
-| awesome-system-design-resources | github.com/ashishps1/awesome-system-design-resources | 큐레이션 링크 모음 |
-| Tech Interview Handbook | techinterviewhandbook.org/system-design/ | 접근 프레임워크 + 전략 |
-| High Scalability Blog | highscalability.com | 실제 아키텍처 케이스 스터디 아카이브 |
-
 ## 커뮤니티 / SNS
 
 | 소스 | URL 패턴 | 검색 쿼리 템플릿 | 특화 |
@@ -40,16 +31,6 @@
 | Reddit r/SystemDesign | reddit.com/r/SystemDesign | `site:reddit.com/r/SystemDesign "{company}" interview` | 설계 토론, 모의 연습 |
 | Reddit r/ExperiencedDevs | reddit.com/r/ExperiencedDevs | `site:reddit.com/r/ExperiencedDevs "system design" interview` | Senior+ 경험 |
 | Glassdoor | glassdoor.com/Interview/ | `{company} system design site:glassdoor.com` | 면접 프로세스, 난이도 |
-
-## YouTube
-
-| 소스 | URL | 특화 | Staff+ 적합도 |
-|------|-----|------|--------------|
-| ByteByteGo | youtube.com/@ByteByteGo | 프로 애니메이션, 개념 빠른 파악 | ★★★☆☆ |
-| Gaurav Sen | youtube.com/@gaborsen | 분산 시스템 기초, 직관 형성 | ★★☆☆☆ |
-| Hussein Nasser | youtube.com/@haborosam | DB/네트워크 딥다이브 | ★★★★☆ |
-| Exponent | youtube.com/@tryexponent | 모의 시스템 디자인 면접 시연 | ★★★☆☆ |
-| System Design Interview (SDI) | youtube.com/@SystemDesignInterview | 단계별 설계 워크쓰루 | ★★★☆☆ |
 
 ## 뉴스레터
 
@@ -66,7 +47,7 @@
 | 한국 기술블로그 (Naver D2, Kakao Tech 등) | d2.naver.com/, tech.kakao.com/, engineering.linecorp.com/ko/ | `site:tech.kakao.com 아키텍처 설계` | 실제 프로덕션 아키텍처 사례 | VERY HIGH |
 | 기술블로그 어그리게이터 | techblogposts.com/ko | 주제별 탐색 | 한국 기업 기술블로그 모음 | HIGH |
 | 인프런 | inflearn.com/ | `시스템 디자인` | 유료 강의 (실리콘밸리 아저씨들, 미국달팽이) | HIGH |
-| F-Lab | f-lab.ai/ | `시스템 디자인 면접` | 1:1 멘토링, 인사이트 아티클 | HIGH |
+| F-Lab | f-lab.kr/ | `시스템 디자인 면접` | 1:1 멘토링, 인사이트 아티클 | HIGH |
 | GitHub 한국 스터디 | github.com/Meet-Coder-Study/book-system-design-interview | 직접 탐색 | Alex Xu 책 챕터별 스터디 노트 | HIGH |
 | 벨로그 | velog.io/ | `시스템 설계 면접`, `시스템 디자인 인터뷰` | 북 스터디 노트, 면접 후기 | HIGH |
 | WorkingUS | workingus.com/ | `system design interview` | 한국인 미국 빅테크 면접 경험 | MEDIUM-HIGH |

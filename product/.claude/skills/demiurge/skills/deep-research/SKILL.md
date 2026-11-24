@@ -1,7 +1,7 @@
 ---
 name: deep-research
-description: 3단계 심층 조사 프로토콜. 광역 탐색 → 심화 탐색 → 지식 합성을 통해 근거 기반 아키텍처 의사결정을 지원.
-allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, mcp__playwright__*
+description: "여러 출처를 교차 검증해야 하는 기술 조사·비교·최신 동향 확인, 또는 학습 데이터 주장에 외부 근거가 필요할 때 사용. 출처·확신도를 붙인 리포트를 만든다."
+allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, Skill, Agent, mcp__playwright__*, mcp__plugin_context7_context7__*
 ---
 
 # Deep Research Skill
@@ -58,9 +58,9 @@ allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, mcp__playwright__*
 
 다음의 경우 Deep Research를 **건너뛰고** 기존 지식으로 응답합니다:
 
-- 이미 잘 알려진 패턴에 대한 단순 설명 요청
+- 버전·동작·최신 상태와 무관한 개념 정의만 묻는 요청(예: "멱등성이 뭐야") → 기존 지식으로 응답
+  (설명에 버전별 동작·API·기본값 같은 주장이 들어가면 Quick Research로 확인한다)
 - 코드 리뷰/버그 수정 등 조사가 불필요한 작업
-- 사용자가 명시적으로 빠른 응답을 요청한 경우
 
 ---
 
@@ -70,7 +70,7 @@ allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, mcp__playwright__*
 
 | 도메인 | 보조 도구 | 용도 | 조합 방법 |
 |--------|----------|------|----------|
-| **프레임워크/라이브러리** | `context7` MCP | 공식 문서의 최신 API, 설정, 버전별 차이 확인 | Phase 2에서 context7으로 공식 문서 확인 → deep-research 출처와 교차 검증 |
+| **프레임워크/라이브러리** | `context7` MCP | 공식 문서의 최신 API, 설정, 버전별 차이 확인 | Phase 2에서 context7 MCP가 있으면 resolve-library-id → query-docs로 공식 문서를 확인하고, 없으면 사용자에게 알린 뒤 WebFetch로 공식 문서를 직접 확인한다 → deep-research 출처와 교차 검증 |
 | **Claude Code 기능/설정** | `claude-code-guide` 에이전트 | Claude Code 내부 동작, 스킬, MCP, 설정 확인 | Phase 1 전에 claude-code-guide로 내부 지식 확인 → deep-research는 외부 사례/패턴 보완 |
 | **기술 개념/아키텍처** | (보조 도구 없음) | 학습 데이터 + 외부 근거 | deep-research 단독, 단 학습 데이터의 주장을 반드시 외부 근거로 검증 |
 
@@ -80,7 +80,8 @@ allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, mcp__playwright__*
 도메인 판별
     │
     ├── 프레임워크/라이브러리 관련?
-    │    └── Phase 2에서 context7 resolve-library-id → query-docs 호출
+    │    └── Phase 2에서 context7 MCP가 있으면 resolve-library-id → query-docs로 공식 문서 확인
+    │         (없으면 사용자에게 알린 뒤 WebFetch로 공식 문서를 직접 확인)
     │         → 공식 문서와 deep-research 결과 교차 검증
     │
     ├── Claude Code 관련?
@@ -103,15 +104,10 @@ deep-research (Phase 1~3)
     │
     ▼
 /rl-verify (기술적 정확성 검증)
+    │  • 시작 전에 검증 플랜을 보여 주고 사용자 동의를 받는다
     │  • deep-research 결과의 기술적 사실 여부 검증
     │  • 학습 데이터와 외부 근거 간 모순 식별
-    │  • 검증 실패 항목은 수정 또는 [Uncertain] 태깅
-    │
-    ▼
-/organize (구조화된 최종 문서 출력)
-    │  • 검증된 내용을 구조화된 포맷으로 정리
-    │  • 시각화 (표, 다이어그램, 시퀀스) 포함
-    │  • 출처 및 확신도 태그 보존
+    │  • 수렴 후 Phase 6에서 /organize를 자동 호출해 최종 문서를 출력한다
     │
     ▼
 최종 문서 출력
@@ -119,7 +115,7 @@ deep-research (Phase 1~3)
 
 **파이프라인 실행 조건**:
 - 사용자가 명시적으로 `/deep-research`를 호출한 경우 → 파이프라인 전체 실행
-- 대화 중 기술 논의에서 근거 보강이 필요한 경우 → deep-research 에이전트만 백그라운드 실행, 결과를 대화에 통합 (rl-verify + organize는 생략 가능)
+- 대화 중 기술 논의에서 근거 보강이 필요한 경우 → Phase 1~3만 수행하고 결과를 대화에 통합 (rl-verify·organize 생략)
 
 ---
 
@@ -131,26 +127,7 @@ deep-research (Phase 1~3)
 
 #### Step 1-1: 쿼리 분해 (Query Decomposition)
 
-다음 절차로 쿼리를 분해합니다:
-
-1. 사용자의 요구사항에서 **핵심 질문 3-5개**를 도출
-2. 각 질문에 대한 **검색 쿼리**를 영어와 한국어로 각각 작성
-3. 검색 전략 수립 (어떤 출처에서 어떤 정보를 얻을지)
-
-```yaml
-query_decomposition:
-  original_question: "[사용자의 원본 질문]"
-  sub_questions:
-    - q1: "핵심 질문 1"
-      search_queries:
-        - en: "English search query"
-        - ko: "한국어 검색 쿼리"
-    - q2: "핵심 질문 2"
-      search_queries:
-        - en: "English search query"
-        - ko: "한국어 검색 쿼리"
-    # ... (3-5개)
-```
+사용자의 요구사항을 핵심 질문으로 나누고, 각 질문의 **검색 쿼리**를 영어와 한국어로 각각 작성한다.
 
 #### Step 1-2: Authority Discovery
 
@@ -187,16 +164,7 @@ Phase 1의 WebSearch 광역 탐색 후, 주제의 권위 있는 출처를 사전
 
 도출된 검색 쿼리로 **WebSearch**를 **병렬로** 실행합니다:
 
-> **병렬 호출 안전 전략**: Claude Code의 sibling tool call cascade 버그로 인해
-> 병렬 호출 중 하나가 실패하면 나머지도 연쇄 취소됩니다.
-> 이를 방지하기 위해 **WebSearch는 최대 3개씩 배치**로 나누어 실행합니다.
-> 배치 내 실패 발생 시, 실패한 쿼리만 다음 배치에서 순차 재시도합니다.
->
-> ```
-> 배치 1: WebSearch x3 (병렬) → 결과 수집
-> 배치 2: WebSearch x3 (병렬) → 결과 수집
-> 실패 건: WebSearch x1 (순차) → 개별 재시도
-> ```
+> **병렬 호출 규칙**: 병렬로 호출하되, 한 호출의 실패로 다른 호출이 함께 취소되는 것(`Sibling tool call errored`)이 보이면 취소된 호출만 2~3개씩 나눠 다시 호출한다.
 
 ##### 일반 검색 (3-5회)
 
@@ -252,34 +220,7 @@ Instagram/Facebook은 시각적 자료나 커뮤니티 의견이 필요한 경�
 
 #### Step 1-5: Phase 1 결과 정리
 
-```yaml
-phase1_findings:
-  key_themes:
-    - "[주요 테마 1]"
-    - "[주요 테마 2]"
-  authority_anchors:   # Step 1-2에서 식별
-    - type: paper | standard | official_doc
-      title: "[제목]"
-      authors: ["[저자]"]
-      citation_count: N
-      url: "[URL]"
-      relevance: "[권위 근거]"
-  sources_collected: N
-  source_diversity:
-    official_docs: N
-    primary_sources: N
-    tech_blogs: N
-    community: N
-    sns: N
-  keywords_for_phase2:
-    - "[심화 검색용 키워드 1]"
-    - "[심화 검색용 키워드 2]"
-  initial_findings:
-    - finding: "[발견 1]"
-      source: "[출처]"
-    - finding: "[발견 2]"
-      source: "[출처]"
-```
+주요 테마, Step 1-2에서 찾은 권위 출처, 첫 발견과 그 출처, Phase 2에서 쓸 심화 키워드를 정리해 Phase 2로 넘긴다.
 
 ---
 
@@ -301,15 +242,6 @@ Phase 1 완료 후, 다음 절차로 지식 갭을 분석합니다:
 3. 각 쿼리에 **기대하는 근거(expected evidence)** 명시
    - "이 검색으로 X 주장의 직접 근거를 찾겠다"
 
-```yaml
-phase2_query_refinement:
-  knowledge_gaps:
-    - gap: "[아직 확인되지 않은 것]"
-      initial_query_limitation: "[Phase 1 쿼리가 놓친 이유]"
-      refined_query: "[개선된 검색 쿼리]"
-      expected_evidence: "[이 검색으로 확인하려는 것]"
-```
-
 #### Step 2-1: 정제된 검색 + 원문 확인
 
 Step 2-0의 정제된 쿼리를 사용하여:
@@ -329,7 +261,7 @@ source_verification:
 ```
 
 > **WebFetch 호출 안전 전략**: WebFetch는 봇 탐지에 취약하므로 다음 규칙을 따릅니다:
-> - WebFetch 병렬 호출은 **최대 2개씩** 배치로 제한 (cascade 실패 영향 최소화)
+> - 병렬 호출과 연쇄 취소 대응은 Step 1-3의 병렬 호출 규칙을 따른다
 > - 1개라도 403/timeout 발생 시 남은 URL은 **순차 실행**으로 전환
 > - 403 실패 URL은 **Error Resilience Protocol**의 Fallback Tool Chain 적용
 > - MCP Browser 도구는 단일 인스턴스이므로 **항상 순차 실행**
@@ -346,19 +278,6 @@ Phase 1에서 수집된 SNS 출처 중 유용한 토론/스레드가 있는 경�
 | 공식 문서/기술 블로그와 교차 검증 완료 | `[Likely]`로 승격 | 신뢰도 상향 |
 | Reddit 높은 upvote + 다수 동의 댓글 | 커뮤니티 검증으로 간주 | `[Likely]` 부여 가능 |
 | 전문가 계정(verified/known)의 X 스레드 | `[Likely]` 부여 가능 | 저자 권위성 고려 |
-
-```yaml
-sns_deep_dive:
-  useful_threads:
-    - platform: "reddit"
-      url: "[URL]"
-      relevance: "[관련성 설명]"
-      community_signal: "upvotes: N, comments: N"
-    - platform: "twitter"
-      url: "[URL]"
-      relevance: "[관련성 설명]"
-      author_credibility: "[저자 신뢰도]"
-```
 
 #### Step 2-2: 교차 검증 (Cross-Validation)
 
@@ -483,10 +402,21 @@ edge_cases:
 
 #### Step 3-3: 최종 출력 형식
 
+**확신도 표기 규칙:** 위 확신도 태그는 조사 과정에서만 쓰고, 최종 리포트에는 평이한 말로 바꿔 적는다.
+
+| 과정에서 쓰는 태그 | 최종 리포트 표기 |
+|------|------|
+| `[Confirmed]` | 확인됨(독립 출처 2곳 이상 원문 확인) |
+| `[Likely]` | 가능성 높음 |
+| `[Synthesized]` | 여러 출처를 종합한 결론 |
+| `[Uncertain]` | 불확실 |
+| `[Unverified]` | 검증 안 됨 |
+| `[QuickResearch]` | 빠른 조사 결과(교차 검증 안 함) |
+
 **시각화 규칙:**
 - 섹션 제목에 이모티콘을 포함하라 (📋 Summary, 🔍 Findings, 📊 Comparisons, ⚠️ Caveats, 📎 Sources)
 - 비교 항목은 반드시 테이블로 정리하라
-- 핵심 발견에 확신도별 이모티콘을 사용하라 (✅ Confirmed, 🟡 Likely, 🔄 Synthesized, ❓ Uncertain, ⚪ Unverified)
+- 핵심 발견에 확신도별 이모티콘을 사용하라 (✅ 확인됨, 🟡 가능성 높음, 🔄 여러 출처를 종합한 결론, ❓ 불확실, ⚪ 검증 안 됨)
 - 구조나 흐름을 설명할 때 ASCII 다이어그램을 적극 활용하라
 - 장점/단점이 있으면 ✅/❌ 이모티콘을 사용하라
 
@@ -500,7 +430,7 @@ edge_cases:
 
 #### 1. [주요 발견 1]
 [상세 설명]
-- ✅ **확신도**: [Confirmed] / 🟡 [Likely] / 🔄 [Synthesized] / ❓ [Uncertain] / ⚪ [Unverified]
+- **확신도**: ✅ 확인됨(독립 출처 2곳 이상 원문 확인) / 🟡 가능성 높음 / 🔄 여러 출처를 종합한 결론 / ❓ 불확실 / ⚪ 검증 안 됨
 - **출처**: [URL 또는 문서명]
 - **근거**: [왜 이 결론에 도달했는지]
 
@@ -513,7 +443,7 @@ edge_cases:
 |------|----------|----------|----------|
 | ... | ... | ... | ... |
 
-💡 **권장**: [권장 옵션] — ✅ [Confirmed] 근거: ...
+💡 **권장**: [권장 옵션] — ✅ 확인됨 근거: ...
 
 ### ⚠️ Edge Cases & Caveats
 - [특수 상황 1]: [영향]
@@ -531,7 +461,7 @@ edge_cases:
 - 검색 쿼리 수: N (일반 N + SNS N)
 - 수집 출처 수: N
 - 출처 유형 분포: 공식 N, 1차 N, 블로그 N, 커뮤니티 N, SNS N
-- 확신도 분포: ✅ Confirmed N, 🟡 Likely N, 🔄 Synthesized N, ❓ Uncertain N, ⚪ Unverified N
+- 확신도 분포: ✅ 확인됨 N, 🟡 가능성 높음 N, 🔄 여러 출처를 종합한 결론 N, ❓ 불확실 N, ⚪ 검증 안 됨 N
 - SNS 출처: Reddit N건, X N건, Instagram N건, Facebook N건
 - SNS 접근 방법: "WebSearch site: operator" | "MCP API"
 ```
@@ -550,13 +480,13 @@ edge_cases:
 ### 실행 방법
 - Phase 1만 수행 (WebSearch 1-2회)
 - 교차 검증 생략
-- 간단한 결과 형식:
+- 간단한 결과 형식 (확신도는 Step 3-3의 확신도 표기 규칙대로 평이한 말로 적는다):
 
 ```markdown
 ## Quick Research: [주제]
 
 ### 결과
-[QuickResearch] [핵심 내용 — 확신도 태그 포함]
+빠른 조사 결과(교차 검증 안 함): [핵심 내용 — 확신도를 평이한 말로 표기]
 
 ### 출처
 - [출처 1](URL)
@@ -564,30 +494,16 @@ edge_cases:
 
 ### 주의
 Quick Research 결과입니다. 중요한 의사결정에는 Full Research를 권장합니다.
-**이 결과를 Full Research의 [Confirmed] 근거로 사용하지 마세요.**
+**이 결과를 Full Research에서 '확인됨' 판정의 근거로 사용하지 마세요.**
 ```
-
----
-
-## 오케스트레이션 연계
-
-### 개별 Agent 직접 호출
-
-개별 아키텍트 에이전트가 직접 사용하는 경우:
-
-```
-User → Agent → Phase 1 → Phase 2 → Phase 3 → 응답에 통합
-```
-
-- 에이전트가 자신의 도메인 관점에서 3단계 모두 수행
-- 결과를 리뷰/권고사항에 근거로 포함
 
 ---
 
 ## Error Resilience Protocol
 
-WebFetch는 단순 HTTP 클라이언트로 봇 탐지(Cloudflare, Medium, npm 등)에 취약하며,
-Claude Code의 병렬 tool call 중 하나가 실패하면 나머지도 연쇄 취소되는 알려진 버그가 있습니다.
+> 검증 기준: Claude Code v2.1.331(2026-11-24)에서 Read·Bash 실패로는 연쇄 취소가 재현되지 않았다. WebFetch는 확인하지 못했다.
+
+WebFetch는 단순 HTTP 클라이언트로 봇 탐지(Cloudflare, Medium, npm 등)에 취약합니다.
 이 프로토콜은 조사 중단을 방지하고 대안 경로를 자동으로 탐색합니다.
 
 ### 알려진 실패 유형
@@ -595,7 +511,7 @@ Claude Code의 병렬 tool call 중 하나가 실패하면 나머지도 연쇄 �
 | 에러 | 원인 | 빈도 |
 |------|------|------|
 | `HTTP 403 Forbidden` | 봇 탐지 (Cloudflare, User-Agent 차단, TLS fingerprinting) | 높음 |
-| `Sibling tool call errored` | 병렬 tool call 중 하나 실패 시 나머지 연쇄 취소 (Claude Code 버그) | 높음 |
+| `Sibling tool call errored` | 병렬 tool call 중 하나 실패 시 나머지가 함께 취소됨 → 관찰되면 취소된 호출만 나눠 재호출 | 미확인 (Read·Bash 실패로는 재현 안 됨) |
 | `Request timeout` | 응답 지연 또는 무한 대기 | 중간 |
 | `Unable to verify domain` | WebFetch 내부 도메인 검증 실패 | 낮음 |
 
@@ -611,7 +527,7 @@ WebFetch 시도
   └─ 실패 (403 / timeout / sibling error)
        │
        ├─ Playwright MCP 사용 가능? (무료)
-       │    ├─ Yes → browser_navigate + browser_get_text 로 재시도
+       │    ├─ Yes → browser_navigate + browser_snapshot 로 재시도
        │    └─ No → 아래 WebSearch 대체 경로
        │
        ├─ WebSearch 대체 검색
@@ -628,7 +544,7 @@ Playwright MCP가 설치된 경우 다음과 같이 사용합니다:
 
 ```
 1. browser_navigate → URL 접속
-2. browser_get_text → 페이지 텍스트 추출 (accessibility tree 기반)
+2. browser_snapshot → 페이지 텍스트 추출 (accessibility tree 기반)
 ```
 
 - 실제 브라우저를 사용하므로 JavaScript 렌더링 및 기본적인 봇 탐지 우회 가능
@@ -743,79 +659,11 @@ SNS 조사 요청
 | **검증 필수** | SNS 정보는 반드시 공식 문서/기술 블로그와 교차 검증 후 사용 |
 | **샘플 편향** | 특정 기술에 대한 부정적/긍정적 경험이 과대 대표될 수 있음 |
 
-### MCP 서버 설정 (향후 참조용)
-
-SNS API에 직접 접근하려면 MCP 서버를 설정합니다. 현재는 WebSearch `site:` 연산자로 충분하며,
-API 접근이 필요해지면 아래 구성을 참고하세요:
-
-```jsonc
-// .mcp.json 예시 (향후 설정 시)
-{
-  "mcpServers": {
-    "reddit": {
-      "command": "npx",
-      "args": ["-y", "@anthropic/mcp-reddit"],
-      "env": {
-        "REDDIT_CLIENT_ID": "<your-client-id>",
-        "REDDIT_CLIENT_SECRET": "<your-client-secret>"
-      }
-    }
-    // Twitter/X API는 별도 MCP 서버 패키지 확인 필요
-  }
-}
-```
-
-> **참고**: MCP 서버 패키지명은 예시이며, 실제 사용 시 최신 패키지를 확인하세요.
+MCP 서버(Playwright, SNS API) 설치·설정 방법은 [references/mcp-setup.md](references/mcp-setup.md)에 있다.
 
 ---
 
-## MCP 서버 설정 가이드 (Web Fetch 강화)
-
-WebFetch의 봇 탐지 취약성을 보완하기 위해 MCP Browser 도구를 설정합니다.
-Error Resilience Protocol의 Fallback Tool Chain에서 사용됩니다.
-
-### Tier 1: Playwright MCP (무료, 기본 권장)
-
-Microsoft 공식 Playwright MCP 서버. 실제 Chromium 브라우저를 headless로 실행하여
-JavaScript 렌더링 및 기본적인 봇 탐지를 우회합니다.
-
-**설치 (CLI)**:
-```bash
-claude mcp add playwright npx @playwright/mcp@latest -- --headless
-```
-
-**설정 (.mcp.json)**:
-```json
-{
-  "mcpServers": {
-    "playwright": {
-      "command": "npx",
-      "args": ["@playwright/mcp@latest", "--headless"]
-    }
-  }
-}
-```
-
-**주요 옵션**:
-- `--headless`: 브라우저 창 없이 실행 (기본 권장)
-- `--browser firefox`: Firefox 사용 (기본: Chrome)
-- `--viewport-size 1280x720`: 뷰포트 크기 지정
-
-**주요 도구**: `browser_navigate`, `browser_get_text`, `browser_click`, `browser_screenshot`
-
-**한계**: Cloudflare Turnstile/CAPTCHA는 일관되게 통과하지 못할 수 있음
-
-### 설정 확인
-
-```bash
-# 설치된 MCP 서버 목록 확인
-claude mcp list
-
-# 정상 연결 시 출력 예시
-# playwright: npx @playwright/mcp@latest --headless - ✓ Connected
-```
-
-### Tool Selection Matrix (상황별 도구 선택)
+## Tool Selection Matrix (상황별 도구 선택)
 
 | 상황 | 1차 시도 | 2차 Fallback | 3차 Fallback |
 |------|---------|-------------|-------------|
@@ -832,9 +680,3 @@ claude mcp list
 > **Playwright headless 한계**: Cloudflare Turnstile, Google Scholar 봇 감지(IP 기반),
 > Medium Cloudflare 등 고급 보안은 headless 브라우저로도 우회 불가.
 > 학술 권위 판단에는 Semantic Scholar API가 유일하게 안정적인 경로.
-
----
-
-## 관련 리소스
-
-- 아키텍처 패턴 스킬 카드 (`.claude/skills/demiurge/skills/*/SKILL.md`)

@@ -1,7 +1,7 @@
 ---
 name: review-ensemble
 description: Use when reviewing a GitHub PR (posts inline comments) or self-reviewing local/uncommitted work before opening one. Runs multiple review engines in parallel and merges results. /review-ensemble 으로 실행.
-argument-hint: [PR번호 또는 URL — 생략하면 현재 브랜치를 로컬 검증] [quick|standard|deep] [-f] [--no-worktree]
+argument-hint: "[PR번호 또는 URL — 생략하면 현재 브랜치를 로컬 검증] [quick|standard|deep] [-f] [--no-worktree] [base:<ref>]"
 ---
 
 # Review PR
@@ -41,7 +41,7 @@ PR 모드:
 
 (2)(3)(4)는 **엔진을 부르는 구간**이고, (5)는 **GitHub에 쓰는 구간**이다. 엔진이 자기 결과를 따로 게시하면 병합 전 원본이 중복으로 달리므로, 모든 엔진은 report-only로 부른다. 로컬 모드는 (5) 자체가 없다.
 
-참조 문서 두 개를 각 단계에서 읽는다:
+참조 문서는 해당 단계에서 읽는다:
 - **[engines.md](engines.md)** — Phase 3·4에서. 엔진별 호출 방법과 금지사항
 - **[merge.md](merge.md)** — Phase 5에서. 등급 정규화표·중복제거·교차확인 규칙
 - **[comment-format.md](comment-format.md)** — Phase 9에서. GitHub API 페이로드
@@ -54,7 +54,7 @@ PR 모드:
 
 ## Phase 0: 인자 파싱
 
-`$ARGUMENTS`에서 다음을 분리한다. 토큰은 인식 즉시 제거하고, 남은 것을 PR 식별자로 본다.
+`$ARGUMENTS`에서 다음을 분리한다. 토큰은 인식 즉시 제거하고, 남은 것을 PR 식별자로 본다. `base:<ref>`도 같은 방식으로 제거하고 `<ref>` 값을 `BASE_REF`에 담는다.
 
 | 토큰 | 효과 |
 |------|------|
@@ -63,6 +63,7 @@ PR 모드:
 | `deep` | standard + 전문 렌즈 에이전트 + 조건부 레포 로컬 렌즈 |
 | `-f`, `--force` | Phase 8 사용자 확인을 건너뛰고 전체 게시. **로컬 모드에선 의미 없음** — Phase 8·9가 애초에 안 돎 |
 | `--no-worktree` | 워크트리를 만들지 않음. 코드를 읽는 엔진은 자동 제외. **로컬 모드에선 의미 없음** — 로컬 모드는 원래 워크트리를 안 만듦 |
+| `base:<ref>` | 로컬 모드에서 비교 기준을 이 ref로 고정한다(Phase 1의 기본 브랜치 탐지·fetch를 건너뜀) |
 
 PR 식별자:
 - 순수 숫자(`6286`) → PR 번호 → **PR 모드**
@@ -97,12 +98,17 @@ Draft PR은 정상적으로 리뷰한다.
 `gh pr view`가 없으므로 git으로 직접 구한다. ce-code-review 자신의 "인자 없음(standalone, 현재 브랜치)" 경로와 같은 로직이다.
 
 ```bash
-BASE_BRANCH=$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)
-if git fetch --no-tags origin "$BASE_BRANCH" >/dev/null 2>&1; then
-  MERGE_BASE=$(git merge-base FETCH_HEAD HEAD)
+if [ -n "$BASE_REF" ]; then
+  MERGE_BASE=$(git merge-base "$BASE_REF" HEAD)
+  BASE_BRANCH="$BASE_REF"
 else
-  MERGE_BASE=""   # fetch 실패 — 아래 중단 조건("베이스 브랜치를 찾을 수 없습니다")으로 이어진다.
-                   # FETCH_HEAD를 그대로 쓰면 이전 fetch(다른 실행의 잔여물)의 값을 잘못 재사용한다 — 실측 지적
+  BASE_BRANCH=$(gh repo view --json defaultBranchRef -q .defaultBranchRef.name)
+  if git fetch --no-tags origin "$BASE_BRANCH" >/dev/null 2>&1; then
+    MERGE_BASE=$(git merge-base FETCH_HEAD HEAD)
+  else
+    MERGE_BASE=""   # fetch 실패 — 아래 중단 조건("베이스 브랜치를 찾을 수 없습니다")으로 이어진다.
+                     # FETCH_HEAD를 그대로 쓰면 이전 fetch(다른 실행의 잔여물)의 값을 잘못 재사용한다 — 실측 지적
+  fi
 fi
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD)
 git diff --name-only "$MERGE_BASE"          # 커밋된 변경 파일 목록
@@ -112,9 +118,7 @@ git status --porcelain                       # 미커밋 변경 파일 목록(�
 git ls-files --others --exclude-standard     # untracked 신규 파일 — 아래 참고
 ```
 
-**`git diff --name-only`는 untracked 신규 파일을 절대 안 보여준다** — git diff의 기본 동작이고, 실측 확인(방금 이 스킬 자신의 리뷰 대상인 `engines.md`·`merge.md`가 이 명령 출력에서 빠지는 것으로 재현). PR 모드에서는 문제가 안 된다 — PR의 커밋 히스토리에는 신규 파일도 이미 커밋으로 들어가 있어 `gh pr diff`가 전부 잡는다. **로컬 모드만의 문제다.**
-
-**`git status --porcelain`의 `??` 줄로 untracked를 뽑지 않는다** — 신규 디렉터리를 파일 단위가 아니라 디렉터리 한 줄로 뭉갠다(실측 확인: 새 디렉터리 안에 파일 2개를 만들고 비교하면 `git status --porcelain`은 `?? newdir/` 한 줄만 내고, 그 안의 파일 2개는 목록에 안 잡힌다). 대신 `git ls-files --others --exclude-standard`로 뽑는다 — 파일 단위로 나오고, ce-code-review 자신도 `UNTRACKED:` 항목에 이 명령을 쓴다. 이 출력을 `UNTRACKED` 목록으로 저장해 둔다 — Phase 4에서 E3(전문 렌즈)에게 명시로 전달한다.
+**로컬 모드는 untracked 신규 파일을 따로 뽑는다.** untracked 파일은 `git diff`에 나오지 않으므로 `git ls-files --others --exclude-standard`로 파일 단위 목록을 뽑아 `UNTRACKED`로 저장한다(`git status --porcelain`의 `??`는 새 디렉터리를 한 줄로 뭉개므로 쓰지 않는다). PR 모드는 `gh pr diff`가 신규 파일까지 잡으므로 해당 없다. 이 목록은 Phase 4에서 E3(전문 렌즈)에게 명시로 전달한다.
 
 **중단 조건**:
 - `$MERGE_BASE`를 못 구함(베이스 브랜치가 없거나 fetch 실패) → "베이스 브랜치를 찾을 수 없습니다. `base:<ref>`를 직접 지정하거나 원격에 베이스 브랜치가 있는지 확인하세요."
@@ -127,7 +131,7 @@ git ls-files --others --exclude-standard     # untracked 신규 파일 — 아�
 
 **diff 신호**를 뽑아 둔다. Phase 3의 조건부 엔진 선택에 쓴다. **판정 기준이 신호마다 다르다** — `workflows`·`tests`는 변경 파일 경로만 보면 되지만, 나머지 넷은 파일 경로로 판단할 수 없어 위에서 파일로 받아 둔 diff 본문을 봐야 한다. 실측 지적 — 이 구분이 없으면 diff 본문을 아예 안 받은 채로 이 표를 적용하게 된다.
 
-**diff 본문은 컨텍스트로 읽지 말고 파일에서 grep으로만 훑는다.** 위에서 diff를 화면 출력이 아니라 파일(`/tmp/review-ensemble-*.diff`)로 받는 이유다 — 수천~수만 줄짜리 diff를 신호 판정 때문에 통째로 읽어들이면 그 자체로 컨텍스트가 넘친다(실측 지적: 이전 버전에 있던 "8000줄 이상이면 /tmp 파일로" 가드가 개편 때 대체 없이 지워졌는데, 본문 신호 추가로 그 위험이 더 커졌다). 본문 신호 4개는 전부 아래 같은 grep 한 번씩으로 판정된다 — 파일을 읽는 게 아니라 개수만 받는다:
+**diff 본문은 컨텍스트로 읽지 말고 파일에서 grep으로만 훑는다.** 위에서 diff를 화면 출력이 아니라 파일(`/tmp/review-ensemble-*.diff`)로 받는 이유다 — 수천~수만 줄짜리 diff를 신호 판정 때문에 통째로 읽어들이면 그 자체로 컨텍스트가 넘친다. 본문 신호 4개는 전부 아래 같은 grep 한 번씩으로 판정된다 — 파일을 읽는 게 아니라 개수만 받는다:
 
 ```bash
 grep -cE '^\+.*(catch|except|rescue|recover)' /tmp/review-ensemble-*.diff              # error-handling
@@ -142,8 +146,6 @@ grep -cE '^\+.*(interface |type |class |struct |@dataclass)' /tmp/review-ensembl
 | `tests` | 변경 파일이 테스트 디렉토리·파일명 규약에 걸림 | 테스트 커버리지 렌즈 |
 | `new-logic` | diff 본문에 테스트 파일 밖 신규 함수·메서드 선언 추가 | 테스트 커버리지 렌즈 — `tests` 없이도 켠다. 새 로직에 테스트가 안 따라온 경우가 바로 이 렌즈의 대상이므로, 테스트 파일 변경이 있을 때만 켜면 정작 필요한 때 꺼진다 |
 | `comments-heavy` | diff 추가 줄 중 주석·독스트링 줄이 30줄 이상 | 주석 정확성 렌즈 |
-
-마지막 두 신호는 실측 지적으로 추가됐다 — Phase 3 표가 "신규 로직"·"주석 대량 추가"를 조건으로 걸면서 정작 이 표에 판정 기준이 없어, 두 렌즈는 켤 근거를 만들 수 없는 죽은 조건이었다.
 
 ---
 
@@ -323,11 +325,9 @@ Agent 렌즈 결과는 마지막에 수거한다.
 
 ### `/rl-verify`가 아니라 이 스킬 자체 내장 반박 검증자 페르소나를 쓴다
 
-> **왜 `/rl-verify`가 아닌가 (실측 근거)**: `/rl-verify`를 실제로 호출해 확인한 결과, 이 스킬은 단건 판정용이 아니었다. Tier 1~3 분류 후 CONTRARIAN·ARCHITECT·RESEARCHER·SIMPLIFIER·EVALUATOR 팀을 꾸리고, **시작 전 `AskUserQuestion`으로 사용자 동의를 요구**하며(자동 판정을 막음), `docs/demiurge/rl-verify/{slug}/`에 plan.md·report.md를 **영구 생성**한다. 이 경로에 `demiurge`가 고정으로 박혀 있어, review-ensemble이 워크트리(대상 레포) 안에서 이걸 부르면 **남의 레포에 관계없는 폴더가 생긴다.** 발견 1건 판정에 5-역할 팀 + 수렴 루프는 무게도 안 맞는다.
+> **왜 `/rl-verify`가 아닌가 (실측 근거)**: `/rl-verify`를 실제로 호출해 확인한 결과, 이 스킬은 단건 판정용이 아니었다. Tier 1~3 분류 후 CONTRARIAN·ARCHITECT·RESEARCHER·SIMPLIFIER·EVALUATOR 팀을 꾸리고, **시작 전 사용자 동의를 요구**하며(자동 판정을 막음), `docs/demiurge/rl-verify/{slug}/`에 plan.md·report.md를 **영구 생성**한다. 이 경로에 `demiurge`가 고정으로 박혀 있어, review-ensemble이 워크트리(대상 레포) 안에서 이걸 부르면 **남의 레포에 관계없는 폴더가 생긴다.** 발견 1건 판정에 5-역할 팀 + 수렴 루프는 무게도 안 맞는다.
 
-> **외부 에이전트 대신 review-ensemble 자신의 파일을 쓰는 이유**: 초기 버전은 `product/.claude/agents/counter-reviewer.md`(demiurge 레포에만 있는 커스텀 에이전트)를 참조했다. review-ensemble **대상 레포**(tax-agent 등) 안에서 실행될 때 그 경로가 안 열려, `~/.claude/agents/counter-reviewer.md`(전역 심링크)로 대체하는 폴백까지 필요했다 — 즉 review-ensemble을 쓰려면 demiurge를 clone해서 `just link`까지 해둬야만 Phase 6 표1이 동작했다. **이 의존성을 끊었다** — 같은 반박 방법론을 review-ensemble 자신의 디렉터리 안(`counter-reviewer.md`)에 옮겨 담아, engines.md·merge.md처럼 review-ensemble과 함께 배포되는 파일로 만들었다. 이제 review-ensemble 폴더를 어디에 두든(다른 레포, 다른 머신, demiurge 없이 이 폴더만 복사해도) 외부 경로 탐색 없이 항상 열린다.
-
-발견마다 **독립적인 검증 표 2개를 병렬로** 받는다(1개면 그 반박이 맞는지 확인할 길이 없고, 3개 이상은 이 규모의 판정에 과하다). 두 표는 **서로 다른 모델 패밀리**로 낸다 — 같은 모델·같은 페르소나·같은 프롬프트로 두 번 물으면 같은 맹점을 똑같이 반복할 수 있고, 그러면 "2/2 REFUTED"가 실은 하나의 편향이 두 번 나온 것일 수 있다(실측 지적: 이전 버전은 opus 기반 반박 페르소나를 그대로 두 번 불렀다).
+발견마다 **독립적인 검증 표 2개를 병렬로** 받는다(1개면 그 반박이 맞는지 확인할 길이 없고, 3개 이상은 이 규모의 판정에 과하다). 두 표는 **서로 다른 모델 패밀리**로 낸다 — 같은 모델·같은 페르소나·같은 프롬프트로 두 번 물으면 같은 맹점을 똑같이 반복할 수 있고, 그러면 "2/2 REFUTED"가 실은 하나의 편향이 두 번 나온 것일 수 있다.
 
 **표1 — 반박 검증자 페르소나 (Claude, opus)**
 
@@ -364,9 +364,9 @@ EOF
 fi
 ```
 
-**`codex --version` 성공이 `codex exec` 성공을 보장하지 않는다** — 실측 지적: 버전 확인은 통과했는데 실제 실행이 만료된 인증·레이트리밋·네트워크 오류로 실패하면, 이전 버전은 폴백이 발화할 코드 경로 자체가 없어 Phase 6 판정표가 존재하지 않는 두 번째 의견을 소비했다. 그래서 `codex exec`의 종료 코드와 출력 파일이 비어 있지 않은지(`-s`)를 함께 확인하고, 실패면 `CODEX_AVAILABLE=0`으로 되돌려 폴백을 태운다. **행(hang) 방지**: 이 명령을 실행하는 Bash 도구 호출에 timeout을 600000ms(10분)로 명시한다 — Codex 프로세스가 멈추면 도구 타임아웃이 강제 종료하고, 그 종료도 위와 같은 실패 경로로 처리한다(ce의 교차 리뷰 스크립트가 자체 워치독으로 하는 일을 여기서는 도구 타임아웃이 대신한다).
+**`codex --version` 성공이 `codex exec` 성공을 보장하지 않는다** — 버전 확인은 통과해도 실제 실행이 만료된 인증·레이트리밋·네트워크 오류로 실패할 수 있다. 그래서 `codex exec`의 종료 코드와 출력 파일이 비어 있지 않은지(`-s`)를 함께 확인하고, 실패면 `CODEX_AVAILABLE=0`으로 되돌려 폴백을 태운다. **행(hang) 방지**: 이 명령을 실행하는 Bash 도구 호출에 timeout을 600000ms(10분)로 명시한다 — Codex 프로세스가 멈추면 도구 타임아웃이 강제 종료하고, 그 종료도 위와 같은 실패 경로로 처리한다(ce의 교차 리뷰 스크립트가 자체 워치독으로 하는 일을 여기서는 도구 타임아웃이 대신한다).
 
-**`echo "..." | codex exec`가 아니라 파일로 넘긴다** — 실측 지적: 발견의 근거·인용문에는 코드 줄이 그대로 담기고, 그 안에 큰따옴표가 섞이기 마련이다(예: `"session.py:88 return ..."`). `echo "..."`에 그런 문자열을 넣으면 셸이 그 자리에서 깨진다. 따옴표 없는 heredoc(`<<'EOF'`)은 `$`·백틱 확장도 막아 코드 인용문을 안전하게 통째로 옮긴다 — ce 자신의 교차 리뷰 스크립트가 쓰는 것과 같은 방식이다. 마지막 줄(`cat <출력파일>`)도 실측 지적이다 — 이전 버전은 파일에 쓰기만 하고 다시 읽는 단계가 없어, Codex가 정상적으로 답해도 그 판정이 조용히 버려질 수 있었다.
+**`echo "..." | codex exec`가 아니라 파일로 넘긴다** — 실측 지적: 발견의 근거·인용문에는 코드 줄이 그대로 담기고, 그 안에 큰따옴표가 섞이기 마련이다(예: `"session.py:88 return ..."`). `echo "..."`에 그런 문자열을 넣으면 셸이 그 자리에서 깨진다. 따옴표 없는 heredoc(`<<'EOF'`)은 `$`·백틱 확장도 막아 코드 인용문을 안전하게 통째로 옮긴다 — ce 자신의 교차 리뷰 스크립트가 쓰는 것과 같은 방식이다. 마지막 줄(`cat <출력파일>`)은 반드시 둔다 — 파일에 쓰기만 하고 다시 읽지 않으면 Codex가 정상적으로 답해도 그 판정이 조용히 버려진다.
 
 **Codex CLI가 없거나 실패하면(`CODEX_AVAILABLE=0` 또는 명령 오류) 표2를 표1과 같은 방식(general-purpose)으로 대체하되 `model: "sonnet"`을 쓴다** — 페르소나 텍스트는 같아 완전히 독립적이진 않지만, 최소한 모델 가중치가 달라져 이전보다는 상관관계가 줄어든다. 이 경우 판정표 처리 뒤 리포트에 "표2가 폴백 경로였다(Codex 미가용)"를 반드시 남긴다 — 독립성이 약한 판정임을 숨기지 않는다.
 
@@ -391,7 +391,7 @@ fi
 반드시 하나만 반환하라: {"verdict": "UPHELD"|"WEAKENED"|"REFUTED"|"INCONCLUSIVE", "reasoning": "한두 문장"}
 ```
 
-앞의 두 줄이 빠졌던 것은 실측 지적이다 — 이 스킬의 다른 모든 엔진 호출은 게시·수정 금지를 강제하는데, 표1(counter-reviewer)은 `general-purpose`에 도구 제한이 없는 채로 열려 있어(Bash 포함) 이론상 검증 도중 `gh pr comment`를 스스로 실행할 수 있었다.
+앞의 두 줄은 표1이 도구 제한 없는 `general-purpose`(Bash 포함)로 돌기 때문에 필요하다 — 없으면 검증 도중 `gh pr comment`를 스스로 실행할 수 있다.
 
 `WEAKENED`를 강제로 빼지 않는다. 표1(counter-reviewer 페르소나)의 판정 체계가 UPHELD·WEAKENED·REFUTED 셋이다 — "부분적 약점은 있으나 결론은 유지"라는 뜻으로, UPHELD(무결함)와도 REFUTED(반박됨)와도 다른 실제 상태다. 표2(Codex)에도 같은 4값 계약을 그대로 요구해 두 표가 같은 자를 쓰게 한다. `INCONCLUSIVE`는 "코드 자체를 확인할 수 없는 경우"(예: 워크트리가 없고, `git show`로 읽을 head 참조도 fetch돼 있지 않은 경우)를 위한 값이다.
 
@@ -492,7 +492,7 @@ REFUTED 폐기는 merge.md의 "P0/P1 자동 폐기 금지"와 충돌하지 않�
 
 PR 모드에서 `-f`가 있으면 전체 게시로 바로 Phase 9로 간다.
 
-그 외에는 AskUserQuestion으로 묻는다. 질문 카드는 카드만 읽고 결정할 수 있어야 하므로, PR 번호·제목·등급별 건수·교차확인 건수를 카드 안에 담는다.
+그 외에는 평문으로 묻는다. 사용자가 그 메시지만 읽고 결정할 수 있어야 하므로, PR 번호·제목·등급별 건수·교차확인 건수를 질문 안에 담는다.
 
 선택지: 전체 게시 / P0+P1+P2 / P0+P1만 / 게시하지 않음
 

@@ -83,7 +83,7 @@ tags:
   - text-generation
 datasets:
   - stanfordnlp/imdb
-library_name: transformers  # 2024.8 이후 명시 필수
+library_name: transformers  # 필수
 pipeline_tag: text-generation
 base_model: meta-llama/Llama-3-8B
 base_model_relation: finetune

@@ -109,8 +109,6 @@ Co-Reviewed-By: Claude Code <noreply@anthropic.com>
 | P2 | `🟡 **P2 MEDIUM**` | 수정 권장 — 엣지 케이스, 성능 퇴행, 유지보수 함정 |
 | P3 | `🔵 **P3 LOW**` | 개선 제안 — 영향이 작고 범위가 좁음 |
 
-기존 3단계(P1/P2/P3)에서 **P0가 추가되었다.** ce-code-review가 P0~P3 4단계를 쓰므로 이전 3단계 체계에는 취약점·데이터 손상 발견을 담을 칸이 없었다.
-
 ### 배지
 
 [merge.md](merge.md)의 배지표 중 "PR 코멘트" 열을 쓴다. 개수만 쓰고 엔진 이름은 쓰지 않는다.

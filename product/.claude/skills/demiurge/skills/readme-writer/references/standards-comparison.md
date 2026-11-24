@@ -111,21 +111,7 @@ readme-writer Phase 2 (표준 선택) 및 Phase 3 (초안 생성)에서 참조�
 
 ### HF Model Card (AI Asset 필수)
 
-YAML frontmatter + Markdown 본문 구조:
-
-**YAML frontmatter 예**:
-```yaml
----
-language: ko
-license: cc-by-4.0
-datasets:
-  - custom_dataset_name
-model_id: "user/model-name"
-tags:
-  - transformers
-  - pytorch
----
-```
+YAML frontmatter + Markdown 본문 구조. YAML frontmatter 필드와 예시는 `platform-metadata.md`의 HF 섹션 참조.
 
 **본문 권장 섹션** (순서는 자유):
 - **모델 설명** — 아키텍처, 학습 방식
@@ -137,8 +123,6 @@ tags:
 지원 기능:
 - KaTeX 수식: `$$ ... $$`
 - 다크/라이트 모드 이미지: `#hf-light-mode-only`, `#hf-dark-mode-only`
-
-YAML 필드는 `platform-metadata.md`의 HF 섹션 참조.
 
 ### Awesome Manifesto (Curated List)
 

@@ -40,15 +40,6 @@
 | Pragmatic Engineer | newsletter.pragmaticengineer.com/ | `site:newsletter.pragmaticengineer.com interview` | Staff+ 전략, 면접관 시점 |
 | Zain Rizvi Blog | zainrizvi.io/blog/ | `site:zainrizvi.io interview` | FAANG 내부 평가 과정 공개 |
 
-## YouTube
-
-| 소스 | URL | 특화 |
-|------|-----|------|
-| ByteByteGo (Alex Xu) | youtube.com/@ByteByteGo | 시각적 시스템 설명 |
-| Gaurav Sen | youtube.com/@gaborsen | 분산 시스템 기초 |
-| Hussein Nasser | youtube.com/@haborosam | DB/네트워크 딥다이브 (Staff 레벨) |
-| Exponent | youtube.com/@tryexponent | 모의 면접 시연 |
-
 ## 한국 소스
 
 | 소스 | URL 패턴 | 검색 쿼리 템플릿 | 정보 유형 | 품질 |

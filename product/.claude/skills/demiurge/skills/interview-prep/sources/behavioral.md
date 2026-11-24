@@ -31,14 +31,6 @@
 | Meta | interviewing.io Blog | interviewing.io/blog/ | "How behavioral interviews are evaluated at Meta" |
 | 범용 | Design Gurus (Grokking Behavioral) | designgurus.io/course/grokking-behavioral-interview | 체계적 행동 면접 코스 |
 
-## 학습 자료 & 프레임워크
-
-| 소스 | URL | 정보 유형 |
-|------|-----|-----------|
-| awesome-behavioral-interviews (GitHub) | github.com/ashishps1/awesome-behavioral-interviews | 큐레이션 질문 목록, 프레임워크 |
-| amazon-behavioral-interview (GitHub) | github.com/tombetthauser/amazon-behavioral-interview | Amazon LP 특화 질문 + 전략 |
-| Engineering Leadership Newsletter | newsletter.eng-leadership.com/ | Senior/EM behavioral 전략 |
-
 ## 커뮤니티 / SNS
 
 | 소스 | URL 패턴 | 검색 쿼리 템플릿 | 특화 |
@@ -47,14 +39,6 @@
 | Reddit r/cscareerquestions | reddit.com/r/cscareerquestions/ | `behavioral interview STAR {company}` | 범용 면접 경험 |
 | Hacker News | news.ycombinator.com/ | `hn.algolia.com` 검색: `behavioral interview` | 면접관 관점 분석 |
 | DEV.to | dev.to/ | `behavioral interview software engineer` | 개인 회고, 튜토리얼 |
-
-## YouTube
-
-| 소스 | URL | 특화 |
-|------|-----|------|
-| Dan Croitor | youtube.com/@DanCroitor | Amazon LP STAR 전략 (가장 추천) |
-| Exponent | youtube.com/@tryexponent | 모의 behavioral 면접 시연 |
-| Jeff Sipe | YouTube 검색 | Google G&L 특화 |
 
 ## 모의 면접 플랫폼
 

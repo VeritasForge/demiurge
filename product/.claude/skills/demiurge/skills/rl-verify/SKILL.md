@@ -1,6 +1,6 @@
 ---
 name: rl-verify
-description: "수렴 검증 플랜 생성 + 실행. 사용자가 /rl-verify로 직접 호출하거나, 다른 스킬(/readme-writer 등)이 검증 단계로 자동 호출 가능."
+description: "문서·플랜·PR·아이디어의 사실 정확성과 반론을 여러 독립 관점으로 교차 검증할 때 사용. /rl-verify로 직접 호출하거나 다른 스킬이 검증 단계로 호출한다."
 argument-hint: "[--force] <작업 설명 또는 문서 경로>"
 ---
 
@@ -143,9 +143,9 @@ Phase 1에서 추출한 도메인 키워드를 아래 매핑 테이블에서 매
 | API, 통합, 이벤트, EDA | contrarian (ouroboros) | integration-architect (demiurge) | deep-research (demiurge) | simplifier (ouroboros) |
 | 코드 리뷰, PR, 코드 품질 | contrarian (ouroboros) | pattern-recognition-specialist (compound), architecture-strategist (compound) | repo-research-analyst (compound), requesting-code-review (superpowers skill) | code-simplicity-reviewer (compound) |
 | 테스트, TDD, QA | contrarian (ouroboros) | test-driven-development (superpowers skill) | deep-research (demiurge) | simplifier (ouroboros) |
-| 프론트엔드, UI, UX | contrarian (ouroboros) | frontend-design (compound skill) | framework-docs-researcher (compound), agent-browser (compound skill) | simplifier (ouroboros) |
-| 리서치, 조사, 분석, Fact-Check | contrarian (ouroboros) | interview (ouroboros skill) | deep-research (demiurge), best-practices-researcher (compound), notion-research-documentation (notion skill) | simplifier (ouroboros) |
-| 문서화, README, API 문서, 기술 문서 | contrarian (ouroboros) | writing-plans (superpowers skill), writing-skills (superpowers skill) | document-review (compound skill), compound-docs (compound skill) | simplifier (ouroboros), document-review (compound skill) |
+| 프론트엔드, UI, UX | contrarian (ouroboros) | frontend-design (frontend-design skill) | framework-docs-researcher (compound), ce-test-browser (compound skill) | simplifier (ouroboros) |
+| 리서치, 조사, 분석, Fact-Check | contrarian (ouroboros) | interview (ouroboros skill) | deep-research (demiurge), best-practices-researcher (compound), search (Notion skill) | simplifier (ouroboros) |
+| 문서화, README, API 문서, 기술 문서 | contrarian (ouroboros) | writing-plans (superpowers skill), writing-skills (superpowers skill) | ce-doc-review (compound skill) | simplifier (ouroboros), ce-doc-review (compound skill) |
 | 디버깅, 버그, 오류 | contrarian (ouroboros) | systematic-debugging (superpowers skill) | deep-research (demiurge) | simplifier (ouroboros) |
 | Claude Code, plan mode, 스킬, Hook, 설정 | contrarian (ouroboros) | claude-code-guide (agent) | claude-code-guide (agent) | simplifier (ouroboros) |
 
@@ -158,11 +158,11 @@ Phase 1에서 추출한 도메인 키워드를 아래 매핑 테이블에서 매
 | 실행 목록 표기 | 종류 | 호출 방식 | 실패·미가용 시 폴백 |
 |---|---|---|---|
 | `(ouroboros)` — contrarian, simplifier | MCP 페르소나 | `ouroboros_lateral_think` 도구를 **1회** 호출한다. `personas`에는 실행 목록에 있는 것만 넣고(예: `["contrarian","simplifier"]`), `problem_context`에 검증 대상 요약과 검증 관점을, `current_approach`에 대상의 핵심 주장·설계를 넣는다 | 도구가 없거나 오류 → general-purpose 에이전트에 아래 폴백 페르소나를 붙여 실행하고, report.md 헤더에 "ouroboros MCP 미가용 → 폴백 페르소나 실행"을 기록한다 |
-| `(ouroboros skill)` — 예: interview | 스킬 | Skill 도구 `ouroboros:{이름}` | 스킬 목록에 없으면 페르소나 |
+| `(ouroboros skill)` — 예: interview | 스킬 | Skill 도구 `ouroboros:{이름}` | 현재 세션의 스킬 목록에 없으면, 그 칸의 행 주제와 열 역할에 맞는 스킬을 스킬 목록의 description에서 찾아 대체한다. 맞는 스킬이 없으면 페르소나로 실행한다. 어느 경우든 사용자에게 '<원래 이름>이 없어 <대체 이름 또는 페르소나>로 실행했다. rl-verify 표를 고쳐야 한다'고 알리고, report.md 헤더에도 적는다 |
 | `(demiurge)` | 스킬 또는 페르소나 | 이름이 `demiurge:` 스킬 목록에 있으면(예: deep-research) Skill 도구 `demiurge:{이름}`. 아니면(아키텍트 역할명 — 별도 정의 파일 없음) general-purpose 에이전트 + "당신은 {도메인} 아키텍트다" 역할 지침 + 담당 검증 관점 + 구체적 검증 지시 | — |
-| `(demiurge skill)`, `(superpowers skill)`, `(compound skill)`, `(notion skill)` | 스킬 | Skill 도구 `{플러그인}:{이름}` | 스킬 목록에 없으면 페르소나 |
+| `(demiurge skill)`, `(superpowers skill)`, `(compound skill)`, `(frontend-design skill)`, `(Notion skill)` | 스킬 | Skill 도구 `{플러그인}:{이름}`. `(compound skill)`의 플러그인 이름은 `compound-engineering`이다 | 현재 세션의 스킬 목록에 없으면, 그 칸의 행 주제와 열 역할에 맞는 스킬을 스킬 목록의 description에서 찾아 대체한다. 맞는 스킬이 없으면 페르소나로 실행한다. 어느 경우든 사용자에게 '<원래 이름>이 없어 <대체 이름 또는 페르소나>로 실행했다. rl-verify 표를 고쳐야 한다'고 알리고, report.md 헤더에도 적는다 |
 | `(compound)` — 예: security-sentinel | 페르소나 (ce 스킬 내부 프롬프트 자산, 등록 서브에이전트 아님) | general-purpose 에이전트 + 역할 지침 + 담당 검증 관점 | — |
-| `(agent)` — 예: claude-code-guide | 등록 서브에이전트 | Agent 도구 `subagent_type="{이름}"` | not found → 페르소나 |
+| `(agent)` — 예: claude-code-guide | 등록 서브에이전트 | Agent 도구 `subagent_type="{이름}"` | not found → 페르소나. claude-code-guide라면 `~/.claude/skills/demiurge/skills/harness-engineering/references/doc-check.md`의 실패 처리(사라진 에이전트 경고 → 대체 페르소나)를 따른다 |
 | EVALUATOR | rl-verify 참조 파일 | general-purpose 에이전트에 이 스킬 폴더의 `convergence-evaluator.md` 전문을 붙여 실행 | — |
 | 매핑 테이블에 없는 도메인 | — | Explore agent + 전문가 페르소나 + 구체적 검증 지침 | — |
 
@@ -262,14 +262,10 @@ Tier별 필수 역할(CONTRARIAN, RESEARCHER, EVALUATOR)이 실행 목록에 포
 
 ## Phase 4: 사용자 동의 및 수렴 루프 실행
 
-1. 플랜 요약 제시 (검증 대상, Tier, 관점, Agent, 수렴 기준)
-2. AskUserQuestion 도구로 동의 여부 질문:
-   "위 플랜으로 수렴 검증을 시작하시겠습니까?
-    1) 시작
-    2) 플랜 수정 (피드백 입력)"
-3. 선택에 따른 분기:
-   - 1) 선택 → Phase 5 (수렴 루프 실행)로 진행
-   - 2) 선택 → 피드백 반영하여 Phase 2로 돌아가 플랜 수정 후 다시 Phase 4
+1. 플랜 요약(검증 대상, Tier, 관점, Agent, 수렴 기준)을 보여 주고, 같은 메시지 끝에 평문으로 동의를 묻는다. 선택지: 시작 / 플랜 수정(피드백 입력).
+2. 선택에 따른 분기:
+   - 시작 → Phase 5 (수렴 루프 실행)로 진행
+   - 플랜 수정 → 피드백 반영하여 Phase 2로 돌아가 플랜 수정 후 다시 Phase 4
 
 ---
 
@@ -342,7 +338,7 @@ Main agent가 report.md를 읽고 수렴 여부만 판정:
 
 4. **이후 동작은 `/organize` 스킬에 위임**
    - 병합 모드: Step M4에서 병합 미리보기 화면 출력 → M5에서 사용자가 저장 여부 명시 판단
-   - 생성 모드: Step C4에서 신규 문서 화면 출력 (파일 저장 없음)
+   - 생성 모드: Step C5에서 신규 문서 화면 출력 (파일 저장 없음)
 
 ### 6-3. 원본 보존 원칙
 

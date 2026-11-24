@@ -1,7 +1,7 @@
 ---
 name: group-job-analysis
-description: 그룹사/계열사 다수 JD 일괄 분석 프로토콜. JD 수집 → 공유 기업조사 → 스크리닝 → 풀분석 → 비교분석 → 최종 추천.
-allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, Write, AskUserQuestion
+description: "같은 그룹사·계열사의 여러 JD를 한꺼번에 비교해 지원할 법인을 고를 때 사용."
+allowed-tools: WebSearch, WebFetch, Read, Grep, Write, mcp__playwright__*
 user-invocable: true
 argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 ---
@@ -12,7 +12,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 **그룹사/계열사 다수 JD를 일괄 분석**하여 최적 N개 법인을 추천하는 7단계 퍼널 프로토콜입니다.
 
-개별 `job-analysis`를 N번 반복하는 것 대비 **65%+ WebSearch 절감** + **비교 의사결정 프레임워크** 제공.
+개별 `job-analysis`를 N번 반복하는 대신 그룹 공통 조사를 한 번만 하고, **비교 의사결정 프레임워크**를 제공한다.
 
 ```
 ┌───────────────────────────────────────────────────────────────────┐
@@ -21,7 +21,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 │                                                                     │
 │  Phase 0: 📋 입력 수집 + Group ID 생성                             │
 │  ┌─────────────────────────────────────────────────────────┐       │
-│  │  인자 파싱 → 이력서 감지 → career/{group-slug}/ 준비    │       │
+│  │  인자 파싱 → 이력서 경로 확인 → career/{group-slug}/    │       │
 │  └───────────────────────┬─────────────────────────────────┘       │
 │                           │                                         │
 │  Phase 1: 📥 JD 일괄 수집 (Batch Fetch)                           │
@@ -73,7 +73,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 | **group_name** | ✅ | 그룹사명 | "토스 그룹", "카카오 그룹" |
 | **jd_list** | ✅ | JD 목록 (아래 3가지 형식 중 택1) | URL 나열, 파일 경로, 대화 내 입력 |
 | **--top N** | ❌ (기본: 2) | 추천할 법인 수 | `--top 3` |
-| **--resume** | ❌ (자동 감지) | 이력서 경로 | `--resume ~/resume.md` |
+| **--resume** | ❌ (없으면 묻는다) | 이력서 마크다운 파일 경로 | `--resume ~/resume.md` |
 
 ### JD 목록 입력 형식
 
@@ -92,14 +92,9 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 **형식 3: 사용자 대화에서 추출**
 사용자가 대화 중 법인/포지션/URL을 언급하면 파싱
 
-### 이력서 자동 감지
+### 이력서 경로 확인
 
-`job-analysis`와 동일 로직:
-1. `resume.md`, `RESUME.md`
-2. `career/resume.md`, `career/RESUME.md`
-3. `**/resume.md`, `**/RESUME.md`
-
-감지 실패 시 → `AskUserQuestion`으로 경로 요청
+이력서: 사용자가 전달한 마크다운 파일 경로(`--resume` 또는 인자)를 쓴다. 전달받지 못했으면 찾아보지 말고 사용자에게 경로를 묻는다.
 
 ### 스크리닝 설정 (Optional)
 
@@ -109,18 +104,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 | **tier_a_threshold** | 3.5 | Tier A 최소 점수 |
 | **tier_b_threshold** | 2.5 | Tier B 최소 점수 |
 
-사용자가 별도 지정하지 않으면 기본값 사용. `AskUserQuestion`으로 "기본 가중치를 사용할까요?"  확인 가능.
-
----
-
-## 단계별 분석 원칙
-
-모든 Phase에서 다음 원칙을 **반드시** 적용:
-
-1. **Phase 시작**: 분석 계획 수립 (목표, 수집할 정보, 판단 기준)
-2. **스크리닝 점수 산출**: 각 포지션별 5차원 점수화
-3. **법인 레벨 비교**: 가중합산 + 순위 판단
-4. **Phase 완료**: 결과 검증 + 다음 Phase 전환 판단
+사용자가 별도 지정하지 않으면 기본값 사용. 확인이 필요하면 평문으로 묻는다(기본 가중치와 그 근거, 바꿨을 때 달라지는 결과를 함께 적는다).
 
 ---
 
@@ -128,10 +112,10 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 ### Phase 0: 📋 입력 수집 + Group ID 생성
 
-1. `$ARGUMENTS` 파싱 및 전략 수립
+1. `$ARGUMENTS` 파싱
 2. Group ID 생성: `{group-slug}-{YYYY-MM-DD}`
    - slug 규칙: 영문소문자 + 하이픈 (예: toss-group, kakao-group)
-3. 이력서 자동 감지 (Glob)
+3. 이력서 경로 확인: 사용자가 전달한 마크다운 파일 경로(`--resume` 또는 인자)를 쓴다. 전달받지 못했으면 찾아보지 말고 사용자에게 경로를 묻는다.
 4. `career/{group-slug}/` 디렉토리 생성 (없으면)
 5. `career/{group-slug}/jd-raw/` 하위 디렉토리 생성
 6. JD 목록 파싱 → (법인, 포지션, URL) 튜플 리스트 구성
@@ -175,7 +159,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 5. 파일 저장: `career/{group-slug}/jd-raw/{subsidiary-slug}-{position-slug}.md`
 
-**컨텍스트 관리**: JD 전문은 파일에만 보관. 요약 인덱스만 컨텍스트에 유지.
+**컨텍스트 관리**: JD 전문은 파일에 저장하고, 이후 단계는 요약 인덱스를 기준으로 진행하며 세부가 필요할 때만 해당 파일을 다시 읽는다.
 
 **Exit Criteria**: 모든 JD 파일 저장 완료, 요약 인덱스 생성
 
@@ -189,12 +173,12 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 검색 쿼리 분해 후:
 
-**Step 2-A1: 광역 탐색** (WebSearch 5-7회)
+**Step 2-A1: 광역 탐색**
 - 그룹 기업 개요 (설립, 대표, 본사, 사업 구조)
 - 기업가치, 투자/IPO 현황
 - 뉴스, 업계 평판
 
-**Step 2-A2: 심화 탐색** (WebSearch 3-5회)
+**Step 2-A2: 심화 탐색**
 - 💰 재무 안전성 (매출, 영업이익, 흑자/적자, 런웨이)
 - 🛠️ 공통 기술 스택 및 엔지니어링 문화 (기술 블로그, 컨퍼런스)
 - 🎤 면접 프로세스 (공통 구조, 문화적합성 면접 특징)
@@ -207,7 +191,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 #### Part B: 법인별 델타 조사
 
-각 법인에 대해 (WebSearch 1-2회씩):
+각 법인에 대해, 각 항목이 2개 이상 독립 출처로 확인될 만큼 검색한다:
 - 도메인/제품 포커스
 - 직원수, 매출 (법인 단독)
 - 규제 환경 특성
@@ -215,9 +199,6 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 - 면접 프로세스 변형 (사전과제, 라이브코딩 등)
 
 **파일 저장**: `career/{group-slug}/company-research.md`
-
-**WebSearch 추정**: 그룹 공통 8-12회 + 법인당 1-2회 = 5개 법인 시 ~18-22회
-(vs. 개별 job-analysis 5회 = ~50+회, **55-65% 절감**)
 
 **Exit Criteria**: company-research.md 저장, Part A + 모든 법인 Part B 포함, 신뢰도 태그 부여
 
@@ -251,10 +232,12 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 | **B** | ≥ {tier_b_threshold} | 예비, 시간 여유 시 분석 |
 | **C** | < {tier_b_threshold} | 제외 |
 
+저장하는 문서(screening-matrix.md, 분석·비교 문서)에는 Tier A/B/C 대신 "풀 분석 대상 / 검토 대상 / 제외"로 적고, 스크리닝 차원은 D1~D5 번호 없이 이름으로 적는다.
+
 #### Step 3-4: Full Analysis 대상 선정
 
 - Tier A 중 **법인별 최고 점수 포지션**을 선정
-- 법인별 최소 1개 포지션 포함 (전 법인 비교 보장)
+- Tier A가 없는 법인은 풀 분석하지 않고, 스크리닝 점수와 '기준 미달' 표시로 비교표에 남긴다
 - Tier A가 과다 시 (8개+) → 법인별 대표 1개로 축소
 
 **파일 저장**: `career/{group-slug}/screening-matrix.md`
@@ -272,7 +255,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 #### Step 4-1: Phase 1 대체 (Company Research 참조)
 
 - `career/{group-slug}/company-research.md`에서 해당 법인 프로필 추출
-- 분석 파일의 Phase 1 섹션으로 삽입
+- 분석 파일의 기업 조사 섹션으로 삽입
 - 헤더: `> 상세: career/{group-slug}/company-research.md 참조`
 
 #### Step 4-2: job-analysis Phase 2 (직무 분석) 실행
@@ -302,11 +285,10 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 #### 컨텍스트 관리
 
-- **L1 요약만 유지**: 풀 분석 저장 후 컨텍스트에는 L1만 남김:
+- **L1 요약 기준으로 진행**: 풀 분석은 파일에 저장하고, 이후 비교에는 아래 L1 요약을 쓴다. 세부가 필요하면 해당 analysis.md를 다시 읽는다:
   ```
   {법인} {포지션}: {판정} {매칭률}% | 강점: {top} | 리스크: {top}
   ```
-- **Compact 트리거**: 풀 분석 **2개 완료마다** 컨텍스트 정리
 - **순차 실행**: 병렬 금지 (앞 분석 결과를 뒤 분석이 참조하므로 컨텍스트를 공유해야 함)
 
 **Exit Criteria**: 모든 Tier A 포지션의 분석 파일 저장, L1 요약 수집
@@ -360,9 +342,9 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 #### Step 5-5: 부가 섹션
 
 - 미추천 법인 요약 (법인별 1-2줄 이유)
-- 다음 라운드 후보 (Tier B 중 잠재력 있는 법인)
+- 다음 라운드 후보 (검토 대상(Tier B) 중 잠재력 있는 법인)
 - 준비 Timeline (주차별)
-- 두 면접의 차별화 전략 (다른 축으로 어필)
+- 추천한 면접들 사이의 차별화 전략(다른 축으로 어필)
 
 **파일 저장**: `career/{group-slug}-comparative-analysis.md`
 
@@ -374,7 +356,7 @@ argument-hint: "<group_name> <jd_list_or_urls> [--top N] [--resume path]"
 
 1. 비교 분석 Executive Summary를 콘솔에 출력
 2. 사용자와 추천 결과 논의
-   - "이 조합이 괜찮으신가요?" → `AskUserQuestion` 활용
+   - 추천 조합 확정은 평문으로 묻는다(추천 근거와 대안 조합별 결과를 함께 적는다)
    - 사용자가 다른 선호를 제시하면 → Phase 5 결과를 기반으로 대안 분석
 3. 추천 조정이 필요하면:
    - 비교 분석 파일 업데이트 (최종 결론 섹션 수정)
@@ -408,9 +390,10 @@ career/
 ### 1. 스크리닝 매트릭스
 
 ```
-| # | 법인 | 포지션 | D1 | D2 | D3 | D4 | D5 | 가중합 | Tier |
+| # | 법인 | 포지션 | 기술 스택 | 도메인 | 시니어리티 | 성장 | 문화/실용 | 가중합 | 분류 |
 |---|------|--------|:--:|:--:|:--:|:--:|:--:|:------:|:----:|
-| 1 | 토스페이먼츠 | 3년이상 | 5 | 5 | 4 | 4 | 3 | 4.30 | A ⭐⭐ |
+| 1 | 토스페이먼츠 | 3년이상 | 5 | 5 | 4 | 4 | 3 | 4.30 | 풀 분석 대상 ⭐⭐ |
+| 2 | {법인} | {포지션} | 2 | 3 | 2 | 3 | 3 | 2.55 | 검토 대상 (기준 미달) |
 ```
 
 ### 2. 법인 순위 Bar
@@ -434,9 +417,9 @@ career/
 ### 4. 차원별 매칭률 Bar Chart
 
 ```
-D1 기술 스택     █████████░  92%  🟢
-D2 도메인 경험   █████████░  90%  🟢
-D3 리더십        ████████░░  75%  🟡
+기술 스택     █████████░  92%  🟢
+도메인 경험   █████████░  90%  🟢
+리더십        ████████░░  75%  🟡
 ```
 
 블록 매핑: 1블록 = 10%, `█` = 채움, `░` = 빈칸
@@ -455,18 +438,6 @@ D3 리더십        ████████░░  75%  🟡
 
 ---
 
-## Efficiency Comparison
-
-| 항목 | 개별 job-analysis × N | group-job-analysis |
-|------|----------------------|-------------------|
-| WebSearch (5법인) | ~50+회 | ~20-25회 |
-| 기업조사 | 5회 반복 | 1회 (공유+델타) |
-| 비교 분석 | 없음 (수동) | 자동 |
-| 파일 산출물 | 5개 (독립) | ~20개 (연결된 체계) |
-| 의사결정 | 개별 판단 | 퍼널 기반 비교 |
-
----
-
 ## Quality Checklist
 
 분석 완료 전 반드시 확인:
@@ -480,12 +451,11 @@ D3 리더십        ████████░░  75%  🟡
 - [ ] Phase 2: company-research.md 저장
 - [ ] Phase 3: 전 포지션 5차원 점수 산출 + Tier 분류
 - [ ] Phase 3: screening-matrix.md 저장
-- [ ] Phase 3: 법인별 최소 1개 Tier A 포지션 보장
+- [ ] Phase 3: 모든 법인이 스크리닝 비교표에 포함됨(Tier A가 없는 법인은 기준 미달 표시)
 - [ ] Phase 4: 모든 Tier A 포지션에 단계별 분석 적용
 - [ ] Phase 4: 각 분석에 6차원 매칭률 + Radar/Bar Chart 포함
 - [ ] Phase 4: 각 분석에 면접 질문 10개+ 포함
 - [ ] Phase 4: 개별 analysis.md 파일 저장
-- [ ] Phase 4: 풀분석 2개마다 컨텍스트 관리 (L1만 유지)
 - [ ] Phase 5: 법인별 비교 매트릭스 + 법인 점수 산출
 - [ ] Phase 5: Top N 추천 + 지원 전략 + 준비 Timeline
 - [ ] Phase 5: comparative-analysis.md 저장

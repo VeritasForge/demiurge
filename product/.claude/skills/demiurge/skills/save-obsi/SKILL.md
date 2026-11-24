@@ -1,16 +1,7 @@
 ---
 name: save-obsi
-description: 직전 대화 결과를 Obsidian vault의 wiki/ 카테고리에 마크다운 파일로 저장합니다. vault 경로는 환경변수 OBSIDIAN_VAULT(미설정 시 ~/lab/second-brain)에서 읽습니다.
-triggers:
-  - save-obsi
-  - save_obsi
-  - obsidian에 저장
-  - 옵시디언에 저장
-  - wiki에 저장
-  - second-brain에 저장
-  - 세컨브레인에 저장
-user_invocable: true
-allowed-tools: Bash, Write, Read, Glob, AskUserQuestion
+description: "직전 대화 결과를 Obsidian vault에 노트로 저장할 때 사용('옵시디언에 저장', 'wiki에 저장', '세컨브레인에 저장'). vault 경로는 OBSIDIAN_VAULT(미설정 시 ~/lab/second-brain)."
+allowed-tools: Bash, Write, Read, Glob
 ---
 
 # Save to Obsidian Vault
@@ -50,10 +41,8 @@ Look at the conversation history BEFORE this command was invoked.
 Analyze the most recent substantive output (the last assistant response before this command).
 
 ### Category 결정
-- $ARGUMENTS에 category/slug 형태가 주어지면 그것을 사용
-- category만 없으면 AskUserQuestion으로 사용자에게 확인:
-  - 기존 카테고리: security, gen_ai, develop, develop/fe, develop/git, develop/database, develop/claude-code, develop/os, develop/python, develop/go, develop/k8s, develop/slack, develop/architecture, develop/performance, develop/interview-prep, ai-engineering, algorithm, career, research, mac-os
-  - 새 카테고리 입력도 가능
+- $ARGUMENTS에 category/slug 형태가 주어지면 그것을 사용한다.
+- category가 없으면 `<vault_root>/wiki/` 아래 폴더(2단계까지)를 읽어 목록으로 보여 주고, 대화 주제에 가장 맞는 것을 추천해 평문으로 확인한다. 새 카테고리도 입력받을 수 있다.
 
 ### 파일명 결정
 파일명 형식: <slug>.md
@@ -79,11 +68,11 @@ created: <current date in YYYY-MM-DD format>
 
 Then include the full content of the last assistant response with the following formatting rules applied:
 
-### 3-1. Table Formatting (CRITICAL)
+### 3-1. Table Formatting
 
-Tables MUST be valid, well-formed markdown tables for Obsidian to render them correctly:
+Keep tables valid, well-formed markdown so Obsidian renders them as tables:
 
-1. Every table MUST have a header separator row: | --- | --- | immediately after the header row.
+1. Every table has a header separator row: | --- | --- | immediately after the header row.
 2. Column alignment: Pad every cell with spaces so | delimiters are vertically aligned.
 3. Pipe escaping: If cell content contains a literal | character, escape it as \|.
 4. No trailing/leading whitespace issues: Each row must start and end with |.
@@ -115,8 +104,6 @@ Use Bash to check:
 - If the file does NOT exist: save as-is.
 - If the file ALREADY exists: append an incrementing numeric suffix to the base name.
   - Try -2, then -3, -4, ... until a non-existing name is found.
-
-CRITICAL: NEVER overwrite an existing file. Always verify before writing.
 
 ## Step 6: Update index.md & log.md
 

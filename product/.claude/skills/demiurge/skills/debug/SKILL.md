@@ -1,6 +1,6 @@
 ---
 name: debug
-description: 디버깅 라우터. 문제 상황을 판별하여 ce-debug 또는 systematic-debugging 중 적절한 스킬을 선택하여 호출한다. 버그, 에러, 테스트 실패, 예상치 못한 동작 시 사용.
+description: "버그·에러·테스트 실패·예상치 못한 동작을 디버깅할 때 사용. 상황에 맞는 디버깅 스킬을 골라 넘긴다."
 ---
 
 # Debug Router

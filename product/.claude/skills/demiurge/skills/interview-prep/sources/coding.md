@@ -60,7 +60,7 @@
 | Discord (Programming Interview Prep) | discord.gg/ 검색 | 서버 내 #company 채널 | High |
 | YouTube (NeetCode) | youtube.com/@NeetCode | `neetcode {company} OR "{problem}"` | High |
 | YouTube (takeUforward/Striver) | youtube.com/@takeUforward | `takeUforward {topic}` | High |
-| Medium / DEV.to | medium.com/, dev.to/ | `"{company}" OA 2026 site:medium.com` | Weekly |
+| Medium / DEV.to | medium.com/, dev.to/ | `"{company}" OA {year} site:medium.com` | Weekly |
 | Codeforces Blog | codeforces.com/blog/ | `site:codeforces.com "{company}" OA` | Weekly |
 
 ## 한국 소스

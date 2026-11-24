@@ -1,9 +1,9 @@
 ---
 name: interview-prep
-description: 면접 준비 문제 생성 스킬. 코딩 테스트 + 기술 면접 + 시스템 디자인 + 행동 면접 예상 문제를 조사 기반으로 생성.
+description: "특정 회사·포지션의 면접(코딩 테스트·기술·시스템 디자인·행동) 예상 문제를 준비할 때 사용."
 allowed-tools: WebSearch, WebFetch, Read, Grep, Glob, Write, Agent
 user-invocable: true
-argument-hint: "<company_name> <JD_URL_or_text> [hints: topic1, topic2, ...]"
+argument-hint: "<company_name> <JD_URL_or_text> [--resume <path>] [hints: topic1, topic2, ...]"
 ---
 
 # Interview Prep Skill
@@ -34,10 +34,11 @@ Phase 3: 통합 출력 → career/{company}-{role}-interview-prep.md
 | **company_name** | 필수 | 회사명 (영문) |
 | **JD** | 필수 | JD URL 또는 텍스트 |
 | **hints** | 선택 | 리크루터 힌트 (예: `hints: Concurrency, Buffer, LinkedList`) |
+| **resume** | 선택 | 이력서 마크다운 파일 경로 (`--resume <path>`) |
 
-### 자동 감지
+### 입력 확인 및 자동 감지
 
-- **이력서**: `resume/*-{company}*-en.md` > `resume/*-en.md` > `resume/*.md` 순서로 Glob 탐색
+- **이력서**: 사용자가 전달한 마크다운 파일 경로(`--resume` 또는 인자)를 쓴다. 전달받지 못했으면 찾아보지 말고 사용자에게 경로를 묻는다.
 - **job-analysis**: `career/{company}*analysis.md` 패턴으로 Glob 탐색
 
 ---
@@ -52,7 +53,7 @@ Phase 3: 통합 출력 → career/{company}-{role}-interview-prep.md
 ### 2. 전체 범위 커버
 - JD의 모든 요구사항(핵심 책임, 기술스택, 우대사항) 빠짐없이 커버
 - 이력서의 모든 관련 경험 매핑
-- **임의로 간추리거나 생략 금지**
+- JD 항목을 하나도 빼지 않는다. 빠진 항목은 면접 준비의 사각지대가 된다
 
 ### 3. 필수/조건부 출력
 | 카테고리 | 조건 |
@@ -73,7 +74,7 @@ Phase 3: 통합 출력 → career/{company}-{role}-interview-prep.md
 1. `$ARGUMENTS`에서 회사명, JD, 힌트 파싱
 2. JD가 URL이면 → WebFetch로 수집
 3. `career/{company}*analysis.md` 자동 탐색 → 있으면 로드
-4. `resume/` 에서 이력서 자동 탐색 → 로드
+4. 이력서: 사용자가 전달한 마크다운 파일 경로(`--resume` 또는 인자)를 쓴다. 전달받지 못했으면 찾아보지 말고 사용자에게 경로를 묻는다.
 5. **JD 요구사항 맵**: 핵심 책임(R1~RN), 기술스택, 우대사항 전체 추출
 6. **이력서 역량 맵**: 경험, 기술, 성과 추출
 7. 힌트 목록 구조화
@@ -151,13 +152,14 @@ Q: "질문"
 ### Phase 3: 통합 출력
 
 4개 에이전트 결과 통합 → `career/{company}-{role}-interview-prep.md` 저장.
+저장 문서에서는 JD 책임을 R1~RN 번호 대신 짧은 이름으로 부른다(내부 단계에서는 R 번호를 써도 된다).
 
 출력 구조:
 ```markdown
 # Interview Prep: {Company} — {Position}
 
 > 생성일: YYYY-MM-DD
-> JD 기반 | 조사 소스 N개 (Base M + Runtime K) | 이력서 개인화
+> JD 기반 | 조사 소스 N개 (기본 소스 M + 이번 회사 특화 조사 K) | 이력서 개인화
 
 ## 시험 구조 (조사 기반)
 
@@ -186,5 +188,5 @@ Q: "질문"
 ### 7일 / 14일 / 30일 로드맵
 
 ## 6. 조사 출처
-### 소스별 신뢰도 + URL + Base/Runtime 구분
+### 소스별 신뢰도 + URL + 기본 소스/회사 특화 조사 구분
 ```
