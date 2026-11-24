@@ -89,6 +89,42 @@ status:
     echo ""
     bash scripts/check-codex-links.sh "$(pwd -P)" "$DEMIURGE_DEPLOY_TARGET"
 
+# 최신 버전을 받아 로컬에 반영 (pull → link → 깨진 심링크·빈 폴더 정리 → 훅 등록 → 검증)
+update:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    # pull.rebase=true 환경에서는 커밋 안 된 변경이 있으면 pull이 막히므로 rebase를 끈다
+    git pull --ff-only
+    just link
+    # pull이 소스를 먼저 지운 파일은 stow가 추적하지 못하므로, 이 레포를 가리키던 깨진 심링크만 직접 지운다
+    repo=$(pwd -P)
+    for d in .claude .codex .local/bin; do
+        [ -d "$DEMIURGE_DEPLOY_TARGET/$d" ] || continue
+        find "$DEMIURGE_DEPLOY_TARGET/$d" -type l ! -exec test -e {} \; -print
+    done | while IFS= read -r link; do
+        target=$(readlink "$link")
+        case "$target" in
+            /*) p=$target ;;
+            *) p="$(dirname "$link")/$target" ;;
+        esac
+        # 대상이 사라졌으니, 남아 있는 가장 가까운 상위 폴더가 레포 안인지로 판정한다
+        while [ ! -d "$p" ]; do p=$(dirname "$p"); done
+        case "$(cd "$p" && pwd -P)/" in
+            "$repo"/*) rm "$link"; echo "🧹 깨진 심링크 삭제: $link" ;;
+        esac
+    done
+    if [ -d "$DEMIURGE_DEPLOY_TARGET/.claude/skills/demiurge" ]; then
+        find "$DEMIURGE_DEPLOY_TARGET/.claude/skills/demiurge" -depth -type d -empty -delete
+    fi
+    just setup-hooks
+    deployed=$(ls "$DEMIURGE_DEPLOY_TARGET/.claude/skills/demiurge/skills" | wc -l | tr -d ' ')
+    source=$(ls product/.claude/skills/demiurge/skills | wc -l | tr -d ' ')
+    if [ "$deployed" != "$source" ]; then
+        echo "❌ 스킬 개수 불일치: 배포 $deployed / 소스 $source"
+        exit 1
+    fi
+    echo "✅ 업데이트 완료 (스킬 $deployed개)"
+
 # statusLine 설정을 settings.json에 비파괴적으로 병합 (statusLine 키만 갱신, 다른 키는 보존)
 setup-statusline:
     #!/usr/bin/env bash
