@@ -47,7 +47,7 @@ Claude용 자산은 `product/.claude/`, Codex용 지침은 `product/.codex/`에 
 
 | 컴포넌트 | 개수 | 위치 / 설명 |
 |---------|------|------------|
-| **Skills** | 20 | Workflow · Utility · Career · Business (`product/.claude/skills/demiurge/skills/`) |
+| **Skills** | 21 | Workflow · Utility · Career · Business (`product/.claude/skills/demiurge/skills/`) |
 | **Rules** | 3 | 전역 2 (`skills.md`, `agents.md`, `paths` frontmatter 지원) + 프로젝트 로컬 1 (`stow-deployment.md`) |
 | **Commands** | 1 | 프로젝트 로컬 `wrap.md` (전역 `/commit`은 `skills/`로 마이그레이션됨) |
 | **Codex 지침** | 3 | `AGENTS.md` + 설명·질문·문서 참조 + 계획·검증·배포 참조 (`product/.codex/`) |
@@ -240,6 +240,12 @@ just unlink    # 두 하니스와 공용 CLI 심링크 공동 해제
 just setup-statusline
 ```
 
+같은 방식으로 `./bootstrap.sh`는 AskUserQuestion 카드 차단 훅도 `settings.json`의 `hooks.PreToolUse`에 등록한다. 카드 대신 평문으로 묻게 하는 훅이며, 같은 matcher 항목만 갱신하고 다른 훅과 설정은 보존하므로 묻지 않고 적용한다. 수동으로 다시 적용하려면:
+
+```bash
+just setup-hooks
+```
+
 ### CLI Tools
 
 `bin/.local/bin/`이 `~/.local/bin/`으로 stow 배포되어, PATH 등록 후 어디서나 호출 가능.
@@ -280,7 +286,7 @@ demiurge/
 ├── product/.claude/              # 전역 배포 (GNU Stow 경유 → ~/.claude/)
 │   ├── skills/demiurge/          # skills-directory plugin (네임스페이스: demiurge)
 │   │   ├── .claude-plugin/       # plugin.json — 마켓플레이스 등록 없이 로드
-│   │   └── skills/      (20)     # /demiurge:<name>으로 호출
+│   │   └── skills/      (21)     # /demiurge:<name>으로 호출
 │   ├── rules/       (2)          # 전역 룰: skills.md, agents.md (paths frontmatter)
 │   ├── statusline.sh             # Claude Code 상태줄(statusLine) 스크립트
 │   └── CLAUDE.md                 # 응답 가이드라인 · TDD · 스킬 호출 규칙

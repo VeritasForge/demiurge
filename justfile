@@ -100,6 +100,23 @@ setup-statusline:
     mv "$TMP" "$SETTINGS"
     echo "✅ statusLine → ~/.claude/statusline.sh registered in $SETTINGS"
 
+# AskUserQuestion 카드 차단 훅을 settings.json에 비파괴적으로 병합 (같은 matcher가 있으면 갱신만, 다른 훅·키는 보존)
+setup-hooks:
+    #!/usr/bin/env bash
+    set -euo pipefail
+    SETTINGS=~/.claude/settings.json
+    [ -f "$SETTINGS" ] || echo '{}' > "$SETTINGS"
+    CMD='printf '"'"'%s\n'"'"' '"'"'{"hookSpecificOutput":{"hookEventName":"PreToolUse","permissionDecision":"deny","permissionDecisionReason":"AskUserQuestion 카드는 쓰지 않는다. 같은 질문을 평문 채팅으로 물어라."}}'"'"''
+    TMP=$(mktemp)
+    jq --arg cmd "$CMD" '
+      .hooks.PreToolUse = ((.hooks.PreToolUse // []) | map(select(.matcher != "AskUserQuestion")))
+        + [{matcher: "AskUserQuestion", hooks: [{type: "command", command: $cmd}]}]
+    ' "$SETTINGS" > "$TMP"
+    jq empty "$TMP"
+    mv "$TMP" "$SETTINGS"
+    chmod 600 "$SETTINGS"
+    echo "✅ AskUserQuestion 차단 훅 → $SETTINGS"
+
 # 새 스킬 생성 + 심링크
 new-skill name:
     mkdir -p product/.claude/skills/{{name}}

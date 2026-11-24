@@ -67,5 +67,9 @@ else
 fi
 
 echo ""
+echo "🪝 Registering hooks..."
+just setup-hooks
+
+echo ""
 echo "🎉 배포 완료. just status로 링크를 확인하고 새 Codex 세션에서 지침 적용을 확인하세요."
 echo "Codex 모델·권한·MCP·인증·플러그인 설정은 변경하지 않았습니다."
